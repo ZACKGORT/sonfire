@@ -632,10 +632,23 @@ img{max-width:100%;display:block}
 .case-detail-save:hover{background:var(--fg);color:var(--bg)}
 
 .case-detail-right{padding:90px 64px 60px;overflow-y:auto}
-.case-detail-lede{font-size:16px;line-height:1.75;color:var(--muted);max-width:62ch;margin-bottom:44px;padding-bottom:36px;border-bottom:1px solid var(--rule)}
-.case-detail-section{max-width:62ch;margin-bottom:36px}
-.case-detail-section-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.case-detail-section-body{font-size:15px;line-height:1.75}
+.case-detail-lede{font-size:16px;line-height:1.75;color:var(--muted);max-width:62ch;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--rule)}
+.case-detail-subhead{font-size:15px;font-weight:400;color:var(--muted);max-width:600px;line-height:1.75;margin-bottom:20px}
+.case-detail-subhead strong{color:var(--fg);font-weight:600}
+.case-detail-body-text{font-size:13.5px;line-height:1.9;color:var(--muted);max-width:860px;columns:2;column-gap:32px;margin-bottom:32px}
+.case-detail-section-label{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:20px}
+.case-detail-specs{display:grid;grid-template-columns:1fr 2fr;min-height:100px}
+.case-specs-label-col{padding:0 20px 0 0;border-right:1px solid var(--rule);font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.case-specs-body{padding:0 0 0 20px;display:grid;grid-template-columns:1fr 1fr;gap:0 28px}
+.case-spec-row{padding:8px 0;border-bottom:1px solid var(--faint);display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.case-spec-key{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
+.case-spec-val{font-size:12.5px;font-weight:600;color:var(--fg);text-align:right}
+@media(max-width:640px){
+  .case-detail-body-text{columns:1}
+  .case-detail-specs{grid-template-columns:1fr}
+  .case-specs-label-col{border-right:none;border-bottom:1px solid var(--rule);padding:0 0 12px;margin-bottom:12px}
+  .case-specs-body{padding:0;grid-template-columns:1fr}
+}
 
 @media(max-width:900px){
   .case-detail-view{grid-template-columns:1fr;overflow-y:auto}
@@ -684,57 +697,24 @@ img{max-width:100%;display:block}
 .bc .bc-sep{opacity:.4}
 .bc .bc-current{color:var(--fg)}
 
-.jobs-page{padding:130px 20px 80px;max-width:1400px;margin:0 auto}
-.jobs-toolbar{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0;padding-bottom:20px;border-bottom:1px solid var(--rule)}
-.jobs-title{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.4vw,32px)}
-.jobs-toggle{display:flex;gap:2px}
-.jt-btn{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--rule);background:none;color:var(--muted);cursor:none}
-.jt-btn.active{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.feeds-page{padding:0}
+.feeds-header-sticky{position:sticky;top:56px;z-index:60;background:var(--bg);padding:0 20px}
+.feeds-toolbar{max-width:1500px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:34px 0 20px}
+.feeds-title{font-family:var(--serif);font-weight:600;font-size:clamp(22px,2.4vw,32px)}
+.feeds-mode-toggle{display:flex;border:1px solid var(--fg)}
+.feeds-mode-toggle button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:10px 24px;background:none;border:none;color:var(--muted);cursor:none}
+.feeds-mode-toggle button.active{background:var(--fg);color:var(--bg)}
+.feeds-mode-toggle button+button{border-left:1px solid var(--fg)}
+.feeds-header-sticky .feed-tabs{max-width:1500px;padding-left:0;padding-right:0}
 
-.jobs-layout{display:grid;grid-template-columns:1fr 300px;gap:0;align-items:start}
-.jobs-feed{border-right:1px solid var(--rule)}
-.job-row{display:grid;grid-template-columns:40px 1fr auto;gap:20px;padding:32px 20px 32px 0;border-bottom:1px solid var(--rule);align-items:start;cursor:none;transition:background .18s;text-decoration:none;color:var(--fg)}
-.job-row:hover{background:var(--faint)}
-.job-num{font-family:var(--mono);font-size:10.5px;color:var(--muted);padding-top:4px}
-.job-tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--rule);padding:3px 8px;margin-bottom:10px}
-.job-title{font-family:var(--serif);font-weight:600;font-size:clamp(18px,2vw,26px);margin-bottom:8px;line-height:1.1}
-.job-intro{font-size:13.5px;line-height:1.6;color:var(--muted);max-width:56ch}
-.job-meta{text-align:right;font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap;padding-top:4px}
-.job-thumb{display:none}
+#feedsCanvasViewport{height:calc(100vh - 172px)}
 
-.jobs-feed.grid-mode{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);border-bottom:none;border-right:none}
-.jobs-feed.grid-mode .job-row{display:block;padding:0;border:none;background:var(--bg)}
-.jobs-feed.grid-mode .job-num{position:absolute;margin:12px;color:var(--fg);background:color-mix(in srgb, var(--bg) 55%, transparent);padding:3px 7px}
-.jobs-feed.grid-mode .job-thumb{display:block;width:100%;aspect-ratio:4/3;overflow:hidden;position:relative}
-.jobs-feed.grid-mode .job-thumb img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.08)}
-.jobs-feed.grid-mode .job-body{padding:18px}
-.jobs-feed.grid-mode .job-meta{text-align:left;display:block;padding:0 18px 18px}
+.feeds-list-rows{max-width:1500px;margin:0 auto;padding:30px 20px 80px;display:flex;flex-direction:column;gap:34px}
+.browse-row-track .feed-card{flex:0 0 280px;min-height:0}
 
-.jobs-side{padding-left:24px;display:flex;flex-direction:column;gap:24px}
-.side-card{border-bottom:1px solid var(--rule);padding-bottom:20px}
-.side-card:last-child{border-bottom:none}
-.side-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.side-sponsored .side-label{color:var(--fg)}
-.side-sponsored img{width:100%;aspect-ratio:16/10;object-fit:cover;filter:grayscale(1);margin-bottom:10px;display:block}
-.side-title{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:6px}
-.side-sub{font-size:11.5px;line-height:1.6;color:var(--muted)}
-.side-list{list-style:none;display:flex;flex-direction:column;gap:10px}
-.side-list a{font-size:13px;color:var(--fg);text-decoration:none;display:flex;justify-content:space-between;cursor:none}
-.side-list a:hover{opacity:.7}
-.side-list i{font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--muted)}
-.side-cta{font-family:var(--mono);font-size:11px;color:var(--fg);text-decoration:none;cursor:none}
-
-@media(max-width:860px){
-  .jobs-layout{grid-template-columns:1fr}
-  .jobs-feed{border-right:none}
-  .jobs-side{padding-left:0;padding-top:8px}
-  .jobs-feed.grid-mode{grid-template-columns:repeat(2,1fr)}
-  .job-row{grid-template-columns:26px 1fr}
-  .job-meta{display:none}
-}
-@media(max-width:640px){
-  .side-list{display:block;columns:2 110px;column-gap:16px}
-  .side-list li{break-inside:avoid;margin-bottom:8px}
+@media(max-width:900px){
+  #feedsCanvasViewport{height:calc(100vh - 220px)}
+  .browse-row-track .feed-card{flex:0 0 220px}
 }
 
 /* ═══════════════ PROFILE PAGE ═══════════════ */
@@ -925,10 +905,10 @@ img{max-width:100%;display:block}
 <nav class="mnav">
   <a class="mnav-word" href="#top" data-view="home"><img class="mnav-logo-icon" src="https://raw.githubusercontent.com/ZACKGORT/sonfire/main/intoview-duo-line-drk.svg" alt="">intoview.</a>
   <div class="mnav-links">
-    <a href="#" data-view="jobs"><span>Jobs</span></a>
-    <a href="#" data-view="network"><span>Network</span></a>
-    <a href="#" data-view="analytics"><span>Analytics</span></a>
-    <a href="#" data-view="agents"><span>Agents</span></a>
+    <a href="#" data-view="jobs"><span>Feeds</span></a>
+    <a href="#" data-view="network"><span>Circles</span></a>
+    <a href="#" data-view="analytics"><span>Dashboard</span></a>
+    <a href="#" data-view="agents"><span>Agents (coming soon)</span></a>
   </div>
   <button class="mnav-account" id="accountBtn"><span>Account</span></button>
   <div class="mnav-cta">Sign in</div>
@@ -937,10 +917,10 @@ img{max-width:100%;display:block}
 
 <div class="mnav-mobile-overlay" id="mnavMobileOverlay"></div>
 <div class="mnav-mobile-menu" id="mnavMobileMenu">
-  <a href="#" data-view="jobs">Jobs</a>
-  <a href="#" data-view="network">Network</a>
-  <a href="#" data-view="analytics">Analytics</a>
-  <a href="#" data-view="agents">Agents</a>
+  <a href="#" data-view="jobs">Feeds</a>
+  <a href="#" data-view="network">Circles</a>
+  <a href="#" data-view="analytics">Dashboard</a>
+  <a href="#" data-view="agents">Agents (coming soon)</a>
   <button id="mnavMobileAccount">Account</button>
   <div class="mnav-mobile-cta">Sign in</div>
 </div>
@@ -949,7 +929,7 @@ img{max-width:100%;display:block}
 <div class="bc" id="bc">
   <a href="#top" data-view="home">intoview.</a>
   <span class="bc-sep">/</span>
-  <span class="bc-current" id="bcCurrent">Jobs</span>
+  <span class="bc-current" id="bcCurrent">Feeds</span>
 </div>
 
 <!-- ═══ LEFT TAKEOVER PANEL — user control panel, data sourced from Analytics ═══ -->
@@ -973,15 +953,15 @@ img{max-width:100%;display:block}
       <div class="panel-stat"><b>Northeast US</b><span>Top region</span></div>
       <div class="panel-stat"><b>62%</b><span>Viewed your Work</span></div>
     </div>
-    <a class="panel-link" href="#" data-view="analytics">Open full Analytics →</a>
+    <a class="panel-link" href="#" data-view="analytics">Open full Dashboard →</a>
   </div>
 
   <div class="panel-section">
     <div class="panel-section-title">Quick links</div>
     <a class="panel-row" href="#" data-view="profile"><span>View public profile</span><i>→</i></a>
     <a class="panel-row" href="#" data-view="dock"><span>Saved</span><i id="dockCount">0 saved</i></a>
-    <a class="panel-row" href="#" data-view="jobs"><span>Jobs activity</span><i>3 active rooms</i></a>
-    <a class="panel-row" href="#" data-view="network"><span>Network</span><i>128 connections</i></a>
+    <a class="panel-row" href="#" data-view="jobs"><span>Feeds activity</span><i>3 active rooms</i></a>
+    <a class="panel-row" href="#" data-view="network"><span>Circles</span><i>128 connections</i></a>
     <a class="panel-row panel-locked" href="#" data-view="agents"><span>Agent workflows</span><i class="panel-tier">Agent tier</i></a>
   </div>
 
@@ -1067,7 +1047,7 @@ img{max-width:100%;display:block}
       <div class="m-num">02 — The Graph</div>
       <div class="m-title">Relationships are a structure, not a follower count.</div>
       <p class="m-body">Your graph renders as it actually exists — clustered by the work you shared, weighted by how recently you built together, not sorted by who posted today.</p>
-      <span class="m-tag">Network</span>
+      <span class="m-tag">Circles</span>
     </div>
     <div class="m-cell m-vector" style="grid-column:1/5;grid-row:1/3">
       <svg viewBox="0 0 220 180" id="graphSvg">
@@ -1120,7 +1100,7 @@ img{max-width:100%;display:block}
     </div>
     <div class="m-cell m-text" style="grid-column:9/13;grid-row:2/4">
       <p class="m-body">No vanity totals. Every number here traces back to a specific piece of shared work — reach that means something because you can name the room it came from.</p>
-      <span class="m-tag">Analytics</span>
+      <span class="m-tag">Dashboard</span>
     </div>
     <div class="m-cell m-media" style="grid-column:5/13;grid-row:4/5" data-depth="0.3">
       <div class="m-media-img-wrap"><img src="https://picsum.photos/id/1043/1200/300?grayscale" alt="Desk overview" loading="lazy"></div>
@@ -1159,106 +1139,34 @@ img{max-width:100%;display:block}
 
 <!-- ═══════════════ VIEW: JOBS — traditional list/grid feed ═══════════════ -->
 <div id="view-jobs" style="display:none">
-  <div class="jobs-page">
-    <div class="jobs-toolbar">
-      <div class="jobs-title">The Room — your feed</div>
-      <div class="jobs-toggle">
-        <button class="jt-btn active" data-mode="list">List</button>
-        <button class="jt-btn" data-mode="grid">Grid</button>
+  <div class="feeds-page">
+    <div class="feeds-header-sticky">
+      <div class="feeds-toolbar">
+        <div class="feeds-title">Feeds</div>
+        <div class="feeds-mode-toggle" id="feedsModeToggle">
+          <button class="active" data-feedsmode="canvas">Canvas</button>
+          <button data-feedsmode="list">List</button>
+        </div>
+      </div>
+      <div class="feed-tabs" id="feedsTabs">
+        <button class="feed-tab active" data-tab="jobs">Jobs</button>
+        <button class="feed-tab" data-tab="innercircle">Inner-circles</button>
+        <button class="feed-tab" data-tab="outercircle">Outer-circles</button>
+        <button class="feed-tab" data-tab="interesting">Interesting</button>
+        <button class="feed-tab" data-tab="saved">Saved</button>
       </div>
     </div>
-    <div class="jobs-layout">
-      <div class="jobs-feed" id="jobsFeed">
 
-        <a class="job-row" href="#">
-          <div class="job-num">01</div>
-          <div class="job-thumb"><img src="https://picsum.photos/id/1062/700/500?grayscale" alt=""></div>
-          <div class="job-body">
-            <span class="job-tag">Studio Atlas</span>
-            <div class="job-title">Senior Product Designer, Design Systems</div>
-            <p class="job-intro">Introduced by Rachel Kim — building the component library the whole studio ships from. Room stays open until it's filled, not until a deadline passes.</p>
-          </div>
-          <div class="job-meta">Remote · Introduced 2d ago</div>
-        </a>
+    <div class="canvas-grid-viewport" id="feedsCanvasViewport">
+      <div class="canvas-grid-track" id="feedsCanvasTrack"></div>
+    </div>
 
-        <a class="job-row" href="#">
-          <div class="job-num">02</div>
-          <div class="job-thumb"><img src="https://picsum.photos/id/1074/700/500?grayscale" alt=""></div>
-          <div class="job-body">
-            <span class="job-tag">Nordhaus Studio</span>
-            <div class="job-title">Founding Engineer, Applied ML</div>
-            <p class="job-intro">Small team, first ML hire. The founder is in this room and will answer your questions directly — no recruiter relay.</p>
-          </div>
-          <div class="job-meta">Hybrid — Chicago · 5d ago</div>
-        </a>
-
-        <a class="job-row" href="#">
-          <div class="job-num">03</div>
-          <div class="job-thumb"><img src="https://picsum.photos/id/1084/700/500?grayscale" alt=""></div>
-          <div class="job-body">
-            <span class="job-tag">Vector Labs</span>
-            <div class="job-title">Growth Lead, Series B</div>
-            <p class="job-intro">Mentored by two people already in your second-degree graph. The room shows you exactly who, before you apply.</p>
-          </div>
-          <div class="job-meta">Remote · 1w ago</div>
-        </a>
-
-        <a class="job-row" href="#">
-          <div class="job-num">04</div>
-          <div class="job-thumb"><img src="https://picsum.photos/id/1069/700/500?grayscale" alt=""></div>
-          <div class="job-body">
-            <span class="job-tag">Meridian Analytics</span>
-            <div class="job-title">Backend Engineer, Data Platform</div>
-            <p class="job-intro">Shipped with three people you've worked with before. This one showed up because of who's already in the room, not a keyword match.</p>
-          </div>
-          <div class="job-meta">Remote · 1w ago</div>
-        </a>
-
-        <a class="job-row" href="#">
-          <div class="job-num">05</div>
-          <div class="job-thumb"><img src="https://picsum.photos/id/1077/700/500?grayscale" alt=""></div>
-          <div class="job-body">
-            <span class="job-tag">Lower Deck Games</span>
-            <div class="job-title">Creative Direction, Brand Strategy</div>
-            <p class="job-intro">Recruited by a studio lead you were introduced through in Chapter One. Room includes the actual brief, not a job description.</p>
-          </div>
-          <div class="job-meta">On-site — Austin · 2w ago</div>
-        </a>
-
-        <a class="job-row" href="#">
-          <div class="job-num">06</div>
-          <div class="job-thumb"><img src="https://picsum.photos/id/1080/700/500?grayscale" alt=""></div>
-          <div class="job-body">
-            <span class="job-tag">Kent &amp; Vale</span>
-            <div class="job-title">Ops &amp; Logistics Manager</div>
-            <p class="job-intro">Field Research team, hiring through Civic Tech connections. Room closes once three conversations have happened.</p>
-          </div>
-          <div class="job-meta">Remote · 3w ago</div>
-        </a>
-
-      </div>
-
-      <aside class="jobs-side">
-        <div class="side-card side-sponsored">
-          <div class="side-label">Sponsored</div>
-          <img src="https://picsum.photos/id/1035/700/440?grayscale" alt="">
-          <div class="side-title">Climate Fund — Fellows Program</div>
-          <p class="side-sub">A paid, six-month fellowship for engineers moving into climate. Sponsored placement, clearly labeled.</p>
-        </div>
-        <div class="side-card">
-          <div class="side-label">Suggested rooms</div>
-          <ul class="side-list">
-            <li><a href="#"><span>Studio North — Art Director</span><i>New</i></a></li>
-            <li><a href="#"><span>Open Source — Maintainer</span><i>2d</i></a></li>
-            <li><a href="#"><span>Night Shift Radio — Producer</span><i>1w</i></a></li>
-          </ul>
-        </div>
-        <div class="side-card">
-          <div class="side-label">Your network</div>
-          <p class="side-sub" style="margin-bottom:10px">14 first-degree connections are inside rooms on this feed right now.</p>
-          <a class="side-cta" href="#" data-view="network">See the graph →</a>
-        </div>
-      </aside>
+    <div class="feeds-list-rows" id="feedsListRows" style="display:none">
+      <div class="browse-row"><div class="browse-row-head"><span>Jobs</span></div><div class="browse-row-track" id="feedsRowJobs"></div></div>
+      <div class="browse-row"><div class="browse-row-head"><span>Inner-circles</span></div><div class="browse-row-track" id="feedsRowInner"></div></div>
+      <div class="browse-row"><div class="browse-row-head"><span>Outer-circles</span></div><div class="browse-row-track" id="feedsRowOuter"></div></div>
+      <div class="browse-row"><div class="browse-row-head"><span>Interesting</span></div><div class="browse-row-track" id="feedsRowInteresting"></div></div>
+      <div class="browse-row"><div class="browse-row-head"><span>Saved</span></div><div class="browse-row-track" id="feedsRowSaved"></div></div>
     </div>
   </div>
 </div><!-- /view-jobs -->
@@ -1533,7 +1441,7 @@ img{max-width:100%;display:block}
 <div id="view-network" style="display:none">
   <div class="network-page">
     <div class="network-head">
-      <div class="network-title">Network</div>
+      <div class="network-title">Circles</div>
       <p class="network-sub">Everyone you've built something with, organized by how close the work actually was — not who posted today.</p>
     </div>
 
@@ -1715,7 +1623,7 @@ img{max-width:100%;display:block}
 <div id="view-analytics" style="display:none">
   <div class="analytics-page">
     <div class="analytics-head">
-      <div class="analytics-title">Analytics</div>
+      <div class="analytics-title">Dashboard</div>
       <p class="analytics-sub">Every metric here is available on the free tier — no paywall, no "upgrade to see who viewed your profile."</p>
     </div>
     <div class="analytics-grid">
@@ -1936,10 +1844,10 @@ document.addEventListener('click', e=>{
 let expandedCellObserver = null;
 
 const CHAPTER_ROUTES = {
-  room: [{label:'Enter the Room', view:'jobs'},{label:'See the Network', view:'network'},{label:'View Analytics', view:'analytics'}],
-  graph: [{label:'Open Rooms', view:'jobs'},{label:'View Analytics', view:'analytics'},{label:'Agent workflows', view:'agents'}],
-  ledger: [{label:'Open Rooms', view:'jobs'},{label:'See the Network', view:'network'},{label:'Agent workflows', view:'agents'}],
-  assistant: [{label:'Open Rooms', view:'jobs'},{label:'See the Network', view:'network'},{label:'View Analytics', view:'analytics'}],
+  room: [{label:'Enter the Feed', view:'jobs'},{label:'See the Circles', view:'network'},{label:'View Dashboard', view:'analytics'}],
+  graph: [{label:'Open Feeds', view:'jobs'},{label:'View Dashboard', view:'analytics'},{label:'Agent workflows', view:'agents'}],
+  ledger: [{label:'Open Feeds', view:'jobs'},{label:'See the Circles', view:'network'},{label:'Agent workflows', view:'agents'}],
+  assistant: [{label:'Open Feeds', view:'jobs'},{label:'See the Circles', view:'network'},{label:'View Dashboard', view:'analytics'}],
 };
 
 function expandCell(grid, cell){
@@ -2245,13 +2153,13 @@ const viewAgents = document.getElementById('view-agents');
 const bc = document.getElementById('bc');
 const bcCurrent = document.getElementById('bcCurrent');
 const SUBVIEWS = {
-  jobs: { el: viewJobs, label: 'Jobs' },
+  jobs: { el: viewJobs, label: 'Feeds' },
   profile: { el: viewProfile, label: 'Profile' },
   dock: { el: viewDock, label: 'Saved' },
   feed: { el: viewFeed, label: 'Feed' },
-  network: { el: viewNetwork, label: 'Network' },
-  analytics: { el: viewAnalytics, label: 'Analytics' },
-  agents: { el: viewAgents, label: 'Agents' },
+  network: { el: viewNetwork, label: 'Circles' },
+  analytics: { el: viewAnalytics, label: 'Dashboard' },
+  agents: { el: viewAgents, label: 'Agents (coming soon)' },
 };
 
 let currentView = 'home';
@@ -2370,17 +2278,6 @@ panelClose.addEventListener('click', closePanel);
 // Escape handling is centralized in the context-menu keydown listener below
 
 /* ─────────────────────────────────────────────
-   JOBS LIST / GRID TOGGLE
-───────────────────────────────────────────── */
-document.querySelectorAll('.jt-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.jt-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('jobsFeed').classList.toggle('grid-mode', btn.dataset.mode==='grid');
-  });
-});
-
-/* ─────────────────────────────────────────────
    NETWORK MODE TOGGLE — Feed (default) / Connections
 ───────────────────────────────────────────── */
 (function(){
@@ -2467,8 +2364,8 @@ document.querySelectorAll('.jt-btn').forEach(btn=>{
         '</div>',
         '<div class="poster-related">',
           '<div class="poster-related-label">Related pathways</div>',
-          '<a class="poster-related-link" href="#" data-view="jobs">Open Rooms</a>',
-          '<a class="poster-related-link" href="#" data-view="analytics">Analytics</a>',
+          '<a class="poster-related-link" href="#" data-view="jobs">Feeds</a>',
+          '<a class="poster-related-link" href="#" data-view="analytics">Dashboard</a>',
           '<a class="poster-related-link" href="#" data-view="feed">All Updates</a>',
         '</div>',
       '</div>',
@@ -2517,81 +2414,46 @@ function wireFeedToggle(toggleId, containerSelector, onChange){
 wireFeedToggle('pageFeedToggle', '.feed-list-col');
 
 /* ─────────────────────────────────────────────
-   HOME FEATURED — infinite flickable canvas grid.
-   Cards from one real-content pool (from the CV) are
-   tiled into a 3x3 super-grid and panned via drag/flick
-   with inertia, wrapped seamlessly with modulo math, plus
-   a subtle ambient cursor parallax at rest. Click a tile
-   to "dip in" (opens the shared detail modal); a genuine
-   drag never triggers that. Tabs swap which slice of the
-   pool populates the grid.
+   CANVAS GRID FACTORY — infinite flickable canvas
+   grid engine, reused by any page that wants one
+   (Home, Feeds). Cards are tiled into a super-grid
+   and panned via drag/flick with inertia, wrapped
+   seamlessly with modulo math, plus ambient cursor
+   parallax at rest. Click a tile to "dip in" (opens
+   the shared detail panel); a genuine drag never
+   triggers that. Tabs swap the active data slice.
 ───────────────────────────────────────────── */
-(function(){
-  const tabsEl = document.getElementById('homeFeedTabs');
-  const viewport = document.getElementById('canvasViewport');
-  const track = document.getElementById('canvasTrack');
-  if(!tabsEl || !viewport || !track) return;
-
-  const POOL = [
-    { kicker:'BNY Mellon', tag:'Fintech · 2022–23', style:'bold', headline:'Wove: one client profile, three parallel Agile tracks.', meta:'Publicis Sapient engagement — $2T in assets under management.', img:'https://picsum.photos/id/1005/700/460?grayscale' },
-    { kicker:'GNC', tag:'E-commerce · 2021', style:'bold', headline:'Reclaimed ~$500M in annual revenue, post-bankruptcy.', meta:'Elva Design Group — taxonomy to storefront, one thread held.', img:'https://picsum.photos/id/1011/700/460?grayscale' },
-    { kicker:'Code and Theory', tag:'Enterprise · 2021–22', style:'plain', headline:'TikTok For Business — Senior Designer to ACD to DRI.', meta:'One engagement, three roles, sixty-two floors up.', img:'https://picsum.photos/id/1015/700/460?grayscale' },
-    { kicker:'Hardinge', tag:'E-commerce · 2019–21', style:'plain', headline:'A drop-navigation rebuild, thumb-zone logic.', meta:'LiveArea — discovery to delivery in twelve weeks.', img:'https://picsum.photos/id/1025/700/460?grayscale' },
-    { kicker:'LiveArea', tag:'E-commerce · 2019–21', style:'quote', headline:'"Cards Against Bad UX" — jargon turned into "as a shopper."', meta:'It catalyzed everything.', img:'https://picsum.photos/id/1027/700/460?grayscale' },
-    { kicker:'Aquasana · YETI · Simpson', tag:'E-commerce · 2019–21', style:'plain', headline:'B2B and B2C on Salesforce Commerce Cloud.', meta:'Multiple projects and junior designers, simultaneously.', img:'https://picsum.photos/id/1031/700/460?grayscale' },
-    { kicker:'Elva Design Group', tag:'Recovery · 2021', style:'plain', headline:'Restructured GNC’s product taxonomy first.', meta:'You cannot design navigation for a catalog you have not understood.', img:'https://picsum.photos/id/1040/700/460?grayscale' },
-    { kicker:'Publicis Sapient', tag:'Fintech · 2022–23', style:'bold', headline:'Interim Product Owner — a role I became, not one I was hired for.', meta:'Primary client liaison, 375 Hudson Street.', img:'https://picsum.photos/id/1043/700/460?grayscale' },
-    { kicker:'Wolfgang & Co.', tag:'Studio · 2025–', style:'quote', headline:'"A concept studio for craft, language, and human intent."', meta:'Named for a late blind rescue poodle.', img:'https://picsum.photos/id/1050/700/460?grayscale' },
-    { kicker:'wolfie.love', tag:'Product · 2025–', style:'plain', headline:'A sentence-progressive reading engine.', meta:'Flow Mode, authored timing markup, four themes.', img:'https://picsum.photos/id/1056/700/460?grayscale' },
-    { kicker:'dab.cx', tag:'Product · 2025–', style:'bold', headline:'Design, Architect, Build — one continuous motion.', meta:'No hand-off, no translation loss.', img:'https://picsum.photos/id/1059/700/460?grayscale' },
-    { kicker:'intoview.pro', tag:'Studio · 2025–', style:'plain', headline:'Fourteen organizations, twenty years, one panel.', meta:'Narrative-as-nodes, applied to the job market.', img:'https://picsum.photos/id/1073/700/460?grayscale' },
-    { kicker:'ifimaybefrank.com', tag:'Product · 2025–', style:'quote', headline:'"A writing application and a manifesto, simultaneously."', meta:'The tool proves the argument by existing.', img:'https://picsum.photos/id/1069/700/460?grayscale' },
-    { kicker:'reasonably.cc', tag:'Product · 2025–', style:'plain', headline:'A thinking tool — bracket annotation, scatter canvas.', meta:'The same sentence-first engine, applied to thought.', img:'https://picsum.photos/id/1082/700/460?grayscale' },
-    { kicker:'The Argument', tag:'Career · 2026', style:'bold', headline:'Twenty years, no degree, every credential earned in the work.', meta:'Starting from a pirated copy of Photoshop and a Craigslist post.', img:'https://picsum.photos/id/1084/700/460?grayscale' },
-    { kicker:'Phenom People', tag:'Independent · 2023–25', style:'plain', headline:'Owned the corporate web presence end-to-end.', meta:'Content strategy, roadmap, third-party integrations.', img:'https://picsum.photos/id/1062/700/460?grayscale' },
-    { kicker:'Brave People', tag:'Independent · 2023–25', style:'plain', headline:'Fixed-scope fintech UX for Geico Asset Management.', meta:'Execution complete, without the luxury of iteration.', img:'https://picsum.photos/id/1074/700/460?grayscale' },
-    { kicker:'One Sixty Over Ninety', tag:'Agency · 2014–16', style:'bold', headline:'Comcast, Kent State, the Eagles — on time, in budget.', meta:'Enterprise IA, high-fidelity wireframes, ADA compliance.', img:'https://picsum.photos/id/1077/700/460?grayscale' },
-    { kicker:'O3 World', tag:'Product · 2016–17', style:'plain', headline:'Agile with La Colombe, Vertex, SEIC.', meta:'Working with clients, not for them.', img:'https://picsum.photos/id/1080/700/460?grayscale' },
-    { kicker:'FlightPath', tag:'Pharma · 2018–19', style:'plain', headline:'Merck, Zoetis, Charter, Goya.', meta:'WCAG 2.0 AA/AAA under regulatory scrutiny.', img:'https://picsum.photos/id/1035/700/460?grayscale' },
-    { kicker:'HUGE', tag:'Hospitality · 2021', style:'quote', headline:'"One user flow. Twenty people on the account."', meta:'To say we were siloed would be an understatement.', img:'https://picsum.photos/id/1018/700/460?grayscale' },
-    { kicker:'Sentral Lifestyle Apartments', tag:'Hospitality · 2021', style:'plain', headline:'End-to-end booking flow, shipped fast.', meta:'Brand activation, competitive analysis, critical flows.', img:'https://picsum.photos/id/1016/700/460?grayscale' },
-    { kicker:'Leadnomics', tag:'Conversion · 2011–14', style:'bold', headline:'95.8% conversion — mobile-first before it was a mandate.', meta:'Responsive design, rigorous A/B testing.', img:'https://picsum.photos/id/1024/700/460?grayscale' },
-    { kicker:'Workarea', tag:'SaaS · 2017–18', style:'plain', headline:'Napkin sketches, high-velocity over high-fidelity.', meta:'Direct partnership with developers, no mockup theater.', img:'https://picsum.photos/id/1029/700/460?grayscale' },
-  ];
-
-  const TAB_OFFSET = { others:0, today:8, yesterday:16 };
-  function adaptSavedItem(item){
-    return {
-      kicker: item.type,
-      tag: item.meta || item.type,
-      style: 'plain',
-      headline: item.title,
-      meta: 'Saved · ' + new Date(item.ts).toLocaleDateString(),
-      img: '',
-    };
+function initialsOfHome(name){
+  const words = (name||'').split(/\s+/).filter(w=>/[a-zA-Z]/.test(w));
+  if(!words.length) return '•';
+  if(words.length===1) return words[0].slice(0,2).toUpperCase();
+  return (words[0][0]+words[1][0]).toUpperCase();
+}
+function adaptSavedItemForCanvas(item){
+  return {
+    kicker: item.type,
+    tag: item.meta || item.type,
+    style: 'plain',
+    headline: item.title,
+    meta: 'Saved · ' + new Date(item.ts).toLocaleDateString(),
+    img: '',
+  };
+}
+function savedTabSlice(count){
+  const saved = window.getDockItems ? window.getDockItems() : [];
+  if(!saved.length){
+    return Array(count).fill({ kicker:'Saved', tag:'Empty', style:'plain', headline:'Nothing saved yet.', meta:'Right-click any card and choose Save to start collecting.', img:'' });
   }
-  function sliceFor(tab, count){
-    if(tab === 'saved'){
-      const saved = window.getDockItems ? window.getDockItems() : [];
-      if(!saved.length){
-        return Array(count).fill({ kicker:'Saved', tag:'Empty', style:'plain', headline:'Nothing saved yet.', meta:'Right-click any card and choose Save to start collecting.', img:'' });
-      }
-      const out = [];
-      for(let i=0;i<count;i++) out.push(adaptSavedItem(saved[i % saved.length]));
-      return out;
-    }
-    const offset = TAB_OFFSET[tab] || 0;
-    const out = [];
-    for(let i=0;i<count;i++) out.push(POOL[(offset+i) % POOL.length]);
-    return out;
-  }
+  const out = [];
+  for(let i=0;i<count;i++) out.push(adaptSavedItemForCanvas(saved[i % saved.length]));
+  return out;
+}
 
-  function initialsOfHome(name){
-    const words = (name||'').split(/\s+/).filter(w=>/[a-zA-Z]/.test(w));
-    if(!words.length) return '•';
-    if(words.length===1) return words[0].slice(0,2).toUpperCase();
-    return (words[0][0]+words[1][0]).toUpperCase();
-  }
+function initCanvasGrid(cfg){
+  const viewport = document.getElementById(cfg.viewportId);
+  const track = document.getElementById(cfg.trackId);
+  const tabsEl = cfg.tabsId ? document.getElementById(cfg.tabsId) : null;
+  if(!viewport || !track) return null;
 
   function tileInnerHTML(idx, c){
     return `<div class="feed-top"><span class="feed-idx">${String(idx).padStart(2,'0')}</span><span class="feed-arrow">→</span></div>
@@ -2605,7 +2467,7 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
   let baseFontPx = 16;
   let TW = 300, TH = 236, GAP = 16, setW = COLS*(TW+GAP), setH = ROWS*(TH+GAP);
   let copiesX = 1, copiesY = 1;
-  let currentTab = 'others';
+  let currentTab = cfg.defaultTab;
 
   function recomputeDims(){
     const scale = baseFontPx / 16;
@@ -2621,7 +2483,7 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
   function buildTiles(tab){
     currentTab = tab;
     track.innerHTML = '';
-    const cards = sliceFor(tab, COLS*ROWS);
+    const cards = cfg.dataProvider(tab, COLS*ROWS);
     for(let dxi=-copiesX; dxi<=copiesX; dxi++){
       for(let dyi=-copiesY; dyi<=copiesY; dyi++){
         cards.forEach((c,i)=>{
@@ -2644,7 +2506,6 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
   }
 
   let panX = 0, panY = 0, velX = 0, velY = 0;
-  // Ambient parallax: target vs rendered (lerped in the unified rAF loop)
   let ambTargetX = 0, ambTargetY = 0, ambX = 0, ambY = 0;
   let dragging = false, moved = false, startX = 0, startY = 0, lastX = 0, lastY = 0, pid = null;
   let loopRunning = false;
@@ -2669,11 +2530,8 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
     applyTransform();
   }
 
-  // Unified rAF loop — always running while viewport visible.
-  // Handles inertia decay + ambient parallax lerp in one place,
-  // so neither ever blocks the other (Phantom's approach).
-  const AMB_LERP = 0.07;   // how quickly ambient offset catches up
-  const INERTIA_FRICTION = 0.935; // drag-release friction (higher = longer glide)
+  const AMB_LERP = 0.07;
+  const INERTIA_FRICTION = 0.935;
   const INERTIA_THRESHOLD = 0.08;
 
   function startLoop(){
@@ -2681,7 +2539,6 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
     loopRunning = true;
     (function tick(){
       let needsMore = false;
-      // Inertia
       if(!dragging && (Math.abs(velX) > INERTIA_THRESHOLD || Math.abs(velY) > INERTIA_THRESHOLD)){
         velX *= INERTIA_FRICTION;
         velY *= INERTIA_FRICTION;
@@ -2689,7 +2546,6 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
         panY += velY;
         needsMore = true;
       }
-      // Ambient lerp
       const dAmbX = ambTargetX - ambX, dAmbY = ambTargetY - ambY;
       if(Math.abs(dAmbX) > 0.02 || Math.abs(dAmbY) > 0.02){
         ambX += dAmbX * AMB_LERP;
@@ -2723,7 +2579,6 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
     const dx = e.clientX-lastX, dy = e.clientY-lastY;
     if(Math.abs(e.clientX-startX) > 5 || Math.abs(e.clientY-startY) > 5) moved = true;
     panX += dx; panY += dy;
-    // Velocity accumulation: blend new delta with running velocity for smoothness
     velX = velX*0.72 + dx*0.28; velY = velY*0.72 + dy*0.28;
     lastX = e.clientX; lastY = e.clientY;
     applyTransform();
@@ -2759,9 +2614,9 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
         '</div>',
         '<div class="poster-related">',
           '<div class="poster-related-label">Related pathways</div>',
-          '<a class="poster-related-link" href="#" data-view="network">The Network</a>',
-          '<a class="poster-related-link" href="#" data-view="jobs">Open Rooms</a>',
-          '<a class="poster-related-link" href="#" data-view="analytics">Analytics</a>',
+          '<a class="poster-related-link" href="#" data-view="network">Circles</a>',
+          '<a class="poster-related-link" href="#" data-view="jobs">Feeds</a>',
+          '<a class="poster-related-link" href="#" data-view="analytics">Dashboard</a>',
           '<a class="poster-related-link" href="#" data-view="feed">All Updates</a>',
         '</div>',
       '</div>',
@@ -2783,9 +2638,6 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
     if(moved){
       startLoop();
     } else if(e){
-      // Use elementFromPoint rather than e.target — setPointerCapture can
-      // retarget the derived click event to the capturing element itself,
-      // silently swallowing the tile underneath.
       const hit = document.elementFromPoint(e.clientX, e.clientY);
       if(hit && !hit.closest('.feed-quick-save')){
         const card = hit.closest('.canvas-tile');
@@ -2807,18 +2659,20 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
   });
   viewport.addEventListener('mouseleave', ()=>{ ambTargetX = 0; ambTargetY = 0; startLoop(); });
 
-  tabsEl.querySelectorAll('.feed-tab').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      tabsEl.querySelectorAll('.feed-tab').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      stopInertia();
-      currentTab = btn.dataset.tab;
-      buildTiles(currentTab);
-      centerPan();
-      applyTransform();
-      startLoop();
+  if(tabsEl){
+    tabsEl.querySelectorAll('.feed-tab').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        tabsEl.querySelectorAll('.feed-tab').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        stopInertia();
+        currentTab = btn.dataset.tab;
+        buildTiles(currentTab);
+        centerPan();
+        applyTransform();
+        startLoop();
+      });
     });
-  });
+  }
 
   let resizeTimer;
   window.addEventListener('resize', ()=>{
@@ -2826,8 +2680,8 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
     resizeTimer = setTimeout(rebuildAndCenter, 150);
   });
 
-  const scaleSlider = document.getElementById('canvasScaleSlider');
-  const scaleLabel = document.getElementById('canvasScaleLabel');
+  const scaleSlider = cfg.scaleSliderId ? document.getElementById(cfg.scaleSliderId) : null;
+  const scaleLabel = cfg.scaleLabelId ? document.getElementById(cfg.scaleLabelId) : null;
   function setBaseFont(px){
     baseFontPx = Math.min(24, Math.max(11, px));
     if(scaleSlider) scaleSlider.value = String(baseFontPx);
@@ -2846,10 +2700,195 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
   }, { passive:false });
 
   recomputeDims();
-  buildTiles('others');
+  buildTiles(cfg.defaultTab);
   centerPan();
   applyTransform();
+
+  return { rebuildAndCenter, buildTiles: (tab)=>{ buildTiles(tab); centerPan(); applyTransform(); } };
+}
+
+/* ─────────────────────────────────────────────
+   HOME FEATURED — canvas grid instance, real
+   content pool drawn from the CV, rotated per tab
+───────────────────────────────────────────── */
+(function(){
+  const POOL = [
+    { kicker:'BNY Mellon', tag:'Fintech · 2022–23', style:'bold', headline:'Wove: one client profile, three parallel Agile tracks.', meta:'Publicis Sapient engagement — $2T in assets under management.', img:'https://picsum.photos/id/1005/700/460?grayscale' },
+    { kicker:'GNC', tag:'E-commerce · 2021', style:'bold', headline:'Reclaimed ~$500M in annual revenue, post-bankruptcy.', meta:'Elva Design Group — taxonomy to storefront, one thread held.', img:'https://picsum.photos/id/1011/700/460?grayscale' },
+    { kicker:'Code and Theory', tag:'Enterprise · 2021–22', style:'plain', headline:'TikTok For Business — Senior Designer to ACD to DRI.', meta:'One engagement, three roles, sixty-two floors up.', img:'https://picsum.photos/id/1015/700/460?grayscale' },
+    { kicker:'Hardinge', tag:'E-commerce · 2019–21', style:'plain', headline:'A drop-navigation rebuild, thumb-zone logic.', meta:'LiveArea — discovery to delivery in twelve weeks.', img:'https://picsum.photos/id/1025/700/460?grayscale' },
+    { kicker:'LiveArea', tag:'E-commerce · 2019–21', style:'quote', headline:'"Cards Against Bad UX" — jargon turned into "as a shopper."', meta:'It catalyzed everything.', img:'https://picsum.photos/id/1027/700/460?grayscale' },
+    { kicker:'Aquasana · YETI · Simpson', tag:'E-commerce · 2019–21', style:'plain', headline:'B2B and B2C on Salesforce Commerce Cloud.', meta:'Multiple projects and junior designers, simultaneously.', img:'https://picsum.photos/id/1031/700/460?grayscale' },
+    { kicker:'Elva Design Group', tag:'Recovery · 2021', style:'plain', headline:'Restructured GNC’s product taxonomy first.', meta:'You cannot design navigation for a catalog you have not understood.', img:'https://picsum.photos/id/1040/700/460?grayscale' },
+    { kicker:'Publicis Sapient', tag:'Fintech · 2022–23', style:'bold', headline:'Interim Product Owner — a role I became, not one I was hired for.', meta:'Primary client liaison, 375 Hudson Street.', img:'https://picsum.photos/id/1043/700/460?grayscale' },
+    { kicker:'Wolfgang & Co.', tag:'Studio · 2025–', style:'quote', headline:'"A concept studio for craft, language, and human intent."', meta:'Named for a late blind rescue poodle.', img:'https://picsum.photos/id/1050/700/460?grayscale' },
+    { kicker:'wolfie.love', tag:'Product · 2025–', style:'plain', headline:'A sentence-progressive reading engine.', meta:'Flow Mode, authored timing markup, four themes.', img:'https://picsum.photos/id/1056/700/460?grayscale' },
+    { kicker:'dab.cx', tag:'Product · 2025–', style:'bold', headline:'Design, Architect, Build — one continuous motion.', meta:'No hand-off, no translation loss.', img:'https://picsum.photos/id/1059/700/460?grayscale' },
+    { kicker:'intoview.pro', tag:'Studio · 2025–', style:'plain', headline:'Fourteen organizations, twenty years, one panel.', meta:'Narrative-as-nodes, applied to the job market.', img:'https://picsum.photos/id/1073/700/460?grayscale' },
+    { kicker:'ifimaybefrank.com', tag:'Product · 2025–', style:'quote', headline:'"A writing application and a manifesto, simultaneously."', meta:'The tool proves the argument by existing.', img:'https://picsum.photos/id/1069/700/460?grayscale' },
+    { kicker:'reasonably.cc', tag:'Product · 2025–', style:'plain', headline:'A thinking tool — bracket annotation, scatter canvas.', meta:'The same sentence-first engine, applied to thought.', img:'https://picsum.photos/id/1082/700/460?grayscale' },
+    { kicker:'The Argument', tag:'Career · 2026', style:'bold', headline:'Twenty years, no degree, every credential earned in the work.', meta:'Starting from a pirated copy of Photoshop and a Craigslist post.', img:'https://picsum.photos/id/1084/700/460?grayscale' },
+    { kicker:'Phenom People', tag:'Independent · 2023–25', style:'plain', headline:'Owned the corporate web presence end-to-end.', meta:'Content strategy, roadmap, third-party integrations.', img:'https://picsum.photos/id/1062/700/460?grayscale' },
+    { kicker:'Brave People', tag:'Independent · 2023–25', style:'plain', headline:'Fixed-scope fintech UX for Geico Asset Management.', meta:'Execution complete, without the luxury of iteration.', img:'https://picsum.photos/id/1074/700/460?grayscale' },
+    { kicker:'One Sixty Over Ninety', tag:'Agency · 2014–16', style:'bold', headline:'Comcast, Kent State, the Eagles — on time, in budget.', meta:'Enterprise IA, high-fidelity wireframes, ADA compliance.', img:'https://picsum.photos/id/1077/700/460?grayscale' },
+    { kicker:'O3 World', tag:'Product · 2016–17', style:'plain', headline:'Agile with La Colombe, Vertex, SEIC.', meta:'Working with clients, not for them.', img:'https://picsum.photos/id/1080/700/460?grayscale' },
+    { kicker:'FlightPath', tag:'Pharma · 2018–19', style:'plain', headline:'Merck, Zoetis, Charter, Goya.', meta:'WCAG 2.0 AA/AAA under regulatory scrutiny.', img:'https://picsum.photos/id/1035/700/460?grayscale' },
+    { kicker:'HUGE', tag:'Hospitality · 2021', style:'quote', headline:'"One user flow. Twenty people on the account."', meta:'To say we were siloed would be an understatement.', img:'https://picsum.photos/id/1018/700/460?grayscale' },
+    { kicker:'Sentral Lifestyle Apartments', tag:'Hospitality · 2021', style:'plain', headline:'End-to-end booking flow, shipped fast.', meta:'Brand activation, competitive analysis, critical flows.', img:'https://picsum.photos/id/1016/700/460?grayscale' },
+    { kicker:'Leadnomics', tag:'Conversion · 2011–14', style:'bold', headline:'95.8% conversion — mobile-first before it was a mandate.', meta:'Responsive design, rigorous A/B testing.', img:'https://picsum.photos/id/1024/700/460?grayscale' },
+    { kicker:'Workarea', tag:'SaaS · 2017–18', style:'plain', headline:'Napkin sketches, high-velocity over high-fidelity.', meta:'Direct partnership with developers, no mockup theater.', img:'https://picsum.photos/id/1029/700/460?grayscale' },
+  ];
+  const TAB_OFFSET = { others:0, today:8, yesterday:16 };
+  function dataProvider(tab, count){
+    if(tab === 'saved') return savedTabSlice(count);
+    const offset = TAB_OFFSET[tab] || 0;
+    const out = [];
+    for(let i=0;i<count;i++) out.push(POOL[(offset+i) % POOL.length]);
+    return out;
+  }
+  initCanvasGrid({
+    viewportId: 'canvasViewport', trackId: 'canvasTrack', tabsId: 'homeFeedTabs',
+    defaultTab: 'others', dataProvider,
+    scaleSliderId: 'canvasScaleSlider', scaleLabelId: 'canvasScaleLabel',
+  });
 })();
+
+/* ─────────────────────────────────────────────
+   FEEDS — the rebuilt Jobs page. Every feed on
+   the site in one place: Jobs, Inner-circles,
+   Outer-circles, Interesting, Saved. Canvas view
+   (default) uses the shared factory; List view
+   shows the same five categories as stacked rows.
+───────────────────────────────────────────── */
+(function(){
+  const JOBS_POOL = [
+    { kicker:'Studio Atlas', tag:'Remote · 2d ago', style:'bold', headline:'Senior Product Designer, Design Systems', meta:'Introduced by Rachel Kim — building the component library the whole studio ships from.', img:'https://picsum.photos/id/1062/700/460?grayscale' },
+    { kicker:'Nordhaus Studio', tag:'Hybrid — Chicago · 5d ago', style:'plain', headline:'Founding Engineer, Applied ML', meta:'Small team, first ML hire. The founder answers questions directly, no recruiter relay.', img:'https://picsum.photos/id/1074/700/460?grayscale' },
+    { kicker:'Vector Labs', tag:'Remote · 1w ago', style:'plain', headline:'Growth Lead, Series B', meta:'Mentored by two people already in your second-degree graph.', img:'https://picsum.photos/id/1084/700/460?grayscale' },
+    { kicker:'Meridian Analytics', tag:'Remote · 1w ago', style:'plain', headline:'Backend Engineer, Data Platform', meta:'Shipped with three people you\u2019ve worked with before.', img:'https://picsum.photos/id/1069/700/460?grayscale' },
+    { kicker:'Lower Deck Games', tag:'On-site — Austin · 2w ago', style:'quote', headline:'"Creative Direction, Brand Strategy"', meta:'Recruited by a studio lead you were introduced through in Chapter One.', img:'https://picsum.photos/id/1077/700/460?grayscale' },
+    { kicker:'Kent & Vale', tag:'Remote · 3w ago', style:'plain', headline:'Ops & Logistics Manager', meta:'Field Research team, hiring through Civic Tech connections.', img:'https://picsum.photos/id/1080/700/460?grayscale' },
+  ];
+  const INNER_CIRCLE_POOL = [
+    { kicker:'Rachel Kim', tag:'Product · 2d ago', style:'bold', headline:'Just wrapped Q3 planning for the Wove rebuild.', meta:'The rebuild finally has a name people believe in internally.', img:'https://picsum.photos/id/1027/700/460?grayscale' },
+    { kicker:'Priya Shah', tag:'Design Systems · 5h ago', style:'plain', headline:'New design tokens shipped across the component library.', meta:'Every component now documents its own accessibility contract.', img:'https://picsum.photos/id/1040/700/460?grayscale' },
+    { kicker:'Marcus Webb', tag:'Funding · 1d ago', style:'bold', headline:'Nordhaus Studio closed its seed round this week.', meta:'Closed with the same three investors who passed the first time.', img:'https://picsum.photos/id/1050/700/460?grayscale' },
+    { kicker:'Th\u00e9o Marchal', tag:'Growth · 3d ago', style:'plain', headline:'Vector Labs crossed 50K weekly active users.', meta:'Retention held steady through the growth, for once.', img:'https://picsum.photos/id/1059/700/460?grayscale' },
+    { kicker:'Lucia Ferrer', tag:'Case study · 2w ago', style:'plain', headline:'Wrote up the GNC recovery research, finally.', meta:'Everyone asked for it; nobody had time until now.', img:'https://picsum.photos/id/1043/700/460?grayscale' },
+    { kicker:'Sam Okoro', tag:'Fintech · 6d ago', style:'plain', headline:'BNY Mellon / Wove hit its first production milestone.', meta:'Eighteen months after the first whiteboard sketch.', img:'https://picsum.photos/id/1069/700/460?grayscale' },
+  ];
+  const OUTER_CIRCLE_POOL = [
+    { kicker:'Elin Vass', tag:'Documentary · 1w ago', style:'quote', headline:'"Drift" premieres next month — the first cut is done.', meta:'Runs long, but every scene earns its place.', img:'https://picsum.photos/id/1025/700/460?grayscale' },
+    { kicker:'Sasha Lund', tag:'Games · 4d ago', style:'bold', headline:'Lower Deck Games opened its first public beta.', meta:'Balance patches start now, not at launch.', img:'https://picsum.photos/id/1074/700/460?grayscale' },
+    { kicker:'R. Okafor', tag:'Production · 2w ago', style:'plain', headline:'Parallax wrapped principal photography.', meta:'Three weeks under schedule, which never happens.', img:'https://picsum.photos/id/1050/700/460?grayscale' },
+    { kicker:'Kenji Watanabe', tag:'Backend · 5d ago', style:'plain', headline:'Meridian Analytics migrated off the legacy event pipeline.', meta:'Six months of quiet work nobody will ever see directly.', img:'https://picsum.photos/id/1069/700/460?grayscale' },
+    { kicker:'Dana Ruiz', tag:'Product · 2d ago', style:'plain', headline:'Opened a new room for the Hardinge follow-up work.', meta:'The drop-nav rebuild needs a second phase.', img:'https://picsum.photos/id/1040/700/460?grayscale' },
+  ];
+  const INTERESTING_POOL = [
+    { kicker:'BNY Mellon', tag:'Fintech · 2022–23', style:'bold', headline:'Wove: one client profile, three parallel Agile tracks.', meta:'Publicis Sapient engagement — $2T in assets under management.', img:'https://picsum.photos/id/1005/700/460?grayscale' },
+    { kicker:'GNC', tag:'E-commerce · 2021', style:'bold', headline:'Reclaimed ~$500M in annual revenue, post-bankruptcy.', meta:'Elva Design Group — taxonomy to storefront, one thread held.', img:'https://picsum.photos/id/1011/700/460?grayscale' },
+    { kicker:'Code and Theory', tag:'Enterprise · 2021–22', style:'plain', headline:'TikTok For Business — Senior Designer to ACD to DRI.', meta:'One engagement, three roles, sixty-two floors up.', img:'https://picsum.photos/id/1015/700/460?grayscale' },
+    { kicker:'Hardinge', tag:'E-commerce · 2019–21', style:'plain', headline:'A drop-navigation rebuild, thumb-zone logic.', meta:'LiveArea — discovery to delivery in twelve weeks.', img:'https://picsum.photos/id/1025/700/460?grayscale' },
+    { kicker:'Wolfgang & Co.', tag:'Studio · 2025–', style:'quote', headline:'"A concept studio for craft, language, and human intent."', meta:'Named for a late blind rescue poodle.', img:'https://picsum.photos/id/1050/700/460?grayscale' },
+    { kicker:'intoview.pro', tag:'Studio · 2025–', style:'plain', headline:'Fourteen organizations, twenty years, one panel.', meta:'Narrative-as-nodes, applied to the job market.', img:'https://picsum.photos/id/1073/700/460?grayscale' },
+  ];
+  const FEEDS_POOLS = { jobs: JOBS_POOL, innercircle: INNER_CIRCLE_POOL, outercircle: OUTER_CIRCLE_POOL, interesting: INTERESTING_POOL };
+
+  function feedsDataProvider(tab, count){
+    if(tab === 'saved') return savedTabSlice(count);
+    const pool = FEEDS_POOLS[tab] || JOBS_POOL;
+    const out = [];
+    for(let i=0;i<count;i++) out.push(pool[i % pool.length]);
+    return out;
+  }
+
+  const feedsGrid = initCanvasGrid({
+    viewportId: 'feedsCanvasViewport', trackId: 'feedsCanvasTrack', tabsId: 'feedsTabs',
+    defaultTab: 'jobs', dataProvider: feedsDataProvider,
+  });
+
+  function feedCardHTML(idx, c){
+    return `<div class="feed-card" data-kicker="${c.kicker||''}" data-tag="${c.tag}" data-img="${c.img||''}" data-body="${(c.meta||'').replace(/"/g,'&quot;')}">
+      <div class="feed-top"><span class="feed-idx">${String(idx).padStart(2,'0')}</span><span class="feed-arrow">→</span></div>
+      ${c.kicker ? `<div class="feed-kicker">${c.kicker}</div>` : ''}
+      <div class="feed-headline style-${c.style}">${c.headline}</div>
+      <div class="feed-meta-line">${c.meta}</div>
+      <div class="feed-bottom"><span class="feed-tag">${c.tag}</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+    </div>`;
+  }
+  function renderFeedsListRows(){
+    const rowMap = { jobs:'feedsRowJobs', innercircle:'feedsRowInner', outercircle:'feedsRowOuter', interesting:'feedsRowInteresting' };
+    Object.entries(rowMap).forEach(([tab, elId])=>{
+      const el = document.getElementById(elId);
+      if(!el) return;
+      el.innerHTML = FEEDS_POOLS[tab].map((c,i)=>feedCardHTML(i+1, c)).join('');
+    });
+    const savedEl = document.getElementById('feedsRowSaved');
+    if(savedEl){
+      const saved = window.getDockItems ? window.getDockItems() : [];
+      savedEl.innerHTML = saved.length
+        ? saved.map((item,i)=>feedCardHTML(i+1, adaptSavedItemForCanvas(item))).join('')
+        : feedCardHTML(1, { kicker:'Saved', tag:'Empty', style:'plain', headline:'Nothing saved yet.', meta:'Right-click any card and choose Save to start collecting.' });
+    }
+  }
+
+  const listRowsContainer = document.getElementById('feedsListRows');
+  if(listRowsContainer){
+    listRowsContainer.addEventListener('click', e=>{
+      if(e.target.closest('.feed-quick-save')) return;
+      const card = e.target.closest('.feed-card');
+      if(!card || !window.openCardPanel) return;
+      const kicker = card.dataset.kicker || '';
+      const tag = card.dataset.tag || '';
+      const img = card.dataset.img || '';
+      const body = card.dataset.body || '';
+      const role = (tag.split('·')[0] || '').trim();
+      const headlineEl = card.querySelector('.feed-headline');
+      const headline = headlineEl?.textContent.trim() || '';
+      const styleClass = [...(headlineEl?.classList || [])].find(c=>c.startsWith('style-')) || 'style-plain';
+      window.openCardPanel([
+        '<div class="poster-header">',
+          '<span class="poster-kicker">'+kicker+'</span>',
+          '<button class="poster-close" id="posterCloseBtn">Close ×</button>',
+        '</div>',
+        img ? '<div class="poster-media"><img src="'+img+'" alt=""></div>' : '',
+        '<div class="poster-body-wrap">',
+          '<h2 class="poster-title '+styleClass+'">'+headline+'</h2>',
+          '<p class="poster-body">'+body+'</p>',
+          '<div class="poster-tagrow">',
+            '<span class="poster-tag">'+tag+'</span>',
+            '<button class="poster-save" id="posterSaveBtn">Save</button>',
+          '</div>',
+          '<div class="poster-author">',
+            '<div class="poster-avatar">'+initialsOfHome(kicker)+'</div>',
+            '<div><div class="poster-author-name">'+kicker+'</div><div class="poster-author-role">'+role+'</div></div>',
+          '</div>',
+        '</div>',
+      ].join(''));
+      const panel = document.getElementById('posterPanel');
+      panel.querySelector('#posterCloseBtn')?.addEventListener('click', ()=>{ if(window.closeCardPanel) window.closeCardPanel(); });
+      panel.querySelector('#posterSaveBtn')?.addEventListener('click', ()=>{ if(window.saveFeedCard) window.saveFeedCard(card); });
+    });
+  }
+
+  const feedsModeToggle = document.getElementById('feedsModeToggle');
+  const feedsCanvasViewport = document.getElementById('feedsCanvasViewport');
+  if(feedsModeToggle && feedsCanvasViewport && listRowsContainer){
+    feedsModeToggle.querySelectorAll('button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        feedsModeToggle.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const isList = btn.dataset.feedsmode === 'list';
+        feedsCanvasViewport.style.display = isList ? 'none' : '';
+        document.getElementById('feedsTabs').style.display = isList ? 'none' : '';
+        listRowsContainer.style.display = isList ? '' : 'none';
+        if(isList) renderFeedsListRows();
+        else if(feedsGrid) feedsGrid.rebuildAndCenter();
+      });
+    });
+  }
+})();
+
 
 /* ─────────────────────────────────────────────
    FEED PAGE — master/detail panel
@@ -2979,40 +3018,44 @@ const CASE_STUDY_DETAILS = [
     role: 'Lead Product Designer', duration: '14 weeks', team: '3 designers, 6 engineers',
     impact: 'Cross-team component drift dropped to zero',
     skills: ['Design Systems','Figma','Accessibility','Workshop Facilitation'],
-    sections: [
-      { head:'The problem', body:'Three product tracks were independently rebuilding the same button, the same dropdown, the same nav pattern — each slightly incompatible with the others, with no shared source of truth anywhere.' },
-      { head:'The approach', body:'Ran a two-week audit across all three codebases before designing anything, then built the token layer first — color, spacing, type — before touching a single component, so every downstream decision inherited the same constraints.' },
-      { head:'The outcome', body:'All three teams now ship from one library. What used to require a Slack thread and a judgment call is now just the default.' },
+    subhead: 'Three product tracks were independently rebuilding the same button, the same dropdown, the same nav pattern — each slightly incompatible with the others. <strong>The token layer went in before a single component was touched</strong>, so every downstream decision inherited the same constraints.',
+    body: 'Ran a two-week audit across all three codebases before designing anything. All three teams now ship from one library — what used to require a Slack thread and a judgment call is just the default. Cross-team component drift dropped to zero within the quarter, and the workshop-facilitation sessions became the template other teams now request for their own onboarding.',
+    specs: [
+      ['Client','Studio Atlas'], ['Designer','Alex Kim'], ['Role','Lead Product Designer'], ['Category','Design Systems'], ['Status','Shipped · Live'],
+      ['Team','3 designers, 6 engineers'], ['Duration','14 weeks'], ['Deliverables','Token layer, component library'], ['Year','2025'], ['Impact','Zero cross-team drift'],
     ],
   },
   {
     role: 'Founding Product Designer', duration: '5 weeks to prototype, 6 months to GA', team: 'Solo design, 2 engineers',
     impact: '68% of new users completed onboarding without a support contact',
     skills: ['Prototyping','Figma','User Research'],
-    sections: [
-      { head:'The problem', body:'The product\u2019s core value only became obvious after a user had already configured three separate settings correctly — and almost nobody made it that far.' },
-      { head:'The approach', body:'Ran discovery solo since there was no research budget yet, watched five people struggle through the raw prototype, and rebuilt the first-run flow around the one moment that actually made people say "oh."' },
-      { head:'The outcome', body:'Shipped the first usable prototype in five weeks. Stayed on through GA to make sure the onboarding held up once real users, not just test subjects, came through it.' },
+    subhead: 'The product\u2019s core value only became obvious after a user had already configured three separate settings correctly — and almost nobody made it that far. <strong>Discovery ran solo, since there was no research budget yet.</strong>',
+    body: 'Watched five people struggle through the raw prototype before touching a single screen. Rebuilt the first-run flow around the one moment that actually made people say "oh." Shipped the first usable prototype in five weeks, then stayed on through GA to make sure the onboarding held up once real users, not just test subjects, came through it.',
+    specs: [
+      ['Client','Nordhaus Studio'], ['Designer','Alex Kim'], ['Role','Founding Product Designer'], ['Category','Applied ML'], ['Status','Shipped · Live'],
+      ['Team','Solo design, 2 engineers'], ['Duration','5 wks to prototype, 6 mo to GA'], ['Deliverables','Onboarding flow, prototype'], ['Year','2024'], ['Impact','68% completed unassisted'],
     ],
   },
   {
     role: 'Senior Product Designer', duration: '10 weeks', team: '2 designers, 4 engineers',
     impact: 'Weekly active use tripled within one quarter',
     skills: ['Heuristic Audit','Usability Testing','Navigation Design'],
-    sections: [
-      { head:'The problem', body:'The dashboard had the right data the whole time. Nobody trusted it enough to check it more than once a month.' },
-      { head:'The approach', body:'A heuristic audit surfaced eleven distinct navigation dead ends before a single design was tested. Three rounds of usability testing rebuilt the information architecture around the three questions people actually asked, not the seventeen the dashboard tried to answer.' },
-      { head:'The outcome', body:'Weekly active use tripled in one quarter. The rebuild didn\u2019t add a single new metric — it just made the right ones findable.' },
+    subhead: 'The dashboard had the right data the whole time. Nobody trusted it enough to check it more than once a month. <strong>A heuristic audit surfaced eleven distinct navigation dead ends before a single design was tested.</strong>',
+    body: 'Three rounds of usability testing rebuilt the information architecture around the three questions people actually asked, not the seventeen the dashboard tried to answer. The rebuild didn\u2019t add a single new metric — it just made the right ones findable. Weekly active use tripled in one quarter.',
+    specs: [
+      ['Client','Meridian Analytics'], ['Designer','Alex Kim'], ['Role','Senior Product Designer'], ['Category','Data Platform UX'], ['Status','Shipped · Live'],
+      ['Team','2 designers, 4 engineers'], ['Duration','10 weeks'], ['Deliverables','IA rebuild, usability audit'], ['Year','2023'], ['Impact','3x weekly active use'],
     ],
   },
   {
     role: 'Contract Design Systems Lead', duration: '12 weeks', team: 'Solo, handed off to an in-house team of 2',
     impact: 'System still in production three years after the contract ended',
     skills: ['Design Systems','Documentation','Component Architecture'],
-    sections: [
-      { head:'The problem', body:'A growth-stage startup needed a system built by someone who\u2019d be gone in three months — which meant documentation wasn\u2019t a nice-to-have, it was the actual deliverable.' },
-      { head:'The approach', body:'Documented every pattern\u2019s intent, not just its usage — why a component existed, not only how to implement it — so a future team could extend the system without guessing at the original reasoning.' },
-      { head:'The outcome', body:'The system outlasted the contract. Three years later, it\u2019s still what the in-house team builds from.' },
+    subhead: 'A growth-stage startup needed a system built by someone who\u2019d be gone in three months — which meant documentation wasn\u2019t a nice-to-have, it was the actual deliverable. <strong>Every pattern\u2019s intent got documented, not just its usage.</strong>',
+    body: 'Why a component existed, not only how to implement it, so a future team could extend the system without guessing at the original reasoning. The system outlasted the contract — three years later, it\u2019s still what the in-house team builds from.',
+    specs: [
+      ['Client','Vector Labs'], ['Designer','Alex Kim'], ['Role','Contract Design Systems Lead'], ['Category','Design Systems'], ['Status','Shipped · Live'],
+      ['Team','Solo, handed to team of 2'], ['Duration','12 weeks'], ['Deliverables','Component library, docs'], ['Year','2022'], ['Impact','Still in production, 3 yrs later'],
     ],
   },
 ];
@@ -3040,13 +3083,21 @@ function renderCaseDetail(row, index){
     <div class="case-detail-skills">${d.skills.map(s=>`<span class="case-skill">${s}</span>`).join('')}</div>
     <button class="case-detail-save" id="caseDetailSaveBtn">Save this case study</button>
   `;
+  const half = Math.ceil(d.specs.length/2);
+  const specsColA = d.specs.slice(0, half);
+  const specsColB = d.specs.slice(half);
   right.innerHTML = `
     <p class="case-detail-lede">${desc}</p>
-    ${d.sections.map(s=>`
-      <div class="case-detail-section">
-        <div class="case-detail-section-head">${s.head}</div>
-        <div class="case-detail-section-body">${s.body}</div>
-      </div>`).join('')}
+    <div class="case-detail-subhead">${d.subhead}</div>
+    <div class="case-detail-body-text">${d.body}</div>
+    <div class="case-detail-section-label">Specifications</div>
+    <div class="case-detail-specs">
+      <div class="case-specs-label-col">Specifications</div>
+      <div class="case-specs-body">
+        <div>${specsColA.map(([k,v])=>`<div class="case-spec-row"><span class="case-spec-key">${k}</span><span class="case-spec-val">${v}</span></div>`).join('')}</div>
+        <div>${specsColB.map(([k,v])=>`<div class="case-spec-row"><span class="case-spec-key">${k}</span><span class="case-spec-val">${v}</span></div>`).join('')}</div>
+      </div>
+    </div>
   `;
   left.querySelector('#caseDetailSaveBtn')?.addEventListener('click', ()=>{
     if(window.saveGenericItem) window.saveGenericItem('Case Study', title, tag);
@@ -3096,7 +3147,7 @@ document.getElementById('caseDetailOverlay')?.addEventListener('click', closeCas
   ];
   let currentFilter = 'all';
 
-  const SAVEABLE_SELECTOR = '#jobsFeed .job-row, #panel-case-studies .case-row, #view-profile .gallery-grid .m-cell, .feed-card';
+  const SAVEABLE_SELECTOR = '#panel-case-studies .case-row, #view-profile .gallery-grid .m-cell, .feed-card';
 
   function cardType(el){
     if(el.classList.contains('job-row')) return 'Job';
@@ -3283,10 +3334,10 @@ document.getElementById('caseDetailOverlay')?.addEventListener('click', closeCas
       ctxTarget = { el: card, type };
       html += `<button class="ctx-item" data-action="save">Save ${type}</button><div class="ctx-sep"></div>`;
     } else if(currentView === 'home'){
-      html += `<button class="ctx-item" data-action="nav-jobs">Jobs</button>`;
-      html += `<button class="ctx-item" data-action="nav-network">Network</button>`;
-      html += `<button class="ctx-item" data-action="nav-analytics">Analytics</button>`;
-      html += `<button class="ctx-item" data-action="nav-agents">Agents</button>`;
+      html += `<button class="ctx-item" data-action="nav-jobs">Feeds</button>`;
+      html += `<button class="ctx-item" data-action="nav-network">Circles</button>`;
+      html += `<button class="ctx-item" data-action="nav-analytics">Dashboard</button>`;
+      html += `<button class="ctx-item" data-action="nav-agents">Agents (coming soon)</button>`;
       html += `<button class="ctx-item" data-action="nav-profile">View public profile</button>`;
       html += `<div class="ctx-sep"></div>`;
     }
