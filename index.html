@@ -868,7 +868,7 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
 .analytics-page{padding:130px 20px 60px;max-width:1500px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
 .analytics-title{font-family:var(--serif);font-weight:600;font-size:clamp(24px,2.8vw,34px);margin-bottom:10px}
 .analytics-sub{font-size:13.5px;line-height:1.7;color:var(--muted);max-width:64ch;margin-bottom:28px}
-.analytics-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(6,minmax(110px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);flex:1 1 auto;min-height:0}
+.analytics-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(8,minmax(110px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);flex:1 1 auto;min-height:0}
 .a-cell{background:var(--bg);padding:22px 24px;display:flex;flex-direction:column;justify-content:center}
 .a-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .a-number{font-family:var(--serif);font-weight:600;font-size:clamp(36px,4.2vw,64px);line-height:1}
@@ -883,10 +883,17 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
 .a-list .a-row:last-child{border-bottom:none}
 .a-list .a-row b{font-family:var(--serif);font-weight:600;font-size:14px}
 .a-banner{align-items:center;text-align:center;font-family:var(--serif);font-style:italic;font-size:clamp(14px,1.4vw,17px);color:var(--muted)}
+.a-viewers{padding:20px 24px;justify-content:flex-start}
+.a-viewer-row{display:flex;gap:12px;overflow-x:auto;margin-top:4px;padding-bottom:2px}
+.a-viewer-card{flex:0 0 168px;cursor:none;padding:14px;border:1px solid var(--rule);background:var(--bg);transition:transform .2s cubic-bezier(.16,1,.3,1),box-shadow .2s}
+.a-viewer-card:hover{transform:translateY(-3px);box-shadow:0 18px 34px -14px color-mix(in srgb, var(--fg) 28%, transparent);z-index:2}
+.a-viewer-avatar{width:36px;height:36px;border-radius:50%;background:var(--fg);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10.5px;margin-bottom:12px}
+.a-viewer-name{font-family:var(--serif);font-weight:600;font-size:13.5px}
+.a-viewer-role{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.4}
 @media(max-width:900px){
   .analytics-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:none;grid-auto-rows:minmax(120px,auto)}
   .a-cell{grid-column:auto !important;grid-row:auto !important}
-  .a-big,.a-chart,.a-list,.a-banner{grid-column:1/3 !important}
+  .a-big,.a-chart,.a-list,.a-banner,.a-viewers{grid-column:1/3 !important}
 }
 
 /* ═══════════════ AGENTS PAGE — placeholder iframe ═══════════════ */
@@ -1468,183 +1475,8 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
 
 <!-- ═══════════════════════ VIEW: NETWORK — Kanban board ═══════════════════════ -->
 <div id="view-network" style="display:none">
-  <div class="network-page">
-    <div class="network-head">
-      <div class="network-title">Circles</div>
-      <p class="network-sub">Everyone you've built something with, organized by how close the work actually was — not who posted today.</p>
-    </div>
-
-    <div class="network-toolbar">
-      <div class="network-mode-toggle" id="networkModeToggle">
-        <button class="active" data-networkmode="feed">Feed</button>
-        <button data-networkmode="connections">Connections</button>
-      </div>
-    </div>
-
-    <!-- ═══ FEED — filterable posts from your network, primary view ═══ -->
-    <div class="network-feed-section" id="networkFeedSection">
-      <div class="network-filters">
-        <button class="network-filter active" data-filter="latest">Latest</button>
-        <button class="network-filter" data-filter="trending">Trending</button>
-        <button class="network-filter" data-filter="range">Range</button>
-        <button class="network-filter" data-filter="region">Region</button>
-        <button class="network-filter" data-filter="category">Category</button>
-      </div>
-      <div class="feed-grid" id="networkFeedGrid">
-        <div class="feed-card" data-kicker="Rachel Kim" data-tag="Product · 2d ago" data-img="https://picsum.photos/id/1027/700/460?grayscale" data-author="Rachel Kim" data-role="Product Lead · Studio Atlas" data-date="2" data-trend="88" data-body="The rebuild finally has a name people believe in internally, which usually means it ships.">
-          <div class="feed-top"><span class="feed-idx">01</span><span class="feed-arrow">→</span></div>
-          <div class="feed-kicker">Rachel Kim</div>
-          <div class="feed-headline style-bold">Just wrapped Q3 planning for the Wove rebuild.</div>
-          <div class="feed-meta-line">The rebuild finally has a name people believe in internally.</div>
-          <div class="feed-bottom"><span class="feed-tag">Product · 2d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
-        </div>
-        <div class="feed-card" data-kicker="Priya Shah" data-tag="Design Systems · 5h ago" data-img="https://picsum.photos/id/1040/700/460?grayscale" data-author="Priya Shah" data-role="Design Systems · Nordhaus Studio" data-date="0.2" data-trend="95" data-body="Every component now documents its own accessibility contract, not just its props.">
-          <div class="feed-top"><span class="feed-idx">02</span><span class="feed-arrow">→</span></div>
-          <div class="feed-kicker">Priya Shah</div>
-          <div class="feed-headline style-plain">New design tokens shipped across the component library.</div>
-          <div class="feed-meta-line">Every component now documents its own accessibility contract.</div>
-          <div class="feed-bottom"><span class="feed-tag">Design Systems · 5h ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
-        </div>
-        <div class="feed-card" data-kicker="Marcus Webb" data-tag="Funding · 1d ago" data-img="https://picsum.photos/id/1050/700/460?grayscale" data-author="Marcus Webb" data-role="Founding Engineer · Nordhaus Studio" data-date="1" data-trend="99" data-body="Closed the round with the same three investors who passed on the seed.">
-          <div class="feed-top"><span class="feed-idx">03</span><span class="feed-arrow">→</span></div>
-          <div class="feed-kicker">Marcus Webb</div>
-          <div class="feed-headline style-bold">Nordhaus Studio closed its seed round this week.</div>
-          <div class="feed-meta-line">Closed with the same three investors who passed the first time.</div>
-          <div class="feed-bottom"><span class="feed-tag">Funding · 1d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
-        </div>
-        <div class="feed-card" data-kicker="Théo Marchal" data-tag="Growth · 3d ago" data-img="https://picsum.photos/id/1059/700/460?grayscale" data-author="Théo Marchal" data-role="Growth Lead · Vector Labs" data-date="3" data-trend="72" data-body="Retention held steady through the growth — the part that usually breaks first.">
-          <div class="feed-top"><span class="feed-idx">04</span><span class="feed-arrow">→</span></div>
-          <div class="feed-kicker">Théo Marchal</div>
-          <div class="feed-headline style-plain">Vector Labs crossed 50K weekly active users.</div>
-          <div class="feed-meta-line">Retention held steady through the growth, for once.</div>
-          <div class="feed-bottom"><span class="feed-tag">Growth · 3d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
-        </div>
-        <div class="feed-card" data-kicker="Elin Vass" data-tag="Documentary · 1w ago" data-img="https://picsum.photos/id/1025/700/460?grayscale" data-author="Elin Vass" data-role="Director · Documentary" data-date="7" data-trend="64" data-body="First cut runs long, but every scene earns its place.">
-          <div class="feed-top"><span class="feed-idx">05</span><span class="feed-arrow">→</span></div>
-          <div class="feed-kicker">Elin Vass</div>
-          <div class="feed-headline style-quote">"Drift" premieres next month — the first cut is done.</div>
-          <div class="feed-meta-line">Runs long, but every scene earns its place.</div>
-          <div class="feed-bottom"><span class="feed-tag">Documentary · 1w ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
-        </div>
-        <div class="feed-card" data-kicker="Sasha Lund" data-tag="Games · 4d ago" data-img="https://picsum.photos/id/1074/700/460?grayscale" data-author="Sasha Lund" data-role="Creative Direction · Lower Deck Games" data-date="4" data-trend="80" data-body="Open beta means the balance patches start now, not at launch.">
-          <div class="feed-top"><span class="feed-idx">06</span><span class="feed-arrow">→</span></div>
-          <div class="feed-kicker">Sasha Lund</div>
-          <div class="feed-headline style-bold">Lower Deck Games opened its first public beta.</div>
-          <div class="feed-meta-line">Balance patches start now, not at launch.</div>
-          <div class="feed-bottom"><span class="feed-tag">Games · 4d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
-        </div>
-        <div class="feed-card" data-kicker="Lucia Ferrer" data-tag="Case study · 2w ago" data-img="https://picsum.photos/id/1043/700/460?grayscale" data-author="Lucia Ferrer" data-role="UX Researcher · GNC recovery" data-date="14" data-trend="55" data-body="The research everyone asked for and nobody had time to write until now.">
-          <div class="feed-top"><span class="feed-idx">07</span><span class="feed-arrow">→</span></div>
-          <div class="feed-kicker">Lucia Ferrer</div>
-          <div class="feed-headline style-plain">Wrote up the GNC recovery research, finally.</div>
-          <div class="feed-meta-line">Everyone asked for it; nobody had time until now.</div>
-          <div class="feed-bottom"><span class="feed-tag">Case study · 2w ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
-        </div>
-        <div class="feed-card" data-kicker="Sam Okoro" data-tag="Fintech · 6d ago" data-img="https://picsum.photos/id/1069/700/460?grayscale" data-author="Sam Okoro" data-role="Engineer · BNY Mellon / Wove" data-date="6" data-trend="70" data-body="First production milestone, eighteen months after the first whiteboard sketch.">
-          <div class="feed-top"><span class="feed-idx">08</span><span class="feed-arrow">→</span></div>
-          <div class="feed-kicker">Sam Okoro</div>
-          <div class="feed-headline style-plain">BNY Mellon / Wove hit its first production milestone.</div>
-          <div class="feed-meta-line">Eighteen months after the first whiteboard sketch.</div>
-          <div class="feed-bottom"><span class="feed-tag">Fintech · 6d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ CONNECTIONS — Browse/Kanban person views, secondary ═══ -->
-    <div class="network-connections-section" id="networkConnectionsSection" style="display:none">
-      <div class="network-view-toggle" id="networkViewToggle">
-        <button class="active" data-networkview="browse">Browse</button>
-        <button data-networkview="kanban">Kanban</button>
-      </div>
-
-    <!-- ═══ BROWSE — Netflix-style rows, primary view ═══ -->
-    <div class="network-browse" id="networkBrowse">
-
-      <div class="browse-row">
-        <div class="browse-row-head"><span>First-degree</span><i>24</i></div>
-        <div class="browse-row-track">
-          <div class="browse-poster"><div class="poster-avatar">RK</div><div class="poster-name">Rachel Kim</div><div class="poster-role">Product Lead · Studio Atlas</div><div class="poster-meta">3 mutual · Active 2d ago</div><button class="poster-btn">Message</button></div>
-          <div class="browse-poster"><div class="poster-avatar">PS</div><div class="poster-name">Priya Shah</div><div class="poster-role">Design Systems · Nordhaus Studio</div><div class="poster-meta">5 mutual · Active today</div><button class="poster-btn">Message</button></div>
-          <div class="browse-poster"><div class="poster-avatar">MW</div><div class="poster-name">Marcus Webb</div><div class="poster-role">Founding Engineer · Nordhaus Studio</div><div class="poster-meta">2 mutual · Active 1w ago</div><button class="poster-btn">Message</button></div>
-          <div class="browse-poster"><div class="poster-avatar">TM</div><div class="poster-name">Théo Marchal</div><div class="poster-role">Growth Lead · Vector Labs</div><div class="poster-meta">4 mutual · Active 3d ago</div><button class="poster-btn">Message</button></div>
-        </div>
-      </div>
-
-      <div class="browse-row">
-        <div class="browse-row-head"><span>Second-degree</span><i>86</i></div>
-        <div class="browse-row-track">
-          <div class="browse-poster"><div class="poster-avatar">EV</div><div class="poster-name">Elin Vass</div><div class="poster-role">Director · Documentary</div><div class="poster-meta">1 mutual · via Rachel Kim</div><button class="poster-btn">Connect</button></div>
-          <div class="browse-poster"><div class="poster-avatar">SL</div><div class="poster-name">Sasha Lund</div><div class="poster-role">Creative Direction · Lower Deck Games</div><div class="poster-meta">2 mutual · via Théo Marchal</div><button class="poster-btn">Connect</button></div>
-          <div class="browse-poster"><div class="poster-avatar">RO</div><div class="poster-name">R. Okafor</div><div class="poster-role">Producer · Parallax</div><div class="poster-meta">1 mutual · via Priya Shah</div><button class="poster-btn">Connect</button></div>
-          <div class="browse-poster"><div class="poster-avatar">KW</div><div class="poster-name">Kenji Watanabe</div><div class="poster-role">Backend Engineer · Meridian Analytics</div><div class="poster-meta">3 mutual · via Marcus Webb</div><button class="poster-btn">Connect</button></div>
-        </div>
-      </div>
-
-      <div class="browse-row">
-        <div class="browse-row-head"><span>Shared rooms</span><i>12</i></div>
-        <div class="browse-row-track">
-          <div class="browse-poster"><div class="poster-avatar">LF</div><div class="poster-name">Lucia Ferrer</div><div class="poster-role">UX Researcher · GNC recovery</div><div class="poster-meta">Same room · 2021</div><button class="poster-btn">Message</button></div>
-          <div class="browse-poster"><div class="poster-avatar">SO</div><div class="poster-name">Sam Okoro</div><div class="poster-role">Engineer · BNY Mellon / Wove</div><div class="poster-meta">Same room · 2022–23</div><button class="poster-btn">Message</button></div>
-          <div class="browse-poster"><div class="poster-avatar">DR</div><div class="poster-name">Dana Ruiz</div><div class="poster-role">PM · Hardinge drop-nav</div><div class="poster-meta">Same room · 2020</div><button class="poster-btn">Message</button></div>
-        </div>
-      </div>
-
-      <div class="browse-row">
-        <div class="browse-row-head"><span>Recently active</span><i>9</i></div>
-        <div class="browse-row-track">
-          <div class="browse-poster"><div class="poster-avatar">MW</div><div class="poster-name">Marcus Webb</div><div class="poster-role">Founding Engineer · Nordhaus Studio</div><div class="poster-meta">Posted an update · 4h ago</div><button class="poster-btn">Message</button></div>
-          <div class="browse-poster"><div class="poster-avatar">EV</div><div class="poster-name">Elin Vass</div><div class="poster-role">Director · Documentary</div><div class="poster-meta">Shipped Drift · 1d ago</div><button class="poster-btn">Connect</button></div>
-          <div class="browse-poster"><div class="poster-avatar">DR</div><div class="poster-name">Dana Ruiz</div><div class="poster-role">PM · Hardinge drop-nav</div><div class="poster-meta">Opened a room · 2d ago</div><button class="poster-btn">Message</button></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ═══ KANBAN — secondary view, full-viewport board ═══ -->
-    <div class="network-kanban" id="networkKanban" style="display:none">
-      <div class="network-board">
-
-        <div class="network-col">
-          <div class="network-col-head"><span>First-degree</span><i>24</i></div>
-          <div class="network-col-body">
-            <div class="person-card"><div class="person-avatar">RK</div><div class="person-info"><div class="person-name">Rachel Kim</div><div class="person-role">Product Lead · Studio Atlas</div><div class="person-meta">3 mutual · Active 2d ago</div></div><button class="person-msg">Message</button></div>
-            <div class="person-card"><div class="person-avatar">PS</div><div class="person-info"><div class="person-name">Priya Shah</div><div class="person-role">Design Systems · Nordhaus Studio</div><div class="person-meta">5 mutual · Active today</div></div><button class="person-msg">Message</button></div>
-            <div class="person-card"><div class="person-avatar">MW</div><div class="person-info"><div class="person-name">Marcus Webb</div><div class="person-role">Founding Engineer · Nordhaus Studio</div><div class="person-meta">2 mutual · Active 1w ago</div></div><button class="person-msg">Message</button></div>
-            <div class="person-card"><div class="person-avatar">TM</div><div class="person-info"><div class="person-name">Théo Marchal</div><div class="person-role">Growth Lead · Vector Labs</div><div class="person-meta">4 mutual · Active 3d ago</div></div><button class="person-msg">Message</button></div>
-          </div>
-        </div>
-
-        <div class="network-col">
-          <div class="network-col-head"><span>Second-degree</span><i>86</i></div>
-          <div class="network-col-body">
-            <div class="person-card"><div class="person-avatar">EV</div><div class="person-info"><div class="person-name">Elin Vass</div><div class="person-role">Director · Documentary</div><div class="person-meta">1 mutual · via Rachel Kim</div></div><button class="person-msg">Connect</button></div>
-            <div class="person-card"><div class="person-avatar">SL</div><div class="person-info"><div class="person-name">Sasha Lund</div><div class="person-role">Creative Direction · Lower Deck Games</div><div class="person-meta">2 mutual · via Théo Marchal</div></div><button class="person-msg">Connect</button></div>
-            <div class="person-card"><div class="person-avatar">RO</div><div class="person-info"><div class="person-name">R. Okafor</div><div class="person-role">Producer · Parallax</div><div class="person-meta">1 mutual · via Priya Shah</div></div><button class="person-msg">Connect</button></div>
-            <div class="person-card"><div class="person-avatar">KW</div><div class="person-info"><div class="person-name">Kenji Watanabe</div><div class="person-role">Backend Engineer · Meridian Analytics</div><div class="person-meta">3 mutual · via Marcus Webb</div></div><button class="person-msg">Connect</button></div>
-          </div>
-        </div>
-
-        <div class="network-col">
-          <div class="network-col-head"><span>Shared rooms</span><i>12</i></div>
-          <div class="network-col-body">
-            <div class="person-card"><div class="person-avatar">LF</div><div class="person-info"><div class="person-name">Lucia Ferrer</div><div class="person-role">UX Researcher · GNC recovery</div><div class="person-meta">Same room · 2021</div></div><button class="person-msg">Message</button></div>
-            <div class="person-card"><div class="person-avatar">SO</div><div class="person-info"><div class="person-name">Sam Okoro</div><div class="person-role">Engineer · BNY Mellon / Wove</div><div class="person-meta">Same room · 2022–23</div></div><button class="person-msg">Message</button></div>
-            <div class="person-card"><div class="person-avatar">DR</div><div class="person-info"><div class="person-name">Dana Ruiz</div><div class="person-role">PM · Hardinge drop-nav</div><div class="person-meta">Same room · 2020</div></div><button class="person-msg">Message</button></div>
-          </div>
-        </div>
-
-        <div class="network-col">
-          <div class="network-col-head"><span>Recently active</span><i>9</i></div>
-          <div class="network-col-body">
-            <div class="person-card"><div class="person-avatar">MW</div><div class="person-info"><div class="person-name">Marcus Webb</div><div class="person-role">Founding Engineer · Nordhaus Studio</div><div class="person-meta">Posted an update · 4h ago</div></div><button class="person-msg">Message</button></div>
-            <div class="person-card"><div class="person-avatar">EV</div><div class="person-info"><div class="person-name">Elin Vass</div><div class="person-role">Director · Documentary</div><div class="person-meta">Shipped Drift · 1d ago</div></div><button class="person-msg">Connect</button></div>
-            <div class="person-card"><div class="person-avatar">DR</div><div class="person-info"><div class="person-name">Dana Ruiz</div><div class="person-role">PM · Hardinge drop-nav</div><div class="person-meta">Opened a room · 2d ago</div></div><button class="person-msg">Message</button></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    </div><!-- /network-connections-section -->
+  <div class="agents-page">
+    <iframe src="https://zack.cx/placeholder00.html" title="Circles — placeholder" loading="lazy"></iframe>
   </div>
 </div><!-- /view-network -->
 
@@ -1720,7 +1552,32 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
         <div class="a-row"><span>Media</span><b>14%</b></div>
       </div>
 
-      <div class="a-cell a-banner" style="grid-column:1/13;grid-row:6/7">
+      <div class="a-cell a-list" style="grid-column:1/5;grid-row:6/7">
+        <div class="a-label">Session detail</div>
+        <div class="a-row"><span>Pages / session</span><b>3.4</b></div>
+        <div class="a-row"><span>Bounce rate</span><b>28%</b></div>
+        <div class="a-row"><span>Return visitors</span><b>41%</b></div>
+      </div>
+
+      <div class="a-cell a-list" style="grid-column:5/9;grid-row:6/7">
+        <div class="a-label">Device split</div>
+        <div class="a-row"><span>Desktop</span><b>58%</b></div>
+        <div class="a-row"><span>Mobile</span><b>36%</b></div>
+        <div class="a-row"><span>Tablet</span><b>6%</b></div>
+      </div>
+
+      <div class="a-cell" style="grid-column:9/13;grid-row:6/7">
+        <div class="a-label">Peak activity</div>
+        <div class="a-number a-mid">Tue, 2–4pm</div>
+        <div class="a-delta">Busiest window this month</div>
+      </div>
+
+      <div class="a-cell a-viewers" style="grid-column:1/13;grid-row:7/8">
+        <div class="a-label">People who viewed you also viewed</div>
+        <div class="a-viewer-row" id="dashboardViewers"></div>
+      </div>
+
+      <div class="a-cell a-banner" style="grid-column:1/13;grid-row:8/9">
         No vanity totals, no locked tiers — this is the whole picture, all the time.
       </div>
 
@@ -1731,7 +1588,7 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
 <!-- ═══════════════════════ VIEW: AGENTS — placeholder iframe ═══════════════════════ -->
 <div id="view-agents" style="display:none">
   <div class="agents-page">
-    <iframe src="https://zack.cx/placeholder" title="Agents — placeholder" loading="lazy"></iframe>
+    <iframe src="https://zack.cx/placeholder.html" title="Agents — placeholder" loading="lazy"></iframe>
   </div>
 </div><!-- /view-agents -->
 
@@ -3125,6 +2982,65 @@ document.querySelectorAll('.profile-tab').forEach(tab=>{
     document.getElementById('panel-'+tab.dataset.tab).classList.add('active');
   });
 });
+
+/* ─────────────────────────────────────────────
+   MOCK PROFILES — a small set of realistic people
+   reused across Feeds/Circles-adjacent content, now
+   also powering the Dashboard's "also viewed" row.
+   Real people aren't behind these profiles — this is
+   demo depth, not a claim about actual visitors.
+───────────────────────────────────────────── */
+const MOCK_PROFILES = [
+  { name:'Rachel Kim', role:'Product Lead', company:'Studio Atlas', bio:'Introduced you to the Studio Atlas room — building the component library the whole studio ships from.', mutual:3 },
+  { name:'Priya Shah', role:'Design Systems', company:'Nordhaus Studio', bio:'Shipped new design tokens across the component library this week.', mutual:5 },
+  { name:'Marcus Webb', role:'Founding Engineer', company:'Nordhaus Studio', bio:'Closed a seed round with the same three investors who passed the first time.', mutual:2 },
+  { name:'Th\u00e9o Marchal', role:'Growth Lead', company:'Vector Labs', bio:'Crossed 50K weekly active users without losing retention.', mutual:4 },
+  { name:'Elin Vass', role:'Director', company:'Documentary', bio:'"Drift" premieres next month — the first cut is done.', mutual:1 },
+  { name:'Sasha Lund', role:'Creative Direction', company:'Lower Deck Games', bio:'Opened the first public beta this week.', mutual:2 },
+];
+function initialsOfMock(name){
+  const words = (name||'').split(/\s+/).filter(w=>/[a-zA-Z]/.test(w));
+  if(!words.length) return '\u2022';
+  if(words.length===1) return words[0].slice(0,2).toUpperCase();
+  return (words[0][0]+words[1][0]).toUpperCase();
+}
+(function(){
+  const row = document.getElementById('dashboardViewers');
+  if(!row) return;
+  row.innerHTML = MOCK_PROFILES.map((p,i)=>`
+    <div class="a-viewer-card" data-idx="${i}">
+      <div class="a-viewer-avatar">${initialsOfMock(p.name)}</div>
+      <div class="a-viewer-name">${p.name}</div>
+      <div class="a-viewer-role">${p.role} \u00b7 ${p.company}</div>
+    </div>`).join('');
+  row.addEventListener('click', e=>{
+    const card = e.target.closest('.a-viewer-card');
+    if(!card || !window.openCardPanel) return;
+    const p = MOCK_PROFILES[card.dataset.idx];
+    window.openCardPanel([
+      '<div class="poster-header">',
+        '<span class="poster-kicker">'+p.company+'</span>',
+        '<button class="poster-close" id="posterCloseBtn">Close \u00d7</button>',
+      '</div>',
+      '<div class="poster-body-wrap">',
+        '<h2 class="poster-title style-plain">'+p.name+'</h2>',
+        '<p class="poster-body">'+p.bio+'</p>',
+        '<div class="poster-tagrow">',
+          '<span class="poster-tag">'+p.role+' \u00b7 '+p.mutual+' mutual</span>',
+        '</div>',
+        '<div class="poster-author">',
+          '<div class="poster-avatar">'+initialsOfMock(p.name)+'</div>',
+          '<div><div class="poster-author-name">'+p.name+'</div><div class="poster-author-role">'+p.role+' \u00b7 '+p.company+'</div></div>',
+        '</div>',
+        '<div class="poster-related">',
+          '<div class="poster-related-label">A note on this preview</div>',
+          '<p style="font-size:12.5px;color:var(--muted);line-height:1.6">Full individual profile pages roll out as more members join intoview. — for now, this is the depth available for people outside your own account.</p>',
+        '</div>',
+      '</div>',
+    ].join(''));
+    document.getElementById('posterPanel').querySelector('#posterCloseBtn')?.addEventListener('click', ()=>{ if(window.closeCardPanel) window.closeCardPanel(); });
+  });
+})();
 
 /* ─────────────────────────────────────────────
    CASE STUDY DETAIL — two-panel full-viewport view.
