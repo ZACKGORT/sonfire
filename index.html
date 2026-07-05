@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>intoview.pro — Who's Actually Looking</title>
+<link rel="icon" type="image/webp" href="https://raw.githubusercontent.com/ZACKGORT/ZACKGORT/main/favicon.webp">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@300;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -54,7 +55,8 @@ img{max-width:100%;display:block}
 
 /* ═══════════════ MONDRIAN NAV (block system, not a row of links) ═══════════════ */
 .mnav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;height:56px;border-bottom:1px solid var(--rule);background:color-mix(in srgb, var(--bg) 92%, transparent);backdrop-filter:blur(10px)}
-.mnav-word{flex:0 0 200px;display:flex;align-items:center;padding:0 20px;font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em;border-right:1px solid var(--rule);cursor:none;text-decoration:none;color:var(--fg)}
+.mnav-word{flex:0 0 200px;display:flex;align-items:center;gap:9px;padding:0 20px;font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em;border-right:1px solid var(--rule);cursor:none;text-decoration:none;color:var(--fg)}
+.mnav-logo-icon{width:24px;height:24px;object-fit:contain;flex-shrink:0}
 .mnav-account{
   flex:0 0 110px;display:flex;align-items:center;justify-content:center;
   font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
@@ -761,7 +763,7 @@ img{max-width:100%;display:block}
 <div class="v-coord" id="vCoord">X 0.00 · Y 0.00</div>
 
 <nav class="mnav">
-  <a class="mnav-word" href="#top" data-view="home">intoview.</a>
+  <a class="mnav-word" href="#top" data-view="home"><img class="mnav-logo-icon" src="https://raw.githubusercontent.com/ZACKGORT/ZACKGORT/main/favicon.webp" alt="">intoview.</a>
   <div class="mnav-links">
     <a href="#" data-view="jobs"><span>Jobs</span></a>
     <a href="#graph" data-anchor="graph"><span>Network</span></a>
@@ -2050,6 +2052,7 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
   function stopInertia(){ velX = 0; velY = 0; }
 
   viewport.addEventListener('pointerdown', e=>{
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
     if(e.target.closest('.feed-quick-save')) return;
     stopInertia();
     dragging = true; moved = false;
