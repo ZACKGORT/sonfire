@@ -743,6 +743,13 @@ img{max-width:100%;display:block}
 
 .gallery-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:8px 0 1px}
 .gallery-grid{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:120px;gap:1px;background:var(--rule)}
+.gallery-grid .m-cell.expanded{
+  position:fixed !important;top:6vh;left:6vw;right:6vw;bottom:6vh;
+  grid-column:auto !important;grid-row:auto !important;
+  z-index:9500;box-shadow:0 60px 140px -20px color-mix(in srgb, var(--fg) 45%, transparent);
+}
+.gallery-grid .m-cell.expanded .m-media-img-wrap{width:100%;height:100%}
+@media(max-width:760px){.gallery-grid .m-cell.expanded{top:3vh;left:3vw;right:3vw;bottom:3vh}}
 
 @media(max-width:900px){
   .profile-grid{grid-template-columns:1fr}
@@ -758,6 +765,64 @@ img{max-width:100%;display:block}
   .profile-facts .profile-fact{break-inside:avoid;margin-bottom:10px}
   .profile-bio{columns:2 130px;column-gap:18px;max-width:none}
 }
+
+/* ═══════════════ NETWORK PAGE — Kanban board ═══════════════ */
+.network-page{padding:130px 20px 90px;max-width:1500px;margin:0 auto}
+.network-title{font-family:var(--serif);font-weight:600;font-size:clamp(24px,2.8vw,34px);margin-bottom:10px}
+.network-sub{font-size:13.5px;line-height:1.7;color:var(--muted);max-width:60ch;margin-bottom:28px}
+.network-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.network-filter{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:8px 15px;border:1px solid var(--rule);background:none;color:var(--muted);cursor:none}
+.network-filter.active{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.network-board{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.network-col{background:var(--bg);display:flex;flex-direction:column;min-height:0}
+.network-col-head{display:flex;justify-content:space-between;align-items:baseline;padding:16px 18px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.network-col-head span{color:var(--fg);font-weight:600}
+.network-col-body{padding:10px 14px;display:flex;flex-direction:column;gap:1px;max-height:640px;overflow-y:auto}
+.person-card{display:flex;align-items:center;gap:12px;padding:14px 4px;border-bottom:1px solid var(--faint);cursor:none}
+.person-card:last-child{border-bottom:none}
+.person-avatar{width:36px;height:36px;border-radius:50%;background:var(--fg);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0}
+.person-info{flex:1;min-width:0}
+.person-name{font-family:var(--serif);font-weight:600;font-size:13.5px}
+.person-role{font-size:11px;color:var(--muted);margin-top:2px}
+.person-meta{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
+.person-msg{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--rule);background:none;color:var(--fg);cursor:none;white-space:nowrap;flex-shrink:0}
+.person-msg:hover{background:var(--fg);color:var(--bg)}
+@media(max-width:900px){
+  .network-board{grid-template-columns:repeat(2,1fr);gap:0;background:none;border:none}
+  .network-col{grid-column:1/3;border-bottom:1px solid var(--rule)}
+  .network-col-body{max-height:none;overflow:visible;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px}
+  .person-card{flex-direction:column;align-items:flex-start;border:1px solid var(--rule);padding:14px;gap:8px}
+  .person-msg{width:100%;text-align:center}
+}
+
+/* ═══════════════ ANALYTICS PAGE — Mondrian bento of stats ═══════════════ */
+.analytics-page{padding:130px 20px 60px;max-width:1500px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.analytics-title{font-family:var(--serif);font-weight:600;font-size:clamp(24px,2.8vw,34px);margin-bottom:10px}
+.analytics-sub{font-size:13.5px;line-height:1.7;color:var(--muted);max-width:64ch;margin-bottom:28px}
+.analytics-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(6,minmax(110px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);flex:1 1 auto;min-height:0}
+.a-cell{background:var(--bg);padding:22px 24px;display:flex;flex-direction:column;justify-content:center}
+.a-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.a-number{font-family:var(--serif);font-weight:600;font-size:clamp(36px,4.2vw,64px);line-height:1}
+.a-number.a-mid{font-size:clamp(26px,3vw,38px)}
+.a-delta{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px}
+.a-big{justify-content:center}
+.a-chart{justify-content:flex-start}
+.a-chart svg{width:100%;flex:1;margin-top:6px}
+.a-chart line{stroke:var(--rule)}
+.a-chart .a-bar{fill:var(--fg)}
+.a-list .a-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--faint);font-size:12.5px}
+.a-list .a-row:last-child{border-bottom:none}
+.a-list .a-row b{font-family:var(--serif);font-weight:600;font-size:14px}
+.a-banner{align-items:center;text-align:center;font-family:var(--serif);font-style:italic;font-size:clamp(14px,1.4vw,17px);color:var(--muted)}
+@media(max-width:900px){
+  .analytics-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:none;grid-auto-rows:minmax(120px,auto)}
+  .a-cell{grid-column:auto !important;grid-row:auto !important}
+  .a-big,.a-chart,.a-list,.a-banner{grid-column:1/3 !important}
+}
+
+/* ═══════════════ AGENTS PAGE — placeholder iframe ═══════════════ */
+.agents-page{padding-top:90px;height:100vh}
+.agents-page iframe{width:100%;height:calc(100vh - 90px);border:none;display:block}
 
 /* ═══════════════ FOOTER ═══════════════ */
 .foot{padding:40px 20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em}
@@ -780,9 +845,9 @@ img{max-width:100%;display:block}
   <a class="mnav-word" href="#top" data-view="home"><img class="mnav-logo-full" src="https://raw.githubusercontent.com/ZACKGORT/intoview/ba57142e3e3db39173d2acb7a896ee97c391ff3e/intoview-logo-dark.svg" alt="intoview."></a>
   <div class="mnav-links">
     <a href="#" data-view="jobs"><span>Jobs</span></a>
-    <a href="#graph" data-anchor="graph"><span>Network</span></a>
-    <a href="#ledger" data-anchor="ledger"><span>Analytics</span></a>
-    <a href="#assistant" data-anchor="assistant"><span>Agents</span></a>
+    <a href="#" data-view="network"><span>Network</span></a>
+    <a href="#" data-view="analytics"><span>Analytics</span></a>
+    <a href="#" data-view="agents"><span>Agents</span></a>
   </div>
   <button class="mnav-account" id="accountBtn"><span>Account</span></button>
   <div class="mnav-cta">Sign in</div>
@@ -792,9 +857,9 @@ img{max-width:100%;display:block}
 <div class="mnav-mobile-overlay" id="mnavMobileOverlay"></div>
 <div class="mnav-mobile-menu" id="mnavMobileMenu">
   <a href="#" data-view="jobs">Jobs</a>
-  <a href="#graph" data-anchor="graph">Network</a>
-  <a href="#ledger" data-anchor="ledger">Analytics</a>
-  <a href="#assistant" data-anchor="assistant">Agents</a>
+  <a href="#" data-view="network">Network</a>
+  <a href="#" data-view="analytics">Analytics</a>
+  <a href="#" data-view="agents">Agents</a>
   <button id="mnavMobileAccount">Account</button>
   <div class="mnav-mobile-cta">Sign in</div>
 </div>
@@ -827,7 +892,7 @@ img{max-width:100%;display:block}
       <div class="panel-stat"><b>Northeast US</b><span>Top region</span></div>
       <div class="panel-stat"><b>62%</b><span>Viewed your Work</span></div>
     </div>
-    <a class="panel-link" href="#ledger" data-anchor="ledger">Open full Analytics →</a>
+    <a class="panel-link" href="#" data-view="analytics">Open full Analytics →</a>
   </div>
 
   <div class="panel-section">
@@ -835,8 +900,8 @@ img{max-width:100%;display:block}
     <a class="panel-row" href="#" data-view="profile"><span>View public profile</span><i>→</i></a>
     <a class="panel-row" href="#" data-view="dock"><span>Saved</span><i id="dockCount">0 saved</i></a>
     <a class="panel-row" href="#" data-view="jobs"><span>Jobs activity</span><i>3 active rooms</i></a>
-    <a class="panel-row" href="#graph" data-anchor="graph"><span>Network</span><i>128 connections</i></a>
-    <a class="panel-row panel-locked" href="#assistant" data-anchor="assistant"><span>Agent workflows</span><i class="panel-tier">Agent tier</i></a>
+    <a class="panel-row" href="#" data-view="network"><span>Network</span><i>128 connections</i></a>
+    <a class="panel-row panel-locked" href="#" data-view="agents"><span>Agent workflows</span><i class="panel-tier">Agent tier</i></a>
   </div>
 
   <div class="panel-foot">
@@ -1107,7 +1172,7 @@ img{max-width:100%;display:block}
         <div class="side-card">
           <div class="side-label">Your network</div>
           <p class="side-sub" style="margin-bottom:10px">14 first-degree connections are inside rooms on this feed right now.</p>
-          <a class="side-cta" href="#graph" data-anchor="graph">See the graph →</a>
+          <a class="side-cta" href="#" data-view="network">See the graph →</a>
         </div>
       </aside>
     </div>
@@ -1380,6 +1445,151 @@ img{max-width:100%;display:block}
   </div>
 </div><!-- /view-feed -->
 
+<!-- ═══════════════════════ VIEW: NETWORK — Kanban board ═══════════════════════ -->
+<div id="view-network" style="display:none">
+  <div class="network-page">
+    <div class="network-head">
+      <div class="network-title">Network</div>
+      <p class="network-sub">Everyone you've built something with, organized by how close the work actually was — not who posted today.</p>
+    </div>
+    <div class="network-filters">
+      <button class="network-filter active" data-filter="latest">Latest</button>
+      <button class="network-filter" data-filter="trending">Trending</button>
+      <button class="network-filter" data-filter="range">Range</button>
+      <button class="network-filter" data-filter="region">Region</button>
+      <button class="network-filter" data-filter="category">Category</button>
+    </div>
+    <div class="network-board">
+
+      <div class="network-col">
+        <div class="network-col-head"><span>First-degree</span><i>24</i></div>
+        <div class="network-col-body">
+          <div class="person-card"><div class="person-avatar">RK</div><div class="person-info"><div class="person-name">Rachel Kim</div><div class="person-role">Product Lead · Studio Atlas</div><div class="person-meta">3 mutual · Active 2d ago</div></div><button class="person-msg">Message</button></div>
+          <div class="person-card"><div class="person-avatar">PS</div><div class="person-info"><div class="person-name">Priya Shah</div><div class="person-role">Design Systems · Nordhaus Studio</div><div class="person-meta">5 mutual · Active today</div></div><button class="person-msg">Message</button></div>
+          <div class="person-card"><div class="person-avatar">MW</div><div class="person-info"><div class="person-name">Marcus Webb</div><div class="person-role">Founding Engineer · Nordhaus Studio</div><div class="person-meta">2 mutual · Active 1w ago</div></div><button class="person-msg">Message</button></div>
+          <div class="person-card"><div class="person-avatar">TM</div><div class="person-info"><div class="person-name">Théo Marchal</div><div class="person-role">Growth Lead · Vector Labs</div><div class="person-meta">4 mutual · Active 3d ago</div></div><button class="person-msg">Message</button></div>
+        </div>
+      </div>
+
+      <div class="network-col">
+        <div class="network-col-head"><span>Second-degree</span><i>86</i></div>
+        <div class="network-col-body">
+          <div class="person-card"><div class="person-avatar">EV</div><div class="person-info"><div class="person-name">Elin Vass</div><div class="person-role">Director · Documentary</div><div class="person-meta">1 mutual · via Rachel Kim</div></div><button class="person-msg">Connect</button></div>
+          <div class="person-card"><div class="person-avatar">SL</div><div class="person-info"><div class="person-name">Sasha Lund</div><div class="person-role">Creative Direction · Lower Deck Games</div><div class="person-meta">2 mutual · via Théo Marchal</div></div><button class="person-msg">Connect</button></div>
+          <div class="person-card"><div class="person-avatar">RO</div><div class="person-info"><div class="person-name">R. Okafor</div><div class="person-role">Producer · Parallax</div><div class="person-meta">1 mutual · via Priya Shah</div></div><button class="person-msg">Connect</button></div>
+          <div class="person-card"><div class="person-avatar">KW</div><div class="person-info"><div class="person-name">Kenji Watanabe</div><div class="person-role">Backend Engineer · Meridian Analytics</div><div class="person-meta">3 mutual · via Marcus Webb</div></div><button class="person-msg">Connect</button></div>
+        </div>
+      </div>
+
+      <div class="network-col">
+        <div class="network-col-head"><span>Shared rooms</span><i>12</i></div>
+        <div class="network-col-body">
+          <div class="person-card"><div class="person-avatar">LF</div><div class="person-info"><div class="person-name">Lucia Ferrer</div><div class="person-role">UX Researcher · GNC recovery</div><div class="person-meta">Same room · 2021</div></div><button class="person-msg">Message</button></div>
+          <div class="person-card"><div class="person-avatar">SO</div><div class="person-info"><div class="person-name">Sam Okoro</div><div class="person-role">Engineer · BNY Mellon / Wove</div><div class="person-meta">Same room · 2022–23</div></div><button class="person-msg">Message</button></div>
+          <div class="person-card"><div class="person-avatar">DR</div><div class="person-info"><div class="person-name">Dana Ruiz</div><div class="person-role">PM · Hardinge drop-nav</div><div class="person-meta">Same room · 2020</div></div><button class="person-msg">Message</button></div>
+        </div>
+      </div>
+
+      <div class="network-col">
+        <div class="network-col-head"><span>Recently active</span><i>9</i></div>
+        <div class="network-col-body">
+          <div class="person-card"><div class="person-avatar">MW</div><div class="person-info"><div class="person-name">Marcus Webb</div><div class="person-role">Founding Engineer · Nordhaus Studio</div><div class="person-meta">Posted an update · 4h ago</div></div><button class="person-msg">Message</button></div>
+          <div class="person-card"><div class="person-avatar">EV</div><div class="person-info"><div class="person-name">Elin Vass</div><div class="person-role">Director · Documentary</div><div class="person-meta">Shipped Drift · 1d ago</div></div><button class="person-msg">Connect</button></div>
+          <div class="person-card"><div class="person-avatar">DR</div><div class="person-info"><div class="person-name">Dana Ruiz</div><div class="person-role">PM · Hardinge drop-nav</div><div class="person-meta">Opened a room · 2d ago</div></div><button class="person-msg">Message</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /view-network -->
+
+<!-- ═══════════════════════ VIEW: ANALYTICS — Mondrian bento of stats ═══════════════════════ -->
+<div id="view-analytics" style="display:none">
+  <div class="analytics-page">
+    <div class="analytics-head">
+      <div class="analytics-title">Analytics</div>
+      <p class="analytics-sub">Every metric here is available on the free tier — no paywall, no "upgrade to see who viewed your profile."</p>
+    </div>
+    <div class="analytics-grid">
+
+      <div class="a-cell a-big" style="grid-column:1/6;grid-row:1/3">
+        <div class="a-label">Profile views</div>
+        <div class="a-number">1,204</div>
+        <div class="a-delta">↑ 18% vs last week</div>
+      </div>
+
+      <div class="a-cell" style="grid-column:6/9;grid-row:1/2">
+        <div class="a-label">Avg. session</div>
+        <div class="a-number a-mid">2m 14s</div>
+      </div>
+
+      <div class="a-cell" style="grid-column:9/13;grid-row:1/2">
+        <div class="a-label">Content impressions</div>
+        <div class="a-number a-mid">8,940</div>
+      </div>
+
+      <div class="a-cell a-chart" style="grid-column:6/13;grid-row:2/4">
+        <div class="a-label">Weekly reach</div>
+        <svg viewBox="0 0 320 120" preserveAspectRatio="none">
+          <line x1="0" y1="110" x2="320" y2="110"/>
+          <rect class="a-bar" x="10" y="60" width="30" height="50"/>
+          <rect class="a-bar" x="55" y="40" width="30" height="70"/>
+          <rect class="a-bar" x="100" y="70" width="30" height="40"/>
+          <rect class="a-bar" x="145" y="20" width="30" height="90"/>
+          <rect class="a-bar" x="190" y="50" width="30" height="60"/>
+          <rect class="a-bar" x="235" y="35" width="30" height="75"/>
+          <rect class="a-bar" x="280" y="55" width="30" height="55"/>
+        </svg>
+      </div>
+
+      <div class="a-cell a-list" style="grid-column:1/6;grid-row:3/5">
+        <div class="a-label">Top regions</div>
+        <div class="a-row"><span>Northeast US</span><b>34%</b></div>
+        <div class="a-row"><span>West Coast</span><b>22%</b></div>
+        <div class="a-row"><span>Europe</span><b>18%</b></div>
+        <div class="a-row"><span>Other</span><b>26%</b></div>
+      </div>
+
+      <div class="a-cell" style="grid-column:1/4;grid-row:5/6">
+        <div class="a-label">Connections growth</div>
+        <div class="a-number a-mid">+12</div>
+        <div class="a-delta">this month</div>
+      </div>
+
+      <div class="a-cell" style="grid-column:4/6;grid-row:5/6">
+        <div class="a-label">Engagement</div>
+        <div class="a-number a-mid">6.8%</div>
+      </div>
+
+      <div class="a-cell a-list" style="grid-column:6/9;grid-row:4/6">
+        <div class="a-label">Referral sources</div>
+        <div class="a-row"><span>Network intros</span><b>41%</b></div>
+        <div class="a-row"><span>Direct</span><b>33%</b></div>
+        <div class="a-row"><span>Search</span><b>26%</b></div>
+      </div>
+
+      <div class="a-cell a-list" style="grid-column:9/13;grid-row:4/6">
+        <div class="a-label">Viewed most</div>
+        <div class="a-row"><span>Work — Case studies</span><b>62%</b></div>
+        <div class="a-row"><span>Résumé</span><b>24%</b></div>
+        <div class="a-row"><span>Media</span><b>14%</b></div>
+      </div>
+
+      <div class="a-cell a-banner" style="grid-column:1/13;grid-row:6/7">
+        No vanity totals, no locked tiers — this is the whole picture, all the time.
+      </div>
+
+    </div>
+  </div>
+</div><!-- /view-analytics -->
+
+<!-- ═══════════════════════ VIEW: AGENTS — placeholder iframe ═══════════════════════ -->
+<div id="view-agents" style="display:none">
+  <div class="agents-page">
+    <iframe src="https://zack.cx/placeholder" title="Agents — placeholder" loading="lazy"></iframe>
+  </div>
+</div><!-- /view-agents -->
+
 <footer class="foot">
   <span>intoview.pro — a thinking exercise in what a professional network could become</span>
   <span>Right-click anywhere for theme, activity &amp; Saved</span>
@@ -1511,10 +1721,10 @@ document.addEventListener('click', e=>{
 let expandedCellObserver = null;
 
 const CHAPTER_ROUTES = {
-  room: [{label:'Enter the Room', view:'jobs'},{label:'See the Network', anchor:'graph'},{label:'View Analytics', anchor:'ledger'}],
-  graph: [{label:'Open Rooms', view:'jobs'},{label:'View Analytics', anchor:'ledger'},{label:'Agent workflows', anchor:'assistant'}],
-  ledger: [{label:'Open Rooms', view:'jobs'},{label:'See the Network', anchor:'graph'},{label:'Agent workflows', anchor:'assistant'}],
-  assistant: [{label:'Open Rooms', view:'jobs'},{label:'See the Network', anchor:'graph'},{label:'View Analytics', anchor:'ledger'}],
+  room: [{label:'Enter the Room', view:'jobs'},{label:'See the Network', view:'network'},{label:'View Analytics', view:'analytics'}],
+  graph: [{label:'Open Rooms', view:'jobs'},{label:'View Analytics', view:'analytics'},{label:'Agent workflows', view:'agents'}],
+  ledger: [{label:'Open Rooms', view:'jobs'},{label:'See the Network', view:'network'},{label:'Agent workflows', view:'agents'}],
+  assistant: [{label:'Open Rooms', view:'jobs'},{label:'See the Network', view:'network'},{label:'View Analytics', view:'analytics'}],
 };
 
 function expandCell(grid, cell){
@@ -1560,17 +1770,19 @@ function expandCell(grid, cell){
     gsap.fromTo(cell, {x:dx,y:dy,scaleX:sx,scaleY:sy}, {x:0,y:0,scaleX:1,scaleY:1,duration:.6,ease:'expo.out'});
   }
 
-  if(expandedCellObserver) expandedCellObserver.disconnect();
-  expandedCellObserver = new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(!entry.isIntersecting) collapseCell(cell);
-    });
-  }, { threshold: 0 });
-  expandedCellObserver.observe(cell);
+  if(window.IntersectionObserver){
+    if(expandedCellObserver) expandedCellObserver.disconnect();
+    expandedCellObserver = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(!entry.isIntersecting) collapseCell(cell);
+      });
+    }, { threshold: 0 });
+    expandedCellObserver.observe(cell);
+  }
 }
 function collapseCell(cell){
   if(expandedCellObserver){ expandedCellObserver.disconnect(); expandedCellObserver = null; }
-  const grid = cell.closest('.m-grid');
+  const grid = cell.closest('.m-grid, .gallery-grid');
   const cells = grid ? [...grid.querySelectorAll('.m-cell')] : [cell];
   const first = cell.getBoundingClientRect();
   cell.classList.remove('expanded');
@@ -1584,7 +1796,7 @@ function collapseCell(cell){
   }
 }
 
-document.querySelectorAll('.m-grid').forEach(grid=>{
+document.querySelectorAll('.m-grid, .gallery-grid').forEach(grid=>{
   grid.querySelectorAll('.m-cell').forEach(cell=>{
     cell.addEventListener('click', (e)=>{
       if(e.target.closest('.m-close')) return collapseCell(cell);
@@ -1812,9 +2024,20 @@ const viewJobs = document.getElementById('view-jobs');
 const viewProfile = document.getElementById('view-profile');
 const viewDock = document.getElementById('view-dock');
 const viewFeed = document.getElementById('view-feed');
+const viewNetwork = document.getElementById('view-network');
+const viewAnalytics = document.getElementById('view-analytics');
+const viewAgents = document.getElementById('view-agents');
 const bc = document.getElementById('bc');
 const bcCurrent = document.getElementById('bcCurrent');
-const SUBVIEWS = { jobs: { el: viewJobs, label: 'Jobs' }, profile: { el: viewProfile, label: 'Profile' }, dock: { el: viewDock, label: 'Saved' }, feed: { el: viewFeed, label: 'Feed' } };
+const SUBVIEWS = {
+  jobs: { el: viewJobs, label: 'Jobs' },
+  profile: { el: viewProfile, label: 'Profile' },
+  dock: { el: viewDock, label: 'Saved' },
+  feed: { el: viewFeed, label: 'Feed' },
+  network: { el: viewNetwork, label: 'Network' },
+  analytics: { el: viewAnalytics, label: 'Analytics' },
+  agents: { el: viewAgents, label: 'Agents' },
+};
 
 let currentView = 'home';
 let historyStack = ['home'];
@@ -1939,6 +2162,16 @@ document.querySelectorAll('.jt-btn').forEach(btn=>{
     document.querySelectorAll('.jt-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('jobsFeed').classList.toggle('grid-mode', btn.dataset.mode==='grid');
+  });
+});
+
+/* ─────────────────────────────────────────────
+   NETWORK FILTER CHIPS
+───────────────────────────────────────────── */
+document.querySelectorAll('.network-filter').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.network-filter').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
   });
 });
 
@@ -2184,9 +2417,9 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
         '</div>',
         '<div class="poster-related">',
           '<div class="poster-related-label">Related pathways</div>',
-          '<a class="poster-related-link" href="#" data-anchor="graph">The Network</a>',
+          '<a class="poster-related-link" href="#" data-view="network">The Network</a>',
           '<a class="poster-related-link" href="#" data-view="jobs">Open Rooms</a>',
-          '<a class="poster-related-link" href="#" data-anchor="ledger">Analytics</a>',
+          '<a class="poster-related-link" href="#" data-view="analytics">Analytics</a>',
           '<a class="poster-related-link" href="#" data-view="feed">All Updates</a>',
         '</div>',
       '</div>',
