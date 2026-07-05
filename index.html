@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>intoview.pro — Who's Actually Looking</title>
-<link rel="icon" type="image/webp" href="https://raw.githubusercontent.com/ZACKGORT/ZACKGORT/main/favicon.webp">
+<link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/ZACKGORT/sonfire/main/intoview-duo-line-drk.svg">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@300;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -57,7 +57,7 @@ img{max-width:100%;display:block}
 /* ═══════════════ MONDRIAN NAV (block system, not a row of links) ═══════════════ */
 .mnav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;height:56px;border-bottom:1px solid var(--rule);background:color-mix(in srgb, var(--bg) 92%, transparent);backdrop-filter:blur(10px)}
 .mnav-word{flex:0 0 200px;display:flex;align-items:center;gap:9px;padding:0 20px;font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em;border-right:1px solid var(--rule);cursor:none;text-decoration:none;color:var(--fg)}
-.mnav-logo-full{height:30px;width:auto;object-fit:contain;flex-shrink:0}
+.mnav-logo-icon{width:26px;height:26px;object-fit:contain;flex-shrink:0}
 .mnav-account{
   flex:0 0 110px;display:flex;align-items:center;justify-content:center;
   font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
@@ -312,6 +312,7 @@ img{max-width:100%;display:block}
 
 /* ═══════════════ DENSE FEED CARDS — shared by the Home
    featured section and the dedicated Feed page ═══════════════ */
+.feed-header-sticky{position:sticky;top:56px;z-index:60;background:var(--bg)}
 .feed-toolbar{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:40px;padding-bottom:20px}
 .feed-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
 .feed-eyebrow::before{content:'';width:20px;height:1px;background:var(--muted)}
@@ -602,6 +603,46 @@ img{max-width:100%;display:block}
 .poster-related-link:last-child{border-bottom:none}
 .poster-related-link:hover{color:rgba(0,0,0,.5);padding-left:6px}
 
+/* ═══════════════ CASE STUDY DETAIL — two-panel full-viewport view ═══════════════
+   Left: quick-read facts (role, duration, team, impact, skills).
+   Right: the actual in-depth narrative (problem/approach/outcome). */
+.case-detail-overlay{position:fixed;inset:0;z-index:9700;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .35s}
+.case-detail-overlay.open{opacity:1;pointer-events:auto}
+.case-detail-view{
+  --bg:#ffffff;--fg:#000000;
+  position:fixed;inset:0;z-index:9701;background:var(--bg);color:var(--fg);
+  display:grid;grid-template-columns:340px 1fr;
+  transform:translateY(3%);opacity:0;pointer-events:none;
+  transition:transform .5s cubic-bezier(.16,1,.3,1),opacity .4s;
+}
+.case-detail-view.open{transform:translateY(0);opacity:1;pointer-events:auto}
+.case-detail-close{position:fixed;top:26px;right:34px;z-index:2;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:none}
+.case-detail-close:hover{color:var(--fg)}
+
+.case-detail-left{border-right:1px solid var(--rule);padding:90px 34px 40px;overflow-y:auto}
+.case-detail-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.case-detail-title{font-family:var(--serif);font-weight:600;font-size:clamp(21px,2vw,26px);line-height:1.15;margin-bottom:16px}
+.case-detail-year{font-family:var(--mono);font-size:11px;color:var(--muted);padding-bottom:24px;border-bottom:1px solid var(--rule);margin-bottom:24px}
+.case-detail-facts{display:flex;flex-direction:column;gap:16px;margin-bottom:28px}
+.case-fact-label{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.case-fact-value{font-family:var(--serif);font-weight:600;font-size:14.5px}
+.case-detail-skills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:28px}
+.case-skill{font-family:var(--mono);font-size:9px;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--rule);color:var(--muted)}
+.case-detail-save{width:100%;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:11px 0;border:1px solid var(--fg);background:none;color:var(--fg);cursor:none}
+.case-detail-save:hover{background:var(--fg);color:var(--bg)}
+
+.case-detail-right{padding:90px 64px 60px;overflow-y:auto}
+.case-detail-lede{font-size:16px;line-height:1.75;color:var(--muted);max-width:62ch;margin-bottom:44px;padding-bottom:36px;border-bottom:1px solid var(--rule)}
+.case-detail-section{max-width:62ch;margin-bottom:36px}
+.case-detail-section-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.case-detail-section-body{font-size:15px;line-height:1.75}
+
+@media(max-width:900px){
+  .case-detail-view{grid-template-columns:1fr;overflow-y:auto}
+  .case-detail-left{border-right:none;border-bottom:1px solid var(--rule);padding:80px 24px 30px;overflow-y:visible}
+  .case-detail-right{padding:36px 24px 60px;overflow-y:visible}
+}
+
 /* ── Mobile: bottom sheet ── */
 @media(max-width:760px){
   .poster-panel{
@@ -770,14 +811,51 @@ img{max-width:100%;display:block}
 .network-page{padding:130px 20px 90px;max-width:1500px;margin:0 auto}
 .network-title{font-family:var(--serif);font-weight:600;font-size:clamp(24px,2.8vw,34px);margin-bottom:10px}
 .network-sub{font-size:13.5px;line-height:1.7;color:var(--muted);max-width:60ch;margin-bottom:28px}
-.network-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.network-toolbar{display:flex;justify-content:flex-start;align-items:center;margin-bottom:30px}
+.network-mode-toggle{display:flex;border:1px solid var(--fg)}
+.network-mode-toggle button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:11px 26px;background:none;border:none;color:var(--muted);cursor:none}
+.network-mode-toggle button.active{background:var(--fg);color:var(--bg)}
+.network-mode-toggle button+button{border-left:1px solid var(--fg)}
+.network-feed-section{margin-bottom:8px}
+.network-connections-section{margin-top:4px}
+.network-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
 .network-filter{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:8px 15px;border:1px solid var(--rule);background:none;color:var(--muted);cursor:none}
 .network-filter.active{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.network-board{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.network-view-toggle{display:flex;border:1px solid var(--rule);flex-shrink:0;margin-bottom:26px}
+.network-view-toggle button{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:8px 16px;background:none;border:none;color:var(--muted);cursor:none}
+.network-view-toggle button.active{background:var(--fg);color:var(--bg)}
+.network-view-toggle button+button{border-left:1px solid var(--rule)}
+.network-view-toggle button.active+button,.network-view-toggle button.active{border-color:var(--fg)}
+
+/* ─────────────────────────────────────────────
+   BROWSE — Netflix-style horizontal rows, the
+   Network page's primary/default view
+───────────────────────────────────────────── */
+.network-browse{display:flex;flex-direction:column;gap:34px}
+.browse-row-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.browse-row-head span{color:var(--fg);font-weight:600;font-size:14px;font-family:var(--sans);text-transform:none;letter-spacing:0}
+.browse-row-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:10px;scrollbar-width:thin}
+.browse-poster{
+  scroll-snap-align:start;flex:0 0 190px;background:var(--bg);border:1px solid var(--rule);
+  padding:22px 18px;cursor:none;transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s ease;
+}
+.browse-poster:hover{transform:translateY(-4px);box-shadow:0 26px 50px -16px color-mix(in srgb, var(--fg) 28%, transparent);z-index:2}
+.poster-avatar{width:52px;height:52px;border-radius:50%;background:var(--fg);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:15px;margin-bottom:16px}
+.poster-name{font-family:var(--serif);font-weight:600;font-size:15px}
+.poster-role{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.4}
+.poster-meta{font-family:var(--mono);font-size:8.5px;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:.04em}
+.poster-btn{margin-top:14px;width:100%;font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;padding:8px 0;border:1px solid var(--rule);background:none;color:var(--fg);cursor:none}
+.poster-btn:hover{background:var(--fg);color:var(--bg)}
+
+/* ─────────────────────────────────────────────
+   KANBAN — secondary view, full-viewport board
+───────────────────────────────────────────── */
+.network-kanban{height:calc(100vh - 260px);min-height:420px}
+.network-board{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);height:100%}
 .network-col{background:var(--bg);display:flex;flex-direction:column;min-height:0}
-.network-col-head{display:flex;justify-content:space-between;align-items:baseline;padding:16px 18px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.network-col-head{display:flex;justify-content:space-between;align-items:baseline;padding:16px 18px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex-shrink:0}
 .network-col-head span{color:var(--fg);font-weight:600}
-.network-col-body{padding:10px 14px;display:flex;flex-direction:column;gap:1px;max-height:640px;overflow-y:auto}
+.network-col-body{padding:10px 14px;display:flex;flex-direction:column;gap:1px;flex:1 1 auto;overflow-y:auto;min-height:0}
 .person-card{display:flex;align-items:center;gap:12px;padding:14px 4px;border-bottom:1px solid var(--faint);cursor:none}
 .person-card:last-child{border-bottom:none}
 .person-avatar{width:36px;height:36px;border-radius:50%;background:var(--fg);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0}
@@ -788,7 +866,10 @@ img{max-width:100%;display:block}
 .person-msg{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--rule);background:none;color:var(--fg);cursor:none;white-space:nowrap;flex-shrink:0}
 .person-msg:hover{background:var(--fg);color:var(--bg)}
 @media(max-width:900px){
-  .network-board{grid-template-columns:repeat(2,1fr);gap:0;background:none;border:none}
+  .browse-poster{flex:0 0 152px;padding:18px 14px}
+  .poster-avatar{width:44px;height:44px;font-size:13px;margin-bottom:12px}
+  .network-kanban{height:auto;min-height:0}
+  .network-board{grid-template-columns:repeat(2,1fr);gap:0;background:none;border:none;height:auto}
   .network-col{grid-column:1/3;border-bottom:1px solid var(--rule)}
   .network-col-body{max-height:none;overflow:visible;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px}
   .person-card{flex-direction:column;align-items:flex-start;border:1px solid var(--rule);padding:14px;gap:8px}
@@ -842,7 +923,7 @@ img{max-width:100%;display:block}
 <div class="v-coord" id="vCoord">X 0.00 · Y 0.00</div>
 
 <nav class="mnav">
-  <a class="mnav-word" href="#top" data-view="home"><img class="mnav-logo-full" src="https://raw.githubusercontent.com/ZACKGORT/intoview/ba57142e3e3db39173d2acb7a896ee97c391ff3e/intoview-logo-dark.svg" alt="intoview."></a>
+  <a class="mnav-word" href="#top" data-view="home"><img class="mnav-logo-icon" src="https://raw.githubusercontent.com/ZACKGORT/sonfire/main/intoview-duo-line-drk.svg" alt="">intoview.</a>
   <div class="mnav-links">
     <a href="#" data-view="jobs"><span>Jobs</span></a>
     <a href="#" data-view="network"><span>Network</span></a>
@@ -926,6 +1007,7 @@ img{max-width:100%;display:block}
 
 <!-- FEATURED — infinite flickable canvas grid -->
 <section class="feed-featured">
+  <div class="feed-header-sticky">
   <div class="feed-toolbar">
     <div class="feed-eyebrow">Featured — today's feed</div>
     <div class="canvas-scaler">
@@ -942,7 +1024,9 @@ img{max-width:100%;display:block}
     <button class="feed-tab active" data-tab="others">Interesting from others</button>
     <button class="feed-tab" data-tab="today">Today</button>
     <button class="feed-tab" data-tab="yesterday">Yesterday</button>
+    <button class="feed-tab" data-tab="saved">Saved</button>
   </div>
+  </div><!-- /feed-header-sticky -->
   <div class="canvas-grid-viewport" id="canvasViewport">
     <div class="canvas-grid-track" id="canvasTrack"></div>
   </div>
@@ -1452,54 +1536,178 @@ img{max-width:100%;display:block}
       <div class="network-title">Network</div>
       <p class="network-sub">Everyone you've built something with, organized by how close the work actually was — not who posted today.</p>
     </div>
-    <div class="network-filters">
-      <button class="network-filter active" data-filter="latest">Latest</button>
-      <button class="network-filter" data-filter="trending">Trending</button>
-      <button class="network-filter" data-filter="range">Range</button>
-      <button class="network-filter" data-filter="region">Region</button>
-      <button class="network-filter" data-filter="category">Category</button>
+
+    <div class="network-toolbar">
+      <div class="network-mode-toggle" id="networkModeToggle">
+        <button class="active" data-networkmode="feed">Feed</button>
+        <button data-networkmode="connections">Connections</button>
+      </div>
     </div>
-    <div class="network-board">
 
-      <div class="network-col">
-        <div class="network-col-head"><span>First-degree</span><i>24</i></div>
-        <div class="network-col-body">
-          <div class="person-card"><div class="person-avatar">RK</div><div class="person-info"><div class="person-name">Rachel Kim</div><div class="person-role">Product Lead · Studio Atlas</div><div class="person-meta">3 mutual · Active 2d ago</div></div><button class="person-msg">Message</button></div>
-          <div class="person-card"><div class="person-avatar">PS</div><div class="person-info"><div class="person-name">Priya Shah</div><div class="person-role">Design Systems · Nordhaus Studio</div><div class="person-meta">5 mutual · Active today</div></div><button class="person-msg">Message</button></div>
-          <div class="person-card"><div class="person-avatar">MW</div><div class="person-info"><div class="person-name">Marcus Webb</div><div class="person-role">Founding Engineer · Nordhaus Studio</div><div class="person-meta">2 mutual · Active 1w ago</div></div><button class="person-msg">Message</button></div>
-          <div class="person-card"><div class="person-avatar">TM</div><div class="person-info"><div class="person-name">Théo Marchal</div><div class="person-role">Growth Lead · Vector Labs</div><div class="person-meta">4 mutual · Active 3d ago</div></div><button class="person-msg">Message</button></div>
+    <!-- ═══ FEED — filterable posts from your network, primary view ═══ -->
+    <div class="network-feed-section" id="networkFeedSection">
+      <div class="network-filters">
+        <button class="network-filter active" data-filter="latest">Latest</button>
+        <button class="network-filter" data-filter="trending">Trending</button>
+        <button class="network-filter" data-filter="range">Range</button>
+        <button class="network-filter" data-filter="region">Region</button>
+        <button class="network-filter" data-filter="category">Category</button>
+      </div>
+      <div class="feed-grid" id="networkFeedGrid">
+        <div class="feed-card" data-kicker="Rachel Kim" data-tag="Product · 2d ago" data-img="https://picsum.photos/id/1027/700/460?grayscale" data-author="Rachel Kim" data-role="Product Lead · Studio Atlas" data-date="2" data-trend="88" data-body="The rebuild finally has a name people believe in internally, which usually means it ships.">
+          <div class="feed-top"><span class="feed-idx">01</span><span class="feed-arrow">→</span></div>
+          <div class="feed-kicker">Rachel Kim</div>
+          <div class="feed-headline style-bold">Just wrapped Q3 planning for the Wove rebuild.</div>
+          <div class="feed-meta-line">The rebuild finally has a name people believe in internally.</div>
+          <div class="feed-bottom"><span class="feed-tag">Product · 2d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+        </div>
+        <div class="feed-card" data-kicker="Priya Shah" data-tag="Design Systems · 5h ago" data-img="https://picsum.photos/id/1040/700/460?grayscale" data-author="Priya Shah" data-role="Design Systems · Nordhaus Studio" data-date="0.2" data-trend="95" data-body="Every component now documents its own accessibility contract, not just its props.">
+          <div class="feed-top"><span class="feed-idx">02</span><span class="feed-arrow">→</span></div>
+          <div class="feed-kicker">Priya Shah</div>
+          <div class="feed-headline style-plain">New design tokens shipped across the component library.</div>
+          <div class="feed-meta-line">Every component now documents its own accessibility contract.</div>
+          <div class="feed-bottom"><span class="feed-tag">Design Systems · 5h ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+        </div>
+        <div class="feed-card" data-kicker="Marcus Webb" data-tag="Funding · 1d ago" data-img="https://picsum.photos/id/1050/700/460?grayscale" data-author="Marcus Webb" data-role="Founding Engineer · Nordhaus Studio" data-date="1" data-trend="99" data-body="Closed the round with the same three investors who passed on the seed.">
+          <div class="feed-top"><span class="feed-idx">03</span><span class="feed-arrow">→</span></div>
+          <div class="feed-kicker">Marcus Webb</div>
+          <div class="feed-headline style-bold">Nordhaus Studio closed its seed round this week.</div>
+          <div class="feed-meta-line">Closed with the same three investors who passed the first time.</div>
+          <div class="feed-bottom"><span class="feed-tag">Funding · 1d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+        </div>
+        <div class="feed-card" data-kicker="Théo Marchal" data-tag="Growth · 3d ago" data-img="https://picsum.photos/id/1059/700/460?grayscale" data-author="Théo Marchal" data-role="Growth Lead · Vector Labs" data-date="3" data-trend="72" data-body="Retention held steady through the growth — the part that usually breaks first.">
+          <div class="feed-top"><span class="feed-idx">04</span><span class="feed-arrow">→</span></div>
+          <div class="feed-kicker">Théo Marchal</div>
+          <div class="feed-headline style-plain">Vector Labs crossed 50K weekly active users.</div>
+          <div class="feed-meta-line">Retention held steady through the growth, for once.</div>
+          <div class="feed-bottom"><span class="feed-tag">Growth · 3d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+        </div>
+        <div class="feed-card" data-kicker="Elin Vass" data-tag="Documentary · 1w ago" data-img="https://picsum.photos/id/1025/700/460?grayscale" data-author="Elin Vass" data-role="Director · Documentary" data-date="7" data-trend="64" data-body="First cut runs long, but every scene earns its place.">
+          <div class="feed-top"><span class="feed-idx">05</span><span class="feed-arrow">→</span></div>
+          <div class="feed-kicker">Elin Vass</div>
+          <div class="feed-headline style-quote">"Drift" premieres next month — the first cut is done.</div>
+          <div class="feed-meta-line">Runs long, but every scene earns its place.</div>
+          <div class="feed-bottom"><span class="feed-tag">Documentary · 1w ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+        </div>
+        <div class="feed-card" data-kicker="Sasha Lund" data-tag="Games · 4d ago" data-img="https://picsum.photos/id/1074/700/460?grayscale" data-author="Sasha Lund" data-role="Creative Direction · Lower Deck Games" data-date="4" data-trend="80" data-body="Open beta means the balance patches start now, not at launch.">
+          <div class="feed-top"><span class="feed-idx">06</span><span class="feed-arrow">→</span></div>
+          <div class="feed-kicker">Sasha Lund</div>
+          <div class="feed-headline style-bold">Lower Deck Games opened its first public beta.</div>
+          <div class="feed-meta-line">Balance patches start now, not at launch.</div>
+          <div class="feed-bottom"><span class="feed-tag">Games · 4d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+        </div>
+        <div class="feed-card" data-kicker="Lucia Ferrer" data-tag="Case study · 2w ago" data-img="https://picsum.photos/id/1043/700/460?grayscale" data-author="Lucia Ferrer" data-role="UX Researcher · GNC recovery" data-date="14" data-trend="55" data-body="The research everyone asked for and nobody had time to write until now.">
+          <div class="feed-top"><span class="feed-idx">07</span><span class="feed-arrow">→</span></div>
+          <div class="feed-kicker">Lucia Ferrer</div>
+          <div class="feed-headline style-plain">Wrote up the GNC recovery research, finally.</div>
+          <div class="feed-meta-line">Everyone asked for it; nobody had time until now.</div>
+          <div class="feed-bottom"><span class="feed-tag">Case study · 2w ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+        </div>
+        <div class="feed-card" data-kicker="Sam Okoro" data-tag="Fintech · 6d ago" data-img="https://picsum.photos/id/1069/700/460?grayscale" data-author="Sam Okoro" data-role="Engineer · BNY Mellon / Wove" data-date="6" data-trend="70" data-body="First production milestone, eighteen months after the first whiteboard sketch.">
+          <div class="feed-top"><span class="feed-idx">08</span><span class="feed-arrow">→</span></div>
+          <div class="feed-kicker">Sam Okoro</div>
+          <div class="feed-headline style-plain">BNY Mellon / Wove hit its first production milestone.</div>
+          <div class="feed-meta-line">Eighteen months after the first whiteboard sketch.</div>
+          <div class="feed-bottom"><span class="feed-tag">Fintech · 6d ago</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CONNECTIONS — Browse/Kanban person views, secondary ═══ -->
+    <div class="network-connections-section" id="networkConnectionsSection" style="display:none">
+      <div class="network-view-toggle" id="networkViewToggle">
+        <button class="active" data-networkview="browse">Browse</button>
+        <button data-networkview="kanban">Kanban</button>
+      </div>
+
+    <!-- ═══ BROWSE — Netflix-style rows, primary view ═══ -->
+    <div class="network-browse" id="networkBrowse">
+
+      <div class="browse-row">
+        <div class="browse-row-head"><span>First-degree</span><i>24</i></div>
+        <div class="browse-row-track">
+          <div class="browse-poster"><div class="poster-avatar">RK</div><div class="poster-name">Rachel Kim</div><div class="poster-role">Product Lead · Studio Atlas</div><div class="poster-meta">3 mutual · Active 2d ago</div><button class="poster-btn">Message</button></div>
+          <div class="browse-poster"><div class="poster-avatar">PS</div><div class="poster-name">Priya Shah</div><div class="poster-role">Design Systems · Nordhaus Studio</div><div class="poster-meta">5 mutual · Active today</div><button class="poster-btn">Message</button></div>
+          <div class="browse-poster"><div class="poster-avatar">MW</div><div class="poster-name">Marcus Webb</div><div class="poster-role">Founding Engineer · Nordhaus Studio</div><div class="poster-meta">2 mutual · Active 1w ago</div><button class="poster-btn">Message</button></div>
+          <div class="browse-poster"><div class="poster-avatar">TM</div><div class="poster-name">Théo Marchal</div><div class="poster-role">Growth Lead · Vector Labs</div><div class="poster-meta">4 mutual · Active 3d ago</div><button class="poster-btn">Message</button></div>
         </div>
       </div>
 
-      <div class="network-col">
-        <div class="network-col-head"><span>Second-degree</span><i>86</i></div>
-        <div class="network-col-body">
-          <div class="person-card"><div class="person-avatar">EV</div><div class="person-info"><div class="person-name">Elin Vass</div><div class="person-role">Director · Documentary</div><div class="person-meta">1 mutual · via Rachel Kim</div></div><button class="person-msg">Connect</button></div>
-          <div class="person-card"><div class="person-avatar">SL</div><div class="person-info"><div class="person-name">Sasha Lund</div><div class="person-role">Creative Direction · Lower Deck Games</div><div class="person-meta">2 mutual · via Théo Marchal</div></div><button class="person-msg">Connect</button></div>
-          <div class="person-card"><div class="person-avatar">RO</div><div class="person-info"><div class="person-name">R. Okafor</div><div class="person-role">Producer · Parallax</div><div class="person-meta">1 mutual · via Priya Shah</div></div><button class="person-msg">Connect</button></div>
-          <div class="person-card"><div class="person-avatar">KW</div><div class="person-info"><div class="person-name">Kenji Watanabe</div><div class="person-role">Backend Engineer · Meridian Analytics</div><div class="person-meta">3 mutual · via Marcus Webb</div></div><button class="person-msg">Connect</button></div>
+      <div class="browse-row">
+        <div class="browse-row-head"><span>Second-degree</span><i>86</i></div>
+        <div class="browse-row-track">
+          <div class="browse-poster"><div class="poster-avatar">EV</div><div class="poster-name">Elin Vass</div><div class="poster-role">Director · Documentary</div><div class="poster-meta">1 mutual · via Rachel Kim</div><button class="poster-btn">Connect</button></div>
+          <div class="browse-poster"><div class="poster-avatar">SL</div><div class="poster-name">Sasha Lund</div><div class="poster-role">Creative Direction · Lower Deck Games</div><div class="poster-meta">2 mutual · via Théo Marchal</div><button class="poster-btn">Connect</button></div>
+          <div class="browse-poster"><div class="poster-avatar">RO</div><div class="poster-name">R. Okafor</div><div class="poster-role">Producer · Parallax</div><div class="poster-meta">1 mutual · via Priya Shah</div><button class="poster-btn">Connect</button></div>
+          <div class="browse-poster"><div class="poster-avatar">KW</div><div class="poster-name">Kenji Watanabe</div><div class="poster-role">Backend Engineer · Meridian Analytics</div><div class="poster-meta">3 mutual · via Marcus Webb</div><button class="poster-btn">Connect</button></div>
         </div>
       </div>
 
-      <div class="network-col">
-        <div class="network-col-head"><span>Shared rooms</span><i>12</i></div>
-        <div class="network-col-body">
-          <div class="person-card"><div class="person-avatar">LF</div><div class="person-info"><div class="person-name">Lucia Ferrer</div><div class="person-role">UX Researcher · GNC recovery</div><div class="person-meta">Same room · 2021</div></div><button class="person-msg">Message</button></div>
-          <div class="person-card"><div class="person-avatar">SO</div><div class="person-info"><div class="person-name">Sam Okoro</div><div class="person-role">Engineer · BNY Mellon / Wove</div><div class="person-meta">Same room · 2022–23</div></div><button class="person-msg">Message</button></div>
-          <div class="person-card"><div class="person-avatar">DR</div><div class="person-info"><div class="person-name">Dana Ruiz</div><div class="person-role">PM · Hardinge drop-nav</div><div class="person-meta">Same room · 2020</div></div><button class="person-msg">Message</button></div>
+      <div class="browse-row">
+        <div class="browse-row-head"><span>Shared rooms</span><i>12</i></div>
+        <div class="browse-row-track">
+          <div class="browse-poster"><div class="poster-avatar">LF</div><div class="poster-name">Lucia Ferrer</div><div class="poster-role">UX Researcher · GNC recovery</div><div class="poster-meta">Same room · 2021</div><button class="poster-btn">Message</button></div>
+          <div class="browse-poster"><div class="poster-avatar">SO</div><div class="poster-name">Sam Okoro</div><div class="poster-role">Engineer · BNY Mellon / Wove</div><div class="poster-meta">Same room · 2022–23</div><button class="poster-btn">Message</button></div>
+          <div class="browse-poster"><div class="poster-avatar">DR</div><div class="poster-name">Dana Ruiz</div><div class="poster-role">PM · Hardinge drop-nav</div><div class="poster-meta">Same room · 2020</div><button class="poster-btn">Message</button></div>
         </div>
       </div>
 
-      <div class="network-col">
-        <div class="network-col-head"><span>Recently active</span><i>9</i></div>
-        <div class="network-col-body">
-          <div class="person-card"><div class="person-avatar">MW</div><div class="person-info"><div class="person-name">Marcus Webb</div><div class="person-role">Founding Engineer · Nordhaus Studio</div><div class="person-meta">Posted an update · 4h ago</div></div><button class="person-msg">Message</button></div>
-          <div class="person-card"><div class="person-avatar">EV</div><div class="person-info"><div class="person-name">Elin Vass</div><div class="person-role">Director · Documentary</div><div class="person-meta">Shipped Drift · 1d ago</div></div><button class="person-msg">Connect</button></div>
-          <div class="person-card"><div class="person-avatar">DR</div><div class="person-info"><div class="person-name">Dana Ruiz</div><div class="person-role">PM · Hardinge drop-nav</div><div class="person-meta">Opened a room · 2d ago</div></div><button class="person-msg">Message</button></div>
+      <div class="browse-row">
+        <div class="browse-row-head"><span>Recently active</span><i>9</i></div>
+        <div class="browse-row-track">
+          <div class="browse-poster"><div class="poster-avatar">MW</div><div class="poster-name">Marcus Webb</div><div class="poster-role">Founding Engineer · Nordhaus Studio</div><div class="poster-meta">Posted an update · 4h ago</div><button class="poster-btn">Message</button></div>
+          <div class="browse-poster"><div class="poster-avatar">EV</div><div class="poster-name">Elin Vass</div><div class="poster-role">Director · Documentary</div><div class="poster-meta">Shipped Drift · 1d ago</div><button class="poster-btn">Connect</button></div>
+          <div class="browse-poster"><div class="poster-avatar">DR</div><div class="poster-name">Dana Ruiz</div><div class="poster-role">PM · Hardinge drop-nav</div><div class="poster-meta">Opened a room · 2d ago</div><button class="poster-btn">Message</button></div>
         </div>
       </div>
 
     </div>
+
+    <!-- ═══ KANBAN — secondary view, full-viewport board ═══ -->
+    <div class="network-kanban" id="networkKanban" style="display:none">
+      <div class="network-board">
+
+        <div class="network-col">
+          <div class="network-col-head"><span>First-degree</span><i>24</i></div>
+          <div class="network-col-body">
+            <div class="person-card"><div class="person-avatar">RK</div><div class="person-info"><div class="person-name">Rachel Kim</div><div class="person-role">Product Lead · Studio Atlas</div><div class="person-meta">3 mutual · Active 2d ago</div></div><button class="person-msg">Message</button></div>
+            <div class="person-card"><div class="person-avatar">PS</div><div class="person-info"><div class="person-name">Priya Shah</div><div class="person-role">Design Systems · Nordhaus Studio</div><div class="person-meta">5 mutual · Active today</div></div><button class="person-msg">Message</button></div>
+            <div class="person-card"><div class="person-avatar">MW</div><div class="person-info"><div class="person-name">Marcus Webb</div><div class="person-role">Founding Engineer · Nordhaus Studio</div><div class="person-meta">2 mutual · Active 1w ago</div></div><button class="person-msg">Message</button></div>
+            <div class="person-card"><div class="person-avatar">TM</div><div class="person-info"><div class="person-name">Théo Marchal</div><div class="person-role">Growth Lead · Vector Labs</div><div class="person-meta">4 mutual · Active 3d ago</div></div><button class="person-msg">Message</button></div>
+          </div>
+        </div>
+
+        <div class="network-col">
+          <div class="network-col-head"><span>Second-degree</span><i>86</i></div>
+          <div class="network-col-body">
+            <div class="person-card"><div class="person-avatar">EV</div><div class="person-info"><div class="person-name">Elin Vass</div><div class="person-role">Director · Documentary</div><div class="person-meta">1 mutual · via Rachel Kim</div></div><button class="person-msg">Connect</button></div>
+            <div class="person-card"><div class="person-avatar">SL</div><div class="person-info"><div class="person-name">Sasha Lund</div><div class="person-role">Creative Direction · Lower Deck Games</div><div class="person-meta">2 mutual · via Théo Marchal</div></div><button class="person-msg">Connect</button></div>
+            <div class="person-card"><div class="person-avatar">RO</div><div class="person-info"><div class="person-name">R. Okafor</div><div class="person-role">Producer · Parallax</div><div class="person-meta">1 mutual · via Priya Shah</div></div><button class="person-msg">Connect</button></div>
+            <div class="person-card"><div class="person-avatar">KW</div><div class="person-info"><div class="person-name">Kenji Watanabe</div><div class="person-role">Backend Engineer · Meridian Analytics</div><div class="person-meta">3 mutual · via Marcus Webb</div></div><button class="person-msg">Connect</button></div>
+          </div>
+        </div>
+
+        <div class="network-col">
+          <div class="network-col-head"><span>Shared rooms</span><i>12</i></div>
+          <div class="network-col-body">
+            <div class="person-card"><div class="person-avatar">LF</div><div class="person-info"><div class="person-name">Lucia Ferrer</div><div class="person-role">UX Researcher · GNC recovery</div><div class="person-meta">Same room · 2021</div></div><button class="person-msg">Message</button></div>
+            <div class="person-card"><div class="person-avatar">SO</div><div class="person-info"><div class="person-name">Sam Okoro</div><div class="person-role">Engineer · BNY Mellon / Wove</div><div class="person-meta">Same room · 2022–23</div></div><button class="person-msg">Message</button></div>
+            <div class="person-card"><div class="person-avatar">DR</div><div class="person-info"><div class="person-name">Dana Ruiz</div><div class="person-role">PM · Hardinge drop-nav</div><div class="person-meta">Same room · 2020</div></div><button class="person-msg">Message</button></div>
+          </div>
+        </div>
+
+        <div class="network-col">
+          <div class="network-col-head"><span>Recently active</span><i>9</i></div>
+          <div class="network-col-body">
+            <div class="person-card"><div class="person-avatar">MW</div><div class="person-info"><div class="person-name">Marcus Webb</div><div class="person-role">Founding Engineer · Nordhaus Studio</div><div class="person-meta">Posted an update · 4h ago</div></div><button class="person-msg">Message</button></div>
+            <div class="person-card"><div class="person-avatar">EV</div><div class="person-info"><div class="person-name">Elin Vass</div><div class="person-role">Director · Documentary</div><div class="person-meta">Shipped Drift · 1d ago</div></div><button class="person-msg">Connect</button></div>
+            <div class="person-card"><div class="person-avatar">DR</div><div class="person-info"><div class="person-name">Dana Ruiz</div><div class="person-role">PM · Hardinge drop-nav</div><div class="person-meta">Opened a room · 2d ago</div></div><button class="person-msg">Message</button></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    </div><!-- /network-connections-section -->
   </div>
 </div><!-- /view-network -->
 
@@ -1603,6 +1811,13 @@ img{max-width:100%;display:block}
 
 <div class="poster-overlay" id="posterOverlay"></div>
 <aside class="poster-panel" id="posterPanel"></aside>
+
+<div class="case-detail-overlay" id="caseDetailOverlay"></div>
+<div class="case-detail-view" id="caseDetailView">
+  <button class="case-detail-close" id="caseDetailClose">Close ×</button>
+  <div class="case-detail-left" id="caseDetailLeft"></div>
+  <div class="case-detail-right" id="caseDetailRight"></div>
+</div>
 
 <button id="askOrb">Ask</button>
 <div id="askTip">Agent workflows are coming soon — this is a placeholder for focused, task-specific help.</div>
@@ -2166,14 +2381,122 @@ document.querySelectorAll('.jt-btn').forEach(btn=>{
 });
 
 /* ─────────────────────────────────────────────
-   NETWORK FILTER CHIPS
+   NETWORK MODE TOGGLE — Feed (default) / Connections
 ───────────────────────────────────────────── */
-document.querySelectorAll('.network-filter').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.network-filter').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
+(function(){
+  const toggle = document.getElementById('networkModeToggle');
+  const feedSection = document.getElementById('networkFeedSection');
+  const connSection = document.getElementById('networkConnectionsSection');
+  if(!toggle || !feedSection || !connSection) return;
+  toggle.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const isConnections = btn.dataset.networkmode === 'connections';
+      feedSection.style.display = isConnections ? 'none' : '';
+      connSection.style.display = isConnections ? '' : 'none';
+    });
   });
-});
+})();
+
+/* ─────────────────────────────────────────────
+   NETWORK FEED — filter chips (Latest/Trending
+   genuinely re-sort; Range/Region/Category are
+   scoping toggles, consistent with how filters
+   read elsewhere in this concept) + click to
+   open the shared card detail panel
+───────────────────────────────────────────── */
+(function(){
+  const grid = document.getElementById('networkFeedGrid');
+  if(!grid) return;
+  const chips = document.querySelectorAll('#networkFeedSection .network-filter');
+  chips.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      chips.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const cards = [...grid.querySelectorAll('.feed-card')];
+      if(btn.dataset.filter === 'latest'){
+        cards.sort((a,b)=> parseFloat(a.dataset.date) - parseFloat(b.dataset.date));
+      } else if(btn.dataset.filter === 'trending'){
+        cards.sort((a,b)=> parseFloat(b.dataset.trend) - parseFloat(a.dataset.trend));
+      } else {
+        return; // Range/Region/Category are scoping affordances, not re-sorts
+      }
+      cards.forEach((c,i)=>{
+        c.querySelector('.feed-idx').textContent = String(i+1).padStart(2,'0');
+        grid.appendChild(c);
+      });
+    });
+  });
+
+  function initialsOfNetwork(name){
+    const words = (name||'').split(/\s+/).filter(w=>/[a-zA-Z]/.test(w));
+    if(!words.length) return '•';
+    if(words.length===1) return words[0].slice(0,2).toUpperCase();
+    return (words[0][0]+words[1][0]).toUpperCase();
+  }
+  grid.addEventListener('click', e=>{
+    if(e.target.closest('.feed-quick-save')) return;
+    const card = e.target.closest('.feed-card');
+    if(!card || !window.openCardPanel) return;
+    const kicker = card.dataset.kicker || '';
+    const tag = card.dataset.tag || '';
+    const img = card.dataset.img || '';
+    const body = card.dataset.body || '';
+    const author = card.dataset.author || kicker || 'Update';
+    const role = card.dataset.role || '';
+    const headlineEl = card.querySelector('.feed-headline');
+    const headline = headlineEl?.textContent.trim() || '';
+    const styleClass = [...(headlineEl?.classList || [])].find(c=>c.startsWith('style-')) || 'style-plain';
+    window.openCardPanel([
+      '<div class="poster-header">',
+        '<span class="poster-kicker">'+kicker+'</span>',
+        '<button class="poster-close" id="posterCloseBtn">Close ×</button>',
+      '</div>',
+      img ? '<div class="poster-media"><img src="'+img+'" alt=""></div>' : '',
+      '<div class="poster-body-wrap">',
+        '<h2 class="poster-title '+styleClass+'">'+headline+'</h2>',
+        '<p class="poster-body">'+body+'</p>',
+        '<div class="poster-tagrow">',
+          '<span class="poster-tag">'+tag+'</span>',
+          '<button class="poster-save" id="posterSaveBtn">Save</button>',
+        '</div>',
+        '<div class="poster-author">',
+          '<div class="poster-avatar">'+initialsOfNetwork(author)+'</div>',
+          '<div><div class="poster-author-name">'+author+'</div><div class="poster-author-role">'+role+'</div></div>',
+        '</div>',
+        '<div class="poster-related">',
+          '<div class="poster-related-label">Related pathways</div>',
+          '<a class="poster-related-link" href="#" data-view="jobs">Open Rooms</a>',
+          '<a class="poster-related-link" href="#" data-view="analytics">Analytics</a>',
+          '<a class="poster-related-link" href="#" data-view="feed">All Updates</a>',
+        '</div>',
+      '</div>',
+    ].join(''));
+    const panel = document.getElementById('posterPanel');
+    panel.querySelector('#posterCloseBtn')?.addEventListener('click', ()=>{ if(window.closeCardPanel) window.closeCardPanel(); });
+    panel.querySelector('#posterSaveBtn')?.addEventListener('click', ()=>{ if(window.saveFeedCard) window.saveFeedCard(card); });
+  });
+})();
+
+/* ─────────────────────────────────────────────
+   NETWORK VIEW TOGGLE — Browse (default) / Kanban
+───────────────────────────────────────────── */
+(function(){
+  const toggle = document.getElementById('networkViewToggle');
+  const browse = document.getElementById('networkBrowse');
+  const kanban = document.getElementById('networkKanban');
+  if(!toggle || !browse || !kanban) return;
+  toggle.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const isKanban = btn.dataset.networkview === 'kanban';
+      browse.style.display = isKanban ? 'none' : '';
+      kanban.style.display = isKanban ? '' : 'none';
+    });
+  });
+})();
 
 /* ─────────────────────────────────────────────
    FEED GRID/LIST TOGGLES (Home featured + Feed page)
@@ -2237,7 +2560,26 @@ wireFeedToggle('pageFeedToggle', '.feed-list-col');
   ];
 
   const TAB_OFFSET = { others:0, today:8, yesterday:16 };
+  function adaptSavedItem(item){
+    return {
+      kicker: item.type,
+      tag: item.meta || item.type,
+      style: 'plain',
+      headline: item.title,
+      meta: 'Saved · ' + new Date(item.ts).toLocaleDateString(),
+      img: '',
+    };
+  }
   function sliceFor(tab, count){
+    if(tab === 'saved'){
+      const saved = window.getDockItems ? window.getDockItems() : [];
+      if(!saved.length){
+        return Array(count).fill({ kicker:'Saved', tag:'Empty', style:'plain', headline:'Nothing saved yet.', meta:'Right-click any card and choose Save to start collecting.', img:'' });
+      }
+      const out = [];
+      for(let i=0;i<count;i++) out.push(adaptSavedItem(saved[i % saved.length]));
+      return out;
+    }
     const offset = TAB_OFFSET[tab] || 0;
     const out = [];
     for(let i=0;i<count;i++) out.push(POOL[(offset+i) % POOL.length]);
@@ -2628,6 +2970,113 @@ document.querySelectorAll('.profile-tab').forEach(tab=>{
 });
 
 /* ─────────────────────────────────────────────
+   CASE STUDY DETAIL — two-panel full-viewport view.
+   Left: quick-read facts. Right: the actual in-depth
+   narrative. Opens from any .case-row on the Profile page.
+───────────────────────────────────────────── */
+const CASE_STUDY_DETAILS = [
+  {
+    role: 'Lead Product Designer', duration: '14 weeks', team: '3 designers, 6 engineers',
+    impact: 'Cross-team component drift dropped to zero',
+    skills: ['Design Systems','Figma','Accessibility','Workshop Facilitation'],
+    sections: [
+      { head:'The problem', body:'Three product tracks were independently rebuilding the same button, the same dropdown, the same nav pattern — each slightly incompatible with the others, with no shared source of truth anywhere.' },
+      { head:'The approach', body:'Ran a two-week audit across all three codebases before designing anything, then built the token layer first — color, spacing, type — before touching a single component, so every downstream decision inherited the same constraints.' },
+      { head:'The outcome', body:'All three teams now ship from one library. What used to require a Slack thread and a judgment call is now just the default.' },
+    ],
+  },
+  {
+    role: 'Founding Product Designer', duration: '5 weeks to prototype, 6 months to GA', team: 'Solo design, 2 engineers',
+    impact: '68% of new users completed onboarding without a support contact',
+    skills: ['Prototyping','Figma','User Research'],
+    sections: [
+      { head:'The problem', body:'The product\u2019s core value only became obvious after a user had already configured three separate settings correctly — and almost nobody made it that far.' },
+      { head:'The approach', body:'Ran discovery solo since there was no research budget yet, watched five people struggle through the raw prototype, and rebuilt the first-run flow around the one moment that actually made people say "oh."' },
+      { head:'The outcome', body:'Shipped the first usable prototype in five weeks. Stayed on through GA to make sure the onboarding held up once real users, not just test subjects, came through it.' },
+    ],
+  },
+  {
+    role: 'Senior Product Designer', duration: '10 weeks', team: '2 designers, 4 engineers',
+    impact: 'Weekly active use tripled within one quarter',
+    skills: ['Heuristic Audit','Usability Testing','Navigation Design'],
+    sections: [
+      { head:'The problem', body:'The dashboard had the right data the whole time. Nobody trusted it enough to check it more than once a month.' },
+      { head:'The approach', body:'A heuristic audit surfaced eleven distinct navigation dead ends before a single design was tested. Three rounds of usability testing rebuilt the information architecture around the three questions people actually asked, not the seventeen the dashboard tried to answer.' },
+      { head:'The outcome', body:'Weekly active use tripled in one quarter. The rebuild didn\u2019t add a single new metric — it just made the right ones findable.' },
+    ],
+  },
+  {
+    role: 'Contract Design Systems Lead', duration: '12 weeks', team: 'Solo, handed off to an in-house team of 2',
+    impact: 'System still in production three years after the contract ended',
+    skills: ['Design Systems','Documentation','Component Architecture'],
+    sections: [
+      { head:'The problem', body:'A growth-stage startup needed a system built by someone who\u2019d be gone in three months — which meant documentation wasn\u2019t a nice-to-have, it was the actual deliverable.' },
+      { head:'The approach', body:'Documented every pattern\u2019s intent, not just its usage — why a component existed, not only how to implement it — so a future team could extend the system without guessing at the original reasoning.' },
+      { head:'The outcome', body:'The system outlasted the contract. Three years later, it\u2019s still what the in-house team builds from.' },
+    ],
+  },
+];
+
+function renderCaseDetail(row, index){
+  const tag = row.querySelector('.case-tag')?.textContent.trim() || '';
+  const title = row.querySelector('.case-title')?.textContent.trim() || '';
+  const desc = row.querySelector('.case-desc')?.textContent.trim() || '';
+  const year = row.querySelector('.case-arrow')?.textContent.trim() || '';
+  const d = CASE_STUDY_DETAILS[index] || CASE_STUDY_DETAILS[0];
+
+  const left = document.getElementById('caseDetailLeft');
+  const right = document.getElementById('caseDetailRight');
+
+  left.innerHTML = `
+    <div class="case-detail-kicker">${tag}</div>
+    <div class="case-detail-title">${title}</div>
+    <div class="case-detail-year">${year}</div>
+    <div class="case-detail-facts">
+      <div><div class="case-fact-label">Role</div><div class="case-fact-value">${d.role}</div></div>
+      <div><div class="case-fact-label">Duration</div><div class="case-fact-value">${d.duration}</div></div>
+      <div><div class="case-fact-label">Team</div><div class="case-fact-value">${d.team}</div></div>
+      <div><div class="case-fact-label">Impact</div><div class="case-fact-value">${d.impact}</div></div>
+    </div>
+    <div class="case-detail-skills">${d.skills.map(s=>`<span class="case-skill">${s}</span>`).join('')}</div>
+    <button class="case-detail-save" id="caseDetailSaveBtn">Save this case study</button>
+  `;
+  right.innerHTML = `
+    <p class="case-detail-lede">${desc}</p>
+    ${d.sections.map(s=>`
+      <div class="case-detail-section">
+        <div class="case-detail-section-head">${s.head}</div>
+        <div class="case-detail-section-body">${s.body}</div>
+      </div>`).join('')}
+  `;
+  left.querySelector('#caseDetailSaveBtn')?.addEventListener('click', ()=>{
+    if(window.saveGenericItem) window.saveGenericItem('Case Study', title, tag);
+  });
+  right.scrollTop = 0;
+}
+
+function openCaseDetail(row){
+  const rows = [...document.querySelectorAll('#panel-case-studies .case-row')];
+  const index = rows.indexOf(row);
+  renderCaseDetail(row, index);
+  document.getElementById('caseDetailOverlay').classList.add('open');
+  document.getElementById('caseDetailView').classList.add('open');
+  document.body.classList.add('scroll-locked');
+}
+function closeCaseDetail(){
+  document.getElementById('caseDetailOverlay').classList.remove('open');
+  document.getElementById('caseDetailView').classList.remove('open');
+  document.body.classList.remove('scroll-locked');
+}
+document.querySelectorAll('#panel-case-studies .case-row').forEach(row=>{
+  row.addEventListener('click', e=>{
+    e.preventDefault();
+    openCaseDetail(row);
+  });
+});
+document.getElementById('caseDetailClose')?.addEventListener('click', closeCaseDetail);
+document.getElementById('caseDetailOverlay')?.addEventListener('click', closeCaseDetail);
+
+/* ─────────────────────────────────────────────
    SAVED — right-click a job, case study, or gallery
    item and choose "Save" to add it here. Generic:
    any element becomes save-able just by being
@@ -2676,6 +3125,8 @@ document.querySelectorAll('.profile-tab').forEach(tab=>{
     const info = extractInfo(el, 'Update');
     saveItem('Update', info.title, info.meta);
   };
+  window.getDockItems = function(){ return dockItems; };
+  window.saveGenericItem = function(type, title, meta){ saveItem(type, title, meta); };
 
   function saveItem(type, title, meta){
     dockItems.unshift({ id:'d'+Date.now()+Math.random().toString(36).slice(2,6), type, title, meta, ts: Date.now() });
@@ -2896,6 +3347,7 @@ document.querySelectorAll('.profile-tab').forEach(tab=>{
     if(e.key !== 'Escape') return;
     closeCtxMenu();
     // Dismiss overlays in priority order, then navigate back one step
+    if(document.getElementById('caseDetailView').classList.contains('open')){ closeCaseDetail(); return; }
     if(document.getElementById('activityOverlay').classList.contains('open')){ closeActivity(); return; }
     if(document.getElementById('posterOverlay').classList.contains('open')){ closePosterPanel(); return; }
     if(document.getElementById('accountPanel').classList.contains('open')){ closePanel(); return; }
