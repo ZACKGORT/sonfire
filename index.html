@@ -8,8 +8,8 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#000000;
-  --fg:#ffffff;
+  --bg:#ffffff;
+  --fg:#000000;
   --rule: color-mix(in srgb, var(--fg) 16%, var(--bg));
   --faint: color-mix(in srgb, var(--fg) 7%, var(--bg));
   --muted: color-mix(in srgb, var(--fg) 42%, var(--bg));
@@ -17,10 +17,21 @@
   --sans:'Inter','Helvetica Neue',sans-serif;
   --mono:'DM Mono',monospace;
 }
-html{scroll-behavior:auto}
+html{scroll-behavior:auto;-webkit-tap-highlight-color:transparent}
 body{
   background:var(--bg);color:var(--fg);font-family:var(--sans);
   overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+}
+*{-webkit-tap-highlight-color:transparent}
+/* Overlay UI (account panel, right-click menu, modals, feed detail panel)
+   always renders light for legibility, independent of whatever dark/light
+   state the underlying page is currently in. --rule/--faint/--muted are
+   derived from --fg/--bg via color-mix() wherever they're used, so
+   overriding just these two here is enough to relight the whole subtree. */
+.panel, .ctx-menu, .modal, .feed-detail-panel{
+  --bg:#ffffff;
+  --fg:#000000;
 }
 ::selection{background:var(--fg);color:var(--bg)}
 :focus-visible{outline:2px solid var(--fg);outline-offset:3px}
@@ -33,7 +44,7 @@ img{max-width:100%;display:block}
 #cursorDot{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--fg);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);opacity:0;transition:opacity .2s,width .18s,height .18s}
 #cursorDot.vis{opacity:1}
 #cursorDot.hot{width:40px;height:40px;background:transparent;border:1px solid var(--fg)}
-.v-line{position:fixed;pointer-events:none;z-index:9000;background:color-mix(in srgb, var(--fg) 22%, transparent);opacity:0;transition:opacity .3s}
+.v-line{position:fixed;pointer-events:none;z-index:5;background:color-mix(in srgb, var(--fg) 9%, transparent);opacity:0;transition:opacity .3s}
 .v-line.h{left:0;right:0;height:1px}
 .v-line.v{top:0;bottom:0;width:1px}
 .v-line.vis{opacity:1}
@@ -80,7 +91,8 @@ img{max-width:100%;display:block}
 .panel-overlay.open{opacity:1;pointer-events:auto}
 .panel{
   position:fixed;top:0;left:0;bottom:0;z-index:701;width:min(380px,88vw);
-  background:var(--bg);color:var(--fg);border-right:1px solid var(--rule);
+  background:#ffffff;color:#000000;border-right:1px solid rgba(0,0,0,.1);
+  box-shadow:4px 0 40px -8px rgba(0,0,0,.13), 1px 0 0 0 rgba(0,0,0,.06);
   transform:translateX(-100%);transition:transform .45s cubic-bezier(.76,0,.24,1);
   padding:26px 22px;overflow-y:auto;
 }
@@ -95,15 +107,17 @@ img{max-width:100%;display:block}
 .panel-section-title{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .panel-badge{font-size:8.5px;padding:2px 6px;border:1px solid var(--rule);color:var(--fg);letter-spacing:.06em}
 .panel-note{font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:16px}
-.panel-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);margin-bottom:14px}
-.panel-stat{background:var(--bg);padding:14px}
+.panel-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(0,0,0,.08);margin-bottom:14px;border-radius:6px;overflow:hidden;box-shadow:0 2px 12px -4px rgba(0,0,0,.1)}
+.panel-stat{background:#ffffff;padding:14px;transition:background .15s}
+.panel-stat:hover{background:#f8f8f8}
 .panel-stat b{display:block;font-family:var(--serif);font-weight:600;font-size:19px;margin-bottom:4px}
 .panel-stat span{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .panel-link{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--fg);text-decoration:none;cursor:none}
 .panel-link:hover{opacity:.7}
-.panel-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--faint);text-decoration:none;color:var(--fg);font-size:13px;cursor:none}
+.panel-row{display:flex;justify-content:space-between;align-items:center;padding:11px 10px;margin:0 -10px;border-bottom:1px solid rgba(0,0,0,.07);text-decoration:none;color:#000;font-size:13px;cursor:none;border-radius:4px;transition:background .15s,box-shadow .15s}
 .panel-row:last-child{border-bottom:none}
-.panel-row i{font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+.panel-row:hover{background:rgba(0,0,0,.04);box-shadow:0 1px 6px -2px rgba(0,0,0,.08)}
+.panel-row i{font-style:normal;font-family:var(--mono);font-size:9.5px;color:rgba(0,0,0,.42)}
 .panel-row.panel-locked i.panel-tier{border:1px solid var(--rule);padding:2px 6px;letter-spacing:.05em;text-transform:uppercase}
 .panel-foot{padding-top:20px;border-top:1px solid var(--rule);display:flex;flex-direction:column;gap:12px}
 .panel-foot span{font-size:11.5px;line-height:1.6;color:var(--muted)}
@@ -115,12 +129,12 @@ img{max-width:100%;display:block}
 .hero-text-block{position:relative;padding:128px 20px 56px;max-width:1400px;margin:0 auto}
 .hero-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:10px}
 .hero-kicker::before{content:'';width:22px;height:1px;background:var(--muted)}
-.hero-title-wrap{position:relative;width:100%;max-width:920px}
-#titleCanvas{display:block;width:100%;opacity:.6}
+.hero-title{font-family:var(--serif);font-weight:600;font-size:clamp(42px,8.6vw,132px);line-height:.94;letter-spacing:-.015em;max-width:16ch}
+.hero-title em{font-style:italic;font-weight:400}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .hero-sub{margin-top:22px;max-width:520px;font-size:clamp(14px,1.4vw,17px);line-height:1.7;color:var(--muted)}
 
-.hero-wall-block{position:relative;height:38vh;min-height:260px;max-height:400px;overflow:hidden;border-top:1px solid var(--rule)}
+.hero-wall-block{position:relative;height:26vh;min-height:180px;max-height:280px;overflow:hidden;border-top:1px solid var(--rule)}
 #wallCanvas{position:absolute;inset:0;z-index:0;display:block;width:100%;height:100%;opacity:.6}
 .hero-scroll{position:absolute;right:20px;bottom:16px;z-index:2;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .hero-scroll .arrow{display:inline-block;animation:bob 1.7s ease-in-out infinite}
@@ -199,37 +213,41 @@ img{max-width:100%;display:block}
 #askTip.vis{opacity:1;transform:none}
 @media(max-width:820px){#askOrb{width:44px;height:44px;right:16px;bottom:16px}#askTip{right:16px;bottom:70px}}
 
-/* ═══════════════ SAVE-TO-DOCK — long-press drag system ═══════════════
-   Any element marked .saveable can be picked up on a press-and-hold and
-   dropped on the FAB that surfaces in the lower-left corner. This is a
-   generic layer — new card types opt in just by adding the class plus
-   data-save-type/title/meta, no per-page wiring required. */
-.saveable{-webkit-user-select:none;user-select:none;touch-action:pan-y}
-.saveable.lifting{opacity:.3;transition:opacity .15s}
-
-.drag-ghost{
-  position:fixed;z-index:9500;pointer-events:none;left:0;top:0;
-  background:var(--bg);border:1px solid var(--rule);padding:12px 16px;max-width:260px;
-  box-shadow:0 20px 50px -12px color-mix(in srgb, var(--fg) 35%, transparent);
-  transform:translate(-50%,-50%) rotate(-2deg);will-change:transform,opacity;
+/* ═══════════════ CONTEXT MENU — right-click for theme, activity, Saved ═══════════════
+   Right-clicking a saveable card (job row, case study, gallery item) adds a
+   "Save" action on top; right-clicking anywhere else shows just the globals. */
+.ctx-menu{
+  position:fixed;z-index:9600;min-width:210px;background:var(--bg);border:1px solid var(--rule);
+  box-shadow:0 20px 50px -12px color-mix(in srgb, var(--fg) 30%, transparent);
+  opacity:0;transform:scale(.96);transform-origin:top left;pointer-events:none;
+  transition:opacity .12s,transform .12s;
 }
-.dg-type{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-.dg-title{font-family:var(--serif);font-weight:600;font-size:14px;line-height:1.25;color:var(--fg)}
+.ctx-menu.show{opacity:1;transform:scale(1);pointer-events:auto}
+.ctx-item{display:block;width:100%;text-align:left;padding:11px 16px;font-family:var(--sans);font-size:13px;background:none;border:none;color:var(--fg);cursor:none}
+.ctx-item:hover,.ctx-item:active,.ctx-item:focus{background:var(--faint);color:var(--fg)}
+.ctx-item:disabled{color:var(--muted);cursor:default;opacity:.5}
+.ctx-item:disabled:hover{background:none}
+.ctx-item:focus-visible{outline:2px solid var(--fg);outline-offset:-2px}
+.ctx-sep{height:1px;background:var(--rule);margin:4px 0}
+@media(prefers-reduced-motion:reduce){.ctx-menu{transition:none}}
 
-#dockFab{
-  position:fixed;left:24px;bottom:24px;z-index:9400;width:56px;height:56px;border-radius:50%;
-  background:var(--fg);color:var(--bg);border:none;display:flex;align-items:center;justify-content:center;
-  transform:scale(0);opacity:0;pointer-events:none;
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .2s,box-shadow .2s;
-  box-shadow:0 10px 30px -8px color-mix(in srgb, var(--fg) 40%, transparent);
+/* ═══════════════ MODAL — daily activity summary ═══════════════ */
+.modal-overlay{position:fixed;inset:0;z-index:9700;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal{
+  position:fixed;top:50%;left:50%;z-index:9701;width:min(420px,88vw);background:var(--bg);border:1px solid var(--rule);
+  padding:28px;transform:translate(-50%,-50%) scale(.96);opacity:0;pointer-events:none;
+  transition:transform .3s cubic-bezier(.34,1.2,.64,1),opacity .25s;
 }
-#dockFab.show{transform:scale(1);opacity:1}
-#dockFab.hover-target{transform:scale(1.28);box-shadow:0 0 0 7px color-mix(in srgb, var(--fg) 16%, transparent),0 10px 30px -8px color-mix(in srgb, var(--fg) 40%, transparent)}
-#dockFab.pulse{animation:dockPulse .4s ease}
-@keyframes dockPulse{0%{transform:scale(1)}45%{transform:scale(1.4)}100%{transform:scale(1)}}
-#dockFab svg{width:19px;height:19px}
-@media(max-width:820px){#dockFab{width:48px;height:48px;left:16px;bottom:16px}}
-@media(prefers-reduced-motion:reduce){#dockFab,.saveable.lifting{transition:none}}
+.modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto}
+.modal-title{font-family:var(--serif);font-weight:600;font-size:20px;margin-bottom:18px}
+.modal-stats{display:flex;flex-direction:column;gap:14px;margin-bottom:22px}
+.modal-stat{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:12px;border-bottom:1px solid var(--faint)}
+.modal-stat:last-child{border-bottom:none;padding-bottom:0}
+.modal-stat b{font-family:var(--serif);font-weight:600;font-size:16px;white-space:nowrap}
+.modal-stat span{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:right}
+.modal-close{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:9px 16px;border:1px solid var(--rule);background:none;color:var(--fg);cursor:none}
+@media(prefers-reduced-motion:reduce){.modal,.modal-overlay{transition:none}}
 
 /* ═══════════════ DOCK PAGE ═══════════════ */
 .dock-page{padding:130px 20px 90px;max-width:960px;margin:0 auto}
@@ -253,6 +271,328 @@ img{max-width:100%;display:block}
   .dock-row{grid-template-columns:44px 1fr auto}
   .dock-time{display:none}
 }
+
+/* ═══════════════ DENSE FEED CARDS — shared by the Home
+   featured section and the dedicated Feed page ═══════════════ */
+.feed-toolbar{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:40px;padding-bottom:20px}
+.feed-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
+.feed-eyebrow::before{content:'';width:20px;height:1px;background:var(--muted)}
+.feed-toolbar-right{display:flex;align-items:center;gap:14px}
+.feed-toggle{display:flex;gap:2px}
+.feed-toggle button{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:7px 13px;border:1px solid var(--rule);background:none;color:var(--muted);cursor:none}
+.feed-toggle button.active{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.feed-seeall{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--fg);text-decoration:none;cursor:none;white-space:nowrap}
+.feed-seeall:hover{opacity:.7}
+.canvas-hint{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+@media(max-width:760px){.canvas-hint{display:none}}
+.canvas-scaler{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--muted)}
+.canvas-scaler input[type="range"]{
+  -webkit-appearance:none;appearance:none;width:100px;height:2px;background:var(--rule);outline:none;cursor:none;
+}
+.canvas-scaler input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--fg);cursor:none}
+.canvas-scaler input[type="range"]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:var(--fg);border:none;cursor:none}
+.canvas-scaler-hint{text-transform:uppercase;opacity:.6}
+#canvasScaleLabel{color:var(--fg);min-width:26px}
+@media(max-width:900px){.canvas-scaler-hint{display:none}}
+@media(max-width:640px){.canvas-scaler{display:none}}
+
+.feed-tabs{max-width:1400px;margin:0 auto;padding:0 20px 18px;display:flex;gap:26px;border-bottom:1px solid var(--rule)}
+.feed-tab{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:0 0 14px;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:none;margin-bottom:-1px}
+.feed-tab.active{color:var(--fg);border-bottom-color:var(--fg)}
+
+/* ═══════════════ INFINITE FLICKABLE CANVAS GRID (Home) ═══════════════
+   A pannable field of cards that wraps seamlessly in every direction —
+   drag or flick to explore, ambient cursor parallax at rest, click a
+   card to "dip in" (opens the shared detail modal), Esc levels back out. */
+.canvas-grid-viewport{
+  position:relative;width:100%;height:min(84vh,800px);overflow:hidden;
+  border-top:1px solid var(--rule);cursor:none;touch-action:none;user-select:none;
+  background:var(--bg);
+}
+.canvas-grid-track{position:absolute;top:0;left:0;will-change:transform}
+.canvas-tile{position:absolute !important;box-sizing:border-box;min-height:0 !important;overflow:hidden;padding:18px !important}
+.canvas-tile .feed-top{margin-bottom:10px}
+.canvas-tile .feed-kicker{margin-bottom:6px}
+.canvas-tile .feed-meta-line{margin-top:7px}
+.canvas-tile .feed-bottom{margin-top:10px;padding-top:10px}
+.canvas-tile .feed-idx{font-size:calc(10px * var(--tile-font-scale, 1))}
+.canvas-tile .feed-kicker{font-size:calc(9.5px * var(--tile-font-scale, 1))}
+.canvas-tile .feed-headline.style-bold,.canvas-tile .feed-headline.style-plain{font-size:calc(16px * var(--tile-font-scale, 1))}
+.canvas-tile .feed-headline.style-quote{font-size:calc(17.5px * var(--tile-font-scale, 1))}
+.canvas-tile .feed-meta-line{font-size:calc(11.5px * var(--tile-font-scale, 1))}
+.canvas-tile .feed-tag{font-size:calc(9px * var(--tile-font-scale, 1))}
+@media(prefers-reduced-motion:reduce){.canvas-grid-track{transition:none !important}}
+
+.feed-category-label{max-width:1400px;margin:0 auto;padding:24px 20px 10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+.feed-ad{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:20px;min-height:216px;background:var(--bg);
+  background-image:repeating-linear-gradient(135deg, var(--faint) 0 10px, transparent 10px 20px);
+  border:1px dashed var(--rule);
+}
+.feed-ad-label{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.feed-ad-name{font-family:var(--serif);font-weight:600;font-size:15px;margin-bottom:6px}
+.feed-ad-sub{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+.feed-grid.list-mode .feed-ad{flex-direction:row;justify-content:space-between;min-height:0;padding:15px 20px;text-align:left}
+.feed-grid.list-mode .feed-ad-label{margin-bottom:0}
+
+.feed-refresh-wrap{max-width:1400px;margin:0 auto;padding:0 20px;position:relative;height:0}
+.feed-refresh{
+  position:absolute;top:-2px;left:20px;z-index:20;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--fg);color:var(--bg);padding:8px 16px;border:none;cursor:none;
+  opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .3s,transform .3s;
+}
+.feed-refresh.show{opacity:1;transform:translateY(0);pointer-events:auto}
+
+.feed-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);
+  max-width:1400px;margin:0 auto;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+}
+.feed-card{position:relative;background:var(--bg);padding:22px 20px;min-height:216px;display:flex;flex-direction:column;cursor:none}
+.feed-card.entering{animation:feedIn .5s ease both}
+@keyframes feedIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.feed-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.feed-idx{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.feed-arrow{font-family:var(--mono);font-size:12px;color:var(--muted);opacity:0;transform:translateX(-4px);transition:opacity .2s,transform .2s}
+.feed-card:hover .feed-arrow{opacity:1;transform:none}
+.feed-headline{flex:1}
+.feed-headline.style-bold{font-family:var(--sans);font-weight:800;font-size:16px;line-height:1.28;text-transform:uppercase;letter-spacing:-.005em}
+.feed-headline.style-quote{font-family:var(--serif);font-style:italic;font-weight:400;font-size:17.5px;line-height:1.32}
+.feed-headline.style-plain{font-family:var(--sans);font-weight:600;font-size:16px;line-height:1.32}
+.feed-kicker{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.feed-meta-line{font-size:11.5px;line-height:1.55;color:var(--muted);margin-top:10px}
+.feed-bottom{margin-top:16px;padding-top:14px;border-top:1px solid var(--faint);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.feed-tag{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feed-quick-save{width:26px;height:26px;border-radius:50%;border:1px solid var(--rule);background:none;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:none;flex-shrink:0;transition:color .15s,border-color .15s}
+.feed-quick-save:hover{color:var(--fg);border-color:var(--fg)}
+.feed-quick-save svg{width:11px;height:11px}
+
+.feed-grid.list-mode{grid-template-columns:1fr !important}
+.feed-grid.list-mode .feed-card{
+  display:grid;grid-template-columns:32px 1fr;column-gap:16px;row-gap:0;
+  min-height:0;padding:18px 20px;align-items:start;
+}
+.feed-grid.list-mode .feed-top{grid-column:1;grid-row:1/-1;margin-bottom:0;display:flex;align-items:flex-start}
+.feed-grid.list-mode .feed-arrow{display:none}
+.feed-grid.list-mode .feed-kicker{grid-column:2;margin-bottom:6px}
+.feed-grid.list-mode .feed-headline{grid-column:2;flex:none}
+.feed-grid.list-mode .feed-headline.style-bold,
+.feed-grid.list-mode .feed-headline.style-quote,
+.feed-grid.list-mode .feed-headline.style-plain{font-size:14.5px}
+.feed-grid.list-mode .feed-meta-line{grid-column:2;margin-top:6px}
+.feed-grid.list-mode .feed-bottom{grid-column:2;margin-top:10px;padding-top:0;border-top:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+
+@media(max-width:900px){.feed-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){
+  .feed-card{padding:16px 14px;min-height:190px}
+  .feed-headline.style-bold,.feed-headline.style-plain{font-size:14px}
+  .feed-headline.style-quote{font-size:15px}
+  .feed-meta-line{font-size:10.5px}
+  .feed-kicker{font-size:8.5px}
+  .feed-tag{font-size:8px}
+  .feed-grid.list-mode .feed-card{grid-template-columns:24px 1fr;padding:15px 14px}
+  .feed-grid.list-mode .feed-bottom{flex-wrap:wrap}
+}
+
+/* ═══════════════ FEED PAGE — dedicated master/detail view ═══════════════ */
+.feed-page{padding:130px 20px 90px;max-width:1400px;margin:0 auto}
+.feed-page-head{margin-bottom:8px}
+.feed-page-title{font-family:var(--serif);font-weight:600;font-size:clamp(24px,2.8vw,34px);margin-bottom:10px}
+.feed-page-sub{font-size:13.5px;color:var(--muted);max-width:60ch;margin-bottom:8px}
+.feed-layout{display:grid;grid-template-columns:1fr 360px;gap:0 28px;align-items:start;margin-top:20px}
+.feed-list-col .feed-grid{grid-template-columns:repeat(2,1fr);max-width:none}
+.feed-list-col .feed-card{cursor:none}
+.feed-list-col .feed-card.active{outline:2px solid var(--fg);outline-offset:-2px}
+.feed-detail-col{position:sticky;top:104px}
+.feed-detail-panel{background:var(--bg);border:1px solid var(--rule);padding:28px;box-shadow:0 24px 60px -20px color-mix(in srgb, var(--fg) 22%, transparent)}
+.feed-detail-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.feed-detail-title{margin-bottom:18px}
+.feed-detail-title.style-quote{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(19px,2vw,24px);line-height:1.4}
+.feed-detail-title.style-bold{font-family:var(--sans);font-weight:800;text-transform:uppercase;font-size:19px;line-height:1.3}
+.feed-detail-title.style-plain{font-family:var(--sans);font-weight:600;font-size:19px;line-height:1.35}
+.feed-detail-body{font-size:13.5px;line-height:1.75;color:var(--muted);margin-bottom:22px}
+.feed-detail-meta{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--rule)}
+.feed-detail-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feed-detail-save{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--rule);background:none;color:var(--fg);cursor:none}
+.feed-detail-save:hover{background:var(--fg);color:var(--bg)}
+
+.feed-detail-media{width:100%;aspect-ratio:16/10;overflow:hidden;margin-bottom:18px;background:var(--faint)}
+.feed-detail-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05);display:block}
+.feed-author-toggle{margin-top:18px;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:none;padding:0}
+.feed-author-toggle:hover{color:var(--fg)}
+.fa-caret{display:inline-block;transition:transform .2s}
+.feed-author-toggle.open .fa-caret{transform:rotate(180deg)}
+.feed-author-fold{max-height:0;overflow:hidden;transition:max-height .3s ease;display:flex;align-items:center;gap:12px}
+.feed-author-fold.open{max-height:120px;margin-top:14px}
+.feed-author-avatar{width:38px;height:38px;border-radius:50%;background:var(--fg);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0}
+.feed-author-name{font-family:var(--serif);font-weight:600;font-size:14px}
+.feed-author-role{font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px}
+.feed-author-link{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--fg);background:none;border:1px solid var(--rule);padding:6px 10px;cursor:none;white-space:nowrap}
+.feed-author-link:hover{background:var(--fg);color:var(--bg)}
+
+/* ═══════════════ POSTER PANEL — editorial "dip in" reading experience
+   Light theme always, regardless of page dark/light state.
+   Desktop: right-clamped rail. Mobile: bottom-sheet with drag handle. ══ */
+.poster-panel{
+  /* Force light palette inside this subtree */
+  --bg:#ffffff; --fg:#0a0a0a;
+  --rule:rgba(0,0,0,.1); --faint:rgba(0,0,0,.05); --muted:rgba(0,0,0,.44);
+
+  position:fixed;top:0;right:0;bottom:0;z-index:9801;
+  width:min(38vw,580px);min-width:340px;max-width:100vw;
+  background:#ffffff;color:#0a0a0a;
+  border-left:1px solid rgba(0,0,0,.08);
+  box-shadow:-8px 0 60px -12px rgba(0,0,0,.18), -1px 0 0 0 rgba(0,0,0,.06);
+  transform:translateX(100%);transition:transform .55s cubic-bezier(.16,1,.3,1);
+  overflow-y:auto;overflow-x:hidden;
+  padding:0 0 60px;
+  /* Scrollbar light */
+  scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.12) transparent;
+}
+.poster-panel.open{transform:translateX(0)}
+.poster-panel::-webkit-scrollbar{width:4px}
+.poster-panel::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:2px}
+
+/* Overlay: very soft scrim on desktop, stronger on mobile */
+.poster-overlay{position:fixed;inset:0;z-index:9800;background:rgba(0,0,0,.28);opacity:0;pointer-events:none;transition:opacity .4s;backdrop-filter:blur(1px)}
+.poster-overlay.open{opacity:1;pointer-events:auto}
+
+/* Header bar — kicker + close button sit above the image bleed */
+.poster-header{
+  position:sticky;top:0;z-index:2;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 28px 16px;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(0,0,0,.07);
+}
+.poster-kicker{
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(0,0,0,.44);margin:0;
+}
+.poster-close{
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(0,0,0,.38);background:none;border:none;cursor:none;
+  display:flex;align-items:center;gap:5px;transition:color .15s;
+  flex-shrink:0;
+}
+.poster-close:hover{color:#0a0a0a}
+
+/* Hero image — full bleed, taller and more editorial */
+.poster-media{
+  width:100%;aspect-ratio:3/2;overflow:hidden;
+  background:rgba(0,0,0,.06);
+  position:relative;
+}
+.poster-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.06);display:block;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+.poster-panel.open .poster-media img{transform:scale(1.02)}
+
+/* Body content — padded column */
+.poster-body-wrap{padding:28px 28px 0}
+
+.poster-title{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(24px,3.2vw,40px);
+  line-height:1.06;letter-spacing:-.015em;
+  margin:0 0 16px;color:#0a0a0a;
+}
+.poster-title.style-quote{font-style:italic;font-weight:400;font-size:clamp(22px,2.8vw,34px);line-height:1.18}
+.poster-title.style-bold{font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:.98}
+
+.poster-body{
+  font-size:14px;line-height:1.8;color:rgba(0,0,0,.52);
+  margin-bottom:22px;
+  border-left:2px solid rgba(0,0,0,.08);
+  padding-left:14px;
+}
+
+/* Tag row */
+.poster-tagrow{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 0;
+  border-top:1px solid rgba(0,0,0,.08);
+  border-bottom:1px solid rgba(0,0,0,.08);
+  margin-bottom:24px;
+}
+.poster-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:rgba(0,0,0,.4)}
+.poster-save{
+  font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+  padding:8px 14px;border:1px solid rgba(0,0,0,.14);
+  background:none;color:#0a0a0a;cursor:none;
+  transition:background .18s,color .18s,border-color .18s;
+}
+.poster-save:hover{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
+
+/* Author row */
+.poster-author{
+  display:flex;align-items:center;gap:14px;
+  padding:18px 0;border-top:1px solid rgba(0,0,0,.08);
+}
+.poster-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:#0a0a0a;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:12px;flex-shrink:0;
+}
+.poster-author-name{font-family:var(--serif);font-weight:600;font-size:15px;color:#0a0a0a}
+.poster-author-role{font-family:var(--mono);font-size:9.5px;color:rgba(0,0,0,.42);margin-top:2px}
+.poster-profile-btn{
+  margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;
+  color:#0a0a0a;background:none;border:1px solid rgba(0,0,0,.14);
+  padding:7px 11px;cursor:none;white-space:nowrap;
+  transition:background .18s,color .18s;
+}
+.poster-profile-btn:hover{background:#0a0a0a;color:#fff}
+
+/* Related links */
+.poster-related{padding-top:20px;border-top:1px solid rgba(0,0,0,.08)}
+.poster-related-label{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(0,0,0,.38);margin-bottom:10px;
+}
+.poster-related-link{
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+  color:#0a0a0a;text-decoration:none;
+  padding:13px 0;border-bottom:1px solid rgba(0,0,0,.07);cursor:none;
+  transition:background .14s,padding-left .2s;
+}
+.poster-related-link:last-child{border-bottom:none}
+.poster-related-link:hover{color:rgba(0,0,0,.5);padding-left:6px}
+
+/* ── Mobile: bottom sheet ── */
+@media(max-width:760px){
+  .poster-panel{
+    top:auto;right:0;left:0;bottom:0;width:100%;min-width:0;
+    max-height:92vh;border-left:none;border-top:1px solid rgba(0,0,0,.09);
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -8px 50px -8px rgba(0,0,0,.22);
+    transform:translateY(100%);
+    padding-bottom:env(safe-area-inset-bottom,20px);
+  }
+  .poster-panel.open{transform:translateY(0)}
+  /* Drag handle pill */
+  .poster-panel::before{
+    content:'';display:block;
+    width:36px;height:4px;border-radius:2px;
+    background:rgba(0,0,0,.14);
+    margin:12px auto 0;
+  }
+  .poster-header{padding:12px 20px 10px;border-radius:20px 20px 0 0}
+  .poster-media{aspect-ratio:16/9}
+  .poster-body-wrap{padding:20px 20px 0}
+  .poster-title{font-size:clamp(22px,6vw,32px)}
+  .poster-body{font-size:14px;padding-left:10px}
+}
+
+@media(max-width:1000px){
+  .feed-layout{grid-template-columns:1fr}
+  .feed-detail-col{position:static;order:-1;margin-bottom:8px}
+  .feed-list-col .feed-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){.feed-list-col .feed-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ═══════════════ JOBS PAGE — traditional list/grid feed ═══════════════ */
 /* ═══════════════ BREADCRUMBS ═══════════════ */
@@ -307,9 +647,13 @@ img{max-width:100%;display:block}
   .jobs-layout{grid-template-columns:1fr}
   .jobs-feed{border-right:none}
   .jobs-side{padding-left:0;padding-top:8px}
-  .jobs-feed.grid-mode{grid-template-columns:1fr}
+  .jobs-feed.grid-mode{grid-template-columns:repeat(2,1fr)}
   .job-row{grid-template-columns:26px 1fr}
   .job-meta{display:none}
+}
+@media(max-width:640px){
+  .side-list{display:block;columns:2 110px;column-gap:16px}
+  .side-list li{break-inside:avoid;margin-bottom:8px}
 }
 
 /* ═══════════════ PROFILE PAGE ═══════════════ */
@@ -368,6 +712,11 @@ img{max-width:100%;display:block}
   .case-arrow{display:none}
   .doc-row{grid-template-columns:32px 1fr auto}
   .doc-meta{display:none}
+}
+@media(max-width:640px){
+  .profile-facts{display:block;columns:2 110px;column-gap:16px}
+  .profile-facts .profile-fact{break-inside:avoid;margin-bottom:10px}
+  .profile-bio{columns:2 130px;column-gap:18px;max-width:none}
 }
 
 /* ═══════════════ FOOTER ═══════════════ */
@@ -433,7 +782,7 @@ img{max-width:100%;display:block}
   <div class="panel-section">
     <div class="panel-section-title">Quick links</div>
     <a class="panel-row" href="#" data-view="profile"><span>View public profile</span><i>→</i></a>
-    <a class="panel-row" href="#" data-view="dock"><span>Dock</span><i id="dockCount">0 saved</i></a>
+    <a class="panel-row" href="#" data-view="dock"><span>Saved</span><i id="dockCount">0 saved</i></a>
     <a class="panel-row" href="#" data-view="jobs"><span>Jobs activity</span><i>3 active rooms</i></a>
     <a class="panel-row" href="#graph" data-anchor="graph"><span>Network</span><i>128 connections</i></a>
     <a class="panel-row panel-locked" href="#assistant" data-anchor="assistant"><span>Agent workflows</span><i class="panel-tier">Agent tier</i></a>
@@ -450,10 +799,7 @@ img{max-width:100%;display:block}
 <header class="hero" id="top">
   <div class="hero-text-block">
     <div class="hero-kicker">Preface — Chapter Zero</div>
-    <div class="hero-title-wrap">
-      <canvas id="titleCanvas"></canvas>
-      <h1 class="sr-only">The professional graph, redrawn.</h1>
-    </div>
+    <h1 class="hero-title">The professional<br>graph, <em>redrawn.</em></h1>
     <p class="hero-sub">Not a resume. Not a feed. A living structure of the people you've built things with — read the way a magazine reads, not the way a database reports.</p>
   </div>
   <div class="hero-wall-block">
@@ -461,6 +807,30 @@ img{max-width:100%;display:block}
     <div class="hero-scroll">Scroll <span class="arrow">↓</span></div>
   </div>
 </header>
+
+<!-- FEATURED — infinite flickable canvas grid -->
+<section class="feed-featured">
+  <div class="feed-toolbar">
+    <div class="feed-eyebrow">Featured — today's feed</div>
+    <div class="canvas-scaler">
+      <span id="canvasScaleLabel">16px</span>
+      <input type="range" id="canvasScaleSlider" min="11" max="24" step="1" value="16">
+      <span class="canvas-scaler-hint">SHIFT+SCROLL</span>
+    </div>
+    <div class="feed-toolbar-right">
+      <span class="canvas-hint">Drag to explore — click a card to dip in, Esc to level out</span>
+      <a class="feed-seeall" href="#" data-view="feed">See all updates →</a>
+    </div>
+  </div>
+  <div class="feed-tabs" id="homeFeedTabs">
+    <button class="feed-tab active" data-tab="others">Interesting from others</button>
+    <button class="feed-tab" data-tab="today">Today</button>
+    <button class="feed-tab" data-tab="yesterday">Yesterday</button>
+  </div>
+  <div class="canvas-grid-viewport" id="canvasViewport">
+    <div class="canvas-grid-track" id="canvasTrack"></div>
+  </div>
+</section>
 
 <!-- CHAPTER 1 — JOBS -->
 <section class="chapter" id="room">
@@ -825,11 +1195,11 @@ img{max-width:100%;display:block}
   </div>
 </div><!-- /view-profile -->
 
-<!-- ═══════════════ VIEW: DOCK — saved-browsing report ═══════════════ -->
+<!-- ═══════════════ VIEW: SAVED — saved-browsing report ═══════════════ -->
 <div id="view-dock" style="display:none">
   <div class="dock-page">
-    <div class="dock-title">Your Dock</div>
-    <p class="dock-sub">Everything you've press-and-held and dropped from today's browsing, in the order it landed. Press and hold any job, case study, or gallery item, then drop it on the dock icon that appears in the lower-left corner.</p>
+    <div class="dock-title">Your Saved</div>
+    <p class="dock-sub">Everything you've right-clicked and saved from today's browsing, in the order it landed. Right-click any job, case study, or gallery item and choose "Save" to add it here.</p>
     <div class="dock-filters" id="dockFilters">
       <button class="dock-filter active" data-filter="all">All</button>
       <button class="dock-filter" data-filter="Job">Jobs</button>
@@ -840,15 +1210,139 @@ img{max-width:100%;display:block}
   </div>
 </div><!-- /view-dock -->
 
+<!-- ═══════════════ VIEW: FEED — dedicated grid:list with master/detail panel ═══════════════ -->
+<div id="view-feed" style="display:none">
+  <div class="feed-page">
+    <div class="feed-page-head">
+      <div class="feed-page-title">Feed</div>
+      <p class="feed-page-sub">Everything moving across your graph — jobs, quotes, analytics, and shipped work. Click any card to read it in full on the right.</p>
+    </div>
+    <div class="feed-toolbar" style="padding:0 0 20px;max-width:none">
+      <div class="feed-eyebrow">All updates</div>
+      <div class="feed-toolbar-right">
+        <div class="feed-toggle" id="pageFeedToggle">
+          <button class="active" data-mode="grid">Grid</button>
+          <button data-mode="list">List</button>
+        </div>
+      </div>
+    </div>
+    <div class="feed-refresh-wrap" style="max-width:none"><button class="feed-refresh" id="feedRefreshBtn">+3 new updates</button></div>
+
+    <div class="feed-layout">
+      <div class="feed-list-col">
+        <div class="feed-grid" id="pageFeedGrid" style="max-width:none">
+
+          <div class="feed-card" data-kicker="Network" data-tag="Network · This week" data-img="https://picsum.photos/id/1027/700/460?grayscale" data-author="Rachel Kim" data-role="Product Lead, Studio Atlas" data-body="Weighted by how recently you built together, not by who posted today. Three of these introductions trace back to Studio Atlas.">
+            <div class="feed-top"><span class="feed-idx">01</span><span class="feed-arrow">→</span></div>
+            <div class="feed-headline style-bold">Your graph just got tighter.</div>
+            <div class="feed-meta-line">3 new intros through people you've actually built things with.</div>
+            <div class="feed-bottom"><span class="feed-tag">Network · This week</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Introduced by Rachel Kim" data-tag="Job · 2d" data-img="https://picsum.photos/id/1005/700/460?grayscale" data-author="Rachel Kim" data-role="Product Lead, Studio Atlas" data-body="Rachel worked with you on the Meridian rebuild. She flagged this room directly rather than letting it sit in a general listing.">
+            <div class="feed-top"><span class="feed-idx">02</span><span class="feed-arrow">→</span></div>
+            <div class="feed-kicker">Introduced by Rachel Kim</div>
+            <div class="feed-headline style-plain">Founding Engineer, Applied ML</div>
+            <div class="feed-meta-line">Nordhaus Studio — two active conversations already.</div>
+            <div class="feed-bottom"><span class="feed-tag">Job · 2d</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Quote" data-tag="Quote · Studio Atlas" data-img="https://picsum.photos/id/1025/700/460?grayscale" data-author="Studio Atlas" data-role="Design Studio" data-body="From the Vector Labs room notes — shared with permission after the room closed.">
+            <div class="feed-top"><span class="feed-idx">03</span><span class="feed-arrow">→</span></div>
+            <div class="feed-headline style-quote">"The room shows you exactly who, before you apply."</div>
+            <div class="feed-meta-line">— on Vector Labs, Growth Lead</div>
+            <div class="feed-bottom"><span class="feed-tag">Quote · Studio Atlas</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Analytics" data-tag="Analytics · This week" data-img="https://picsum.photos/id/1043/700/460?grayscale" data-author="Alex Kim" data-role="You" data-body="Measured anonymously — we can tell you the pattern (where people land, how long they stay) without ever naming who.">
+            <div class="feed-top"><span class="feed-idx">04</span><span class="feed-arrow">→</span></div>
+            <div class="feed-headline style-bold">62% of visitors stopped at your Work.</div>
+            <div class="feed-meta-line">Anonymous by design — patterns, never names.</div>
+            <div class="feed-bottom"><span class="feed-tag">Analytics · This week</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Meridian Analytics" data-tag="Case Study · 4 reactions" data-img="https://picsum.photos/id/1040/700/460?grayscale" data-author="Meridian Analytics" data-role="Data Platform" data-body="The heuristic audit and navigation rewrite that tripled weekly active use — the same case study now sitting in your Profile.">
+            <div class="feed-top"><span class="feed-idx">05</span><span class="feed-arrow">→</span></div>
+            <div class="feed-headline style-bold">Meridian Analytics liked your rebuild.</div>
+            <div class="feed-meta-line">Dashboard nobody used, until now.</div>
+            <div class="feed-bottom"><span class="feed-tag">Case Study · 4 reactions</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="New room opened" data-tag="Job · 3w" data-img="https://picsum.photos/id/1069/700/460?grayscale" data-author="Kent &amp; Vale" data-role="Ops &amp; Logistics" data-body="Field Research team, hiring through Civic Tech connections. Closes once three conversations have happened, whichever comes first.">
+            <div class="feed-top"><span class="feed-idx">06</span><span class="feed-arrow">→</span></div>
+            <div class="feed-kicker">New room opened</div>
+            <div class="feed-headline style-plain">Ops &amp; Logistics Manager</div>
+            <div class="feed-meta-line">Kent &amp; Vale — closes after three conversations.</div>
+            <div class="feed-bottom"><span class="feed-tag">Job · 3w</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Quote" data-tag="Quote · Commercial" data-img="https://picsum.photos/id/1050/700/460?grayscale" data-author="Altitude Airlines" data-role="Commercial Client" data-body="From the Altitude Airlines campaign credits — nine hours in a single continuous take.">
+            <div class="feed-top"><span class="feed-idx">07</span><span class="feed-arrow">→</span></div>
+            <div class="feed-headline style-quote">"Nine hours up, and the story starts before takeoff."</div>
+            <div class="feed-meta-line">— Altitude Airlines campaign</div>
+            <div class="feed-bottom"><span class="feed-tag">Quote · Commercial</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Agents" data-tag="Agent tier · Coming soon" data-img="https://picsum.photos/id/1056/700/460?grayscale" data-author="intoview.pro" data-role="Agent Workflows" data-body="A focused task-enabler, not a co-pilot that talks over you — drafting the follow-up, surfacing the one introduction worth making, then getting out of the way.">
+            <div class="feed-top"><span class="feed-idx">08</span><span class="feed-arrow">→</span></div>
+            <div class="feed-headline style-bold">Drafted, not decided for you.</div>
+            <div class="feed-meta-line">A focused task-enabler, not a co-pilot.</div>
+            <div class="feed-bottom"><span class="feed-tag">Agent tier · Coming soon</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Quote" data-tag="Quote · Brand" data-img="https://picsum.photos/id/1073/700/460?grayscale" data-author="Dana Foundation" data-role="Brand + Type System" data-body="From the Dana Foundation brand system — the typeface's letterforms trace the geometry of neural pathways.">
+            <div class="feed-top"><span class="feed-idx">09</span><span class="feed-arrow">→</span></div>
+            <div class="feed-headline style-quote">"A typeface built from anatomy, not habit."</div>
+            <div class="feed-meta-line">— Dana Foundation, brand + type system</div>
+            <div class="feed-bottom"><span class="feed-tag">Quote · Brand</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Update" data-tag="Update · 5d" data-img="https://picsum.photos/id/1011/700/460?grayscale" data-author="Studio Atlas" data-role="Design Systems" data-body="Twelve collaborators across three time zones shipped from the same token set — no design drift, no duplicate components.">
+            <div class="feed-top"><span class="feed-idx">10</span><span class="feed-arrow">→</span></div>
+            <div class="feed-headline style-plain">Studio Atlas shipped the design system you reviewed.</div>
+            <div class="feed-meta-line">12 collaborators, one shared language.</div>
+            <div class="feed-bottom"><span class="feed-tag">Update · 5d</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Saved" data-tag="Saved · Reminder" data-img="https://picsum.photos/id/1015/700/460?grayscale" data-author="You" data-role="Personal reminder" data-body="Right-click any job, case study, or gallery item and choose Save — everything lands in one place, sorted by when it landed.">
+            <div class="feed-top"><span class="feed-idx">11</span><span class="feed-arrow">→</span></div>
+            <div class="feed-kicker">Your Saved</div>
+            <div class="feed-headline style-plain">2 items saved this week</div>
+            <div class="feed-meta-line">Right-click any card to add more.</div>
+            <div class="feed-bottom"><span class="feed-tag">Saved · Reminder</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+          <div class="feed-card" data-kicker="Music" data-tag="Music · Milestone" data-img="https://picsum.photos/id/1059/700/460?grayscale" data-author="Parallax" data-role="Recording Artist" data-body="Parallax's new single crossed 100,000 streams this week — mixed by two people three connections deep in your graph.">
+            <div class="feed-top"><span class="feed-idx">12</span><span class="feed-arrow">→</span></div>
+            <div class="feed-headline style-bold">Static Ground — 100K streams this week.</div>
+            <div class="feed-meta-line">Parallax's new single, mixed by people in your graph.</div>
+            <div class="feed-bottom"><span class="feed-tag">Music · Milestone</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="feed-detail-col">
+        <div class="feed-detail-panel" id="feedDetailPanel"></div>
+      </div>
+    </div>
+  </div>
+</div><!-- /view-feed -->
+
 <footer class="foot">
   <span>intoview.pro — a thinking exercise in what a professional network could become</span>
-  <span>Right-click anywhere to switch dark/light</span>
+  <span>Right-click anywhere for theme, activity &amp; Saved</span>
   <a href="#top" data-view="home">Back to top ↑</a>
 </footer>
 
-<button id="dockFab" title="Drop to save to your Dock">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="14" rx="1"/><path d="M3 11h18M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-</button>
+<div class="ctx-menu" id="ctxMenu"></div>
+
+<div class="modal-overlay" id="activityOverlay"></div>
+<div class="modal" id="activityModal"></div>
+
+<div class="poster-overlay" id="posterOverlay"></div>
+<aside class="poster-panel" id="posterPanel"></aside>
+
 <button id="askOrb">Ask</button>
 <div id="askTip">Agent workflows are coming soon — this is a placeholder for focused, task-specific help.</div>
 
@@ -857,12 +1351,15 @@ img{max-width:100%;display:block}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.0.42/lenis.min.js" onerror="window.__lenisFailed=true"></script>
 <script>
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pageLoadTs = Date.now();
+const pageViews = { Home: 1 };
 
 /* ─────────────────────────────────────────────
-   THEME — dark by default; right-click anywhere
-   toggles dark/light. No automatic switching.
+   THEME — dark by default; toggled from the
+   right-click context menu below. No automatic
+   switching.
 ───────────────────────────────────────────── */
-let isDarkTheme = true;
+let isDarkTheme = false;
 function applyTheme(dark){
   isDarkTheme = dark;
   const t = dark ? {bg:'#000000',fg:'#ffffff'} : {bg:'#ffffff',fg:'#000000'};
@@ -873,10 +1370,24 @@ function applyTheme(dark){
   }
   gsap.to(document.documentElement, { '--bg':t.bg, '--fg':t.fg, duration:.6, ease:'power2.inOut' });
 }
-document.addEventListener('contextmenu', e=>{
+
+/* ─────────────────────────────────────────────
+   UNIVERSAL SHIFT+SCROLL TYPE SCALE — like the
+   original foundry's reading-size control, but global:
+   scales all copy/labels/headlines site-wide (nav,
+   chapters, footer, everything) via the browser zoom
+   mechanism. The canvas grid has its own local slider
+   for cell:font ratio and intercepts this gesture itself
+   when the cursor is over it (see the Home Featured module).
+───────────────────────────────────────────── */
+let globalTypeScale = 1;
+document.addEventListener('wheel', e=>{
+  if(!e.shiftKey) return;
   e.preventDefault();
-  applyTheme(!isDarkTheme);
-});
+  globalTypeScale += (e.deltaY < 0 ? 0.04 : -0.04);
+  globalTypeScale = Math.min(1.6, Math.max(0.75, globalTypeScale));
+  document.documentElement.style.zoom = globalTypeScale;
+}, { passive:false });
 
 /* ─────────────────────────────────────────────
    GLOBAL CURSOR VECTOR SYSTEM (whole document)
@@ -886,13 +1397,38 @@ const vLineH = document.getElementById('vLineH');
 const vLineV = document.getElementById('vLineV');
 const vCoord = document.getElementById('vCoord');
 
+let coordX = window.innerWidth/2, coordY = window.innerHeight/2;
+let coordTargetX = coordX, coordTargetY = coordY;
+let coordRafId = null;
+function coordEaseLoop(){
+  coordX += (coordTargetX-coordX) * 0.09;
+  coordY += (coordTargetY-coordY) * 0.09;
+  vCoord.style.left = coordX.toFixed(1)+'px';
+  vCoord.style.top = coordY.toFixed(1)+'px';
+  if(Math.abs(coordTargetX-coordX) > 0.3 || Math.abs(coordTargetY-coordY) > 0.3){
+    coordRafId = requestAnimationFrame(coordEaseLoop);
+  } else {
+    coordRafId = null;
+  }
+}
+
 document.addEventListener('mousemove', e=>{
   cursorDot.style.left = e.clientX+'px';
   cursorDot.style.top = e.clientY+'px';
   cursorDot.classList.add('vis');
   vLineH.style.top = e.clientY+'px'; vLineH.classList.add('vis');
   vLineV.style.left = e.clientX+'px'; vLineV.classList.add('vis');
-  vCoord.style.left = e.clientX+'px'; vCoord.style.top = e.clientY+'px'; vCoord.classList.add('vis');
+
+  // magnetic/repel target: sit at the midpoint of whichever side (of the
+  // crosshair, through the cursor) currently has more room, rather than
+  // rigidly glued to the cursor itself
+  const leftLen = e.clientX, rightLen = window.innerWidth - e.clientX;
+  coordTargetX = leftLen > rightLen ? e.clientX/2 : e.clientX + rightLen/2;
+  const topLen = e.clientY, botLen = window.innerHeight - e.clientY;
+  coordTargetY = topLen > botLen ? e.clientY/2 : e.clientY + botLen/2;
+  if(!coordRafId) coordRafId = requestAnimationFrame(coordEaseLoop);
+
+  vCoord.classList.add('vis');
   vCoord.textContent = 'X '+(e.clientX/window.innerWidth).toFixed(2)+' · Y '+(e.clientY/window.innerHeight).toFixed(2);
 });
 document.addEventListener('mouseleave', ()=>{
@@ -984,7 +1520,7 @@ function initScrollFx(){
   if(!window.gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(ScrollTrigger);
 
-  gsap.from('.hero-kicker, .hero-title-wrap, .hero-sub', {
+  gsap.from('.hero-kicker, .hero-title, .hero-sub', {
     y: REDUCED ? 0 : 24, opacity:0, duration:1, ease:'power3.out', stagger:.12, delay:.15
   });
 
@@ -1030,7 +1566,7 @@ function initWallParticles(){
   const hero = document.querySelector('.hero-wall-block');
   const canvas = document.getElementById('wallCanvas');
   const ctx = canvas.getContext('2d');
-  const FONT_SIZE = 20;
+  const FONT_SIZE = 15;
   const CHAR_W = FONT_SIZE * 0.6, LINE_H = FONT_SIZE * 1.4;
   let W, H, DPR, allChars = [], loaded = false;
   let mX = -999, mY = -999, bX = -999, bY = -999;
@@ -1141,103 +1677,13 @@ function initWallParticles(){
   window.addEventListener('touchmove', e=>{ const r = canvas.getBoundingClientRect(); mX = e.touches[0].clientX-r.left; mY = e.touches[0].clientY-r.top; }, {passive:true});
   let rTimer; window.addEventListener('resize', ()=>{ clearTimeout(rTimer); rTimer = setTimeout(rebuild,120); });
 
+  window.resetWallParticles = function(){
+    // Snap all particles to rest and clear velocity — clean slate
+    for(const p of allChars){ p.x = p.restX; p.y = p.restY; p.vx = 0; p.vy = 0; }
+    mX = -999; mY = -999; bX = -999; bY = -999;
+  };
+
   rebuild(); loop();
-}
-
-/* ─────────────────────────────────────────────
-   PARTICLE HEADLINE — the hero title itself,
-   rendered as physics-driven glyphs (mixed roman
-   + italic Fraunces), ported from initParticleHero
-───────────────────────────────────────────── */
-const HL_TETHER = 0.028, HL_DAMP = 0.72, HL_LERP = 0.08;
-const HL_FLOAT_SPD = 0.007, HL_FLOAT_AX = 3.5, HL_FLOAT_AY = 2.4;
-
-function initHeadlineParticles(){
-  const wrap = document.querySelector('.hero-title-wrap');
-  const canvas = document.getElementById('titleCanvas');
-  const ctx = canvas.getContext('2d');
-  const LINES = [
-    [{ text:'The professional', style:'700' }],
-    [{ text:'graph, ', style:'700' }, { text:'redrawn.', style:'italic 400' }],
-  ];
-  let W, H, DPR, particles = [], floatT = Math.random()*Math.PI*2;
-  let mx = -999, my = -999, bX = -999, bY = -999;
-
-  function rootColor(name, fallback){
-    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    return v || fallback;
-  }
-  function fontSize(){ return Math.round(Math.min(window.innerWidth*0.072, 108)); }
-
-  function build(){
-    const fs = fontSize(), gap = Math.round(fs*0.12), lineH = Math.round(fs*1.05);
-    const prev = particles;
-    particles = [];
-    LINES.forEach((segments, li)=>{
-      let cx = 2;
-      const baseY = li*(lineH+gap) + fs*0.86;
-      segments.forEach(seg=>{
-        ctx.font = `${seg.style} ${fs}px 'Fraunces',serif`;
-        for(const ch of seg.text){
-          const w = ctx.measureText(ch).width;
-          const p = prev.find(p=>p.ch===ch && p.font===seg.style && Math.abs(p.restX-cx)<6 && p.line===li);
-          particles.push({
-            ch, font:seg.style, fs, line:li,
-            restX:cx, restY:baseY,
-            x: p?p.x:cx+(Math.random()-.5)*W*0.4,
-            y: p?p.y:baseY+(Math.random()-.5)*H*0.8,
-            vx: p?p.vx:0, vy: p?p.vy:0,
-          });
-          cx += w;
-        }
-      });
-    });
-    return lineH*2+gap+fs*0.3;
-  }
-
-  function resize(){
-    DPR = Math.min(window.devicePixelRatio||1, 2);
-    W = wrap.clientWidth;
-    const contentH = build();
-    H = contentH;
-    canvas.width = W*DPR; canvas.height = H*DPR;
-    canvas.style.width = W+'px'; canvas.style.height = H+'px';
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-    build();
-  }
-
-  function loop(){
-    requestAnimationFrame(loop);
-    bX += (mx-bX)*HL_LERP; bY += (my-bY)*HL_LERP;
-    floatT += HL_FLOAT_SPD;
-    const fdx = Math.sin(floatT)*HL_FLOAT_AX, fdy = Math.sin(floatT*0.8+1)*HL_FLOAT_AY;
-    ctx.clearRect(0,0,W,H);
-    const fg = rootColor('--fg','#ffffff');
-    ctx.fillStyle = fg;
-    ctx.textBaseline = 'alphabetic';
-    let lastFont = '';
-    for(const p of particles){
-      p.vx += (p.restX+fdx-p.x)*HL_TETHER;
-      p.vy += (p.restY+fdy-p.y)*HL_TETHER;
-      const dx = p.x-bX, dy = p.y-bY, d = Math.sqrt(dx*dx+dy*dy);
-      const repelR = 70;
-      if(d < repelR && d > 0.5){
-        const f = 1-d/repelR;
-        p.vx += (dx/d)*f*f*18; p.vy += (dy/d)*f*f*18;
-      }
-      p.vx *= HL_DAMP; p.vy *= HL_DAMP;
-      p.x += p.vx; p.y += p.vy;
-      const font = `${p.font} ${p.fs}px 'Fraunces',serif`;
-      if(font !== lastFont){ ctx.font = font; lastFont = font; }
-      ctx.fillStyle = fg;
-      ctx.fillText(p.ch, p.x, p.y);
-    }
-  }
-
-  window.addEventListener('mousemove', e=>{ const r = canvas.getBoundingClientRect(); mx = e.clientX-r.left; my = e.clientY-r.top; });
-  let rTimer; window.addEventListener('resize', ()=>{ clearTimeout(rTimer); rTimer = setTimeout(resize,120); });
-
-  document.fonts.ready.then(()=>{ resize(); loop(); });
 }
 
 /* ─────────────────────────────────────────────
@@ -1249,11 +1695,18 @@ const viewHome = document.getElementById('view-home');
 const viewJobs = document.getElementById('view-jobs');
 const viewProfile = document.getElementById('view-profile');
 const viewDock = document.getElementById('view-dock');
+const viewFeed = document.getElementById('view-feed');
 const bc = document.getElementById('bc');
 const bcCurrent = document.getElementById('bcCurrent');
-const SUBVIEWS = { jobs: { el: viewJobs, label: 'Jobs' }, profile: { el: viewProfile, label: 'Profile' }, dock: { el: viewDock, label: 'Dock' } };
+const SUBVIEWS = { jobs: { el: viewJobs, label: 'Jobs' }, profile: { el: viewProfile, label: 'Profile' }, dock: { el: viewDock, label: 'Saved' }, feed: { el: viewFeed, label: 'Feed' } };
+
+let currentView = 'home';
+let historyStack = ['home'];
+let historyIndex = 0;
+let navigatingHistory = false;
 
 function showView(name){
+  currentView = name || 'home';
   const sub = SUBVIEWS[name];
   viewHome.style.display = sub ? 'none' : '';
   Object.values(SUBVIEWS).forEach(v=> v.el.style.display = 'none');
@@ -1264,6 +1717,29 @@ function showView(name){
   window.scrollTo(0,0);
   if(window.ScrollTrigger) ScrollTrigger.refresh();
   if(name === 'dock' && typeof renderDock === 'function') renderDock();
+  const label = name === 'dock' ? 'Saved' : name === 'home' ? 'Home' : sub ? sub.label : 'Home';
+  pageViews[label] = (pageViews[label] || 0) + 1;
+
+  if(!navigatingHistory && historyStack[historyIndex] !== currentView){
+    historyStack = historyStack.slice(0, historyIndex+1);
+    historyStack.push(currentView);
+    historyIndex = historyStack.length - 1;
+  }
+}
+
+function goBack(){
+  if(historyIndex <= 0) return;
+  historyIndex--;
+  navigatingHistory = true;
+  showView(historyStack[historyIndex]);
+  navigatingHistory = false;
+}
+function goForward(){
+  if(historyIndex >= historyStack.length-1) return;
+  historyIndex++;
+  navigatingHistory = true;
+  showView(historyStack[historyIndex]);
+  navigatingHistory = false;
 }
 
 function goToAnchor(id){
@@ -1276,19 +1752,22 @@ function goToAnchor(id){
   });
 }
 
-document.querySelectorAll('[data-view]').forEach(el=>{
-  el.addEventListener('click', e=>{
+document.addEventListener('click', e=>{
+  const viewEl = e.target.closest('[data-view]');
+  if(viewEl){
     e.preventDefault();
-    showView(el.dataset.view);
+    showView(viewEl.dataset.view);
     closePanel();
-  });
-});
-document.querySelectorAll('[data-anchor]').forEach(el=>{
-  el.addEventListener('click', e=>{
+    if(window.closeCardPanel) window.closeCardPanel();
+    return;
+  }
+  const anchorEl = e.target.closest('[data-anchor]');
+  if(anchorEl){
     e.preventDefault();
-    goToAnchor(el.dataset.anchor);
+    goToAnchor(anchorEl.dataset.anchor);
     closePanel();
-  });
+    if(window.closeCardPanel) window.closeCardPanel();
+  }
 });
 
 /* ─────────────────────────────────────────────
@@ -1311,7 +1790,7 @@ function closePanel(){
 accountBtn.addEventListener('click', ()=> accountPanel.classList.contains('open') ? closePanel() : openPanel());
 panelOverlay.addEventListener('click', closePanel);
 panelClose.addEventListener('click', closePanel);
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePanel(); });
+// Escape handling is centralized in the context-menu keydown listener below
 
 /* ─────────────────────────────────────────────
    JOBS LIST / GRID TOGGLE
@@ -1323,6 +1802,444 @@ document.querySelectorAll('.jt-btn').forEach(btn=>{
     document.getElementById('jobsFeed').classList.toggle('grid-mode', btn.dataset.mode==='grid');
   });
 });
+
+/* ─────────────────────────────────────────────
+   FEED GRID/LIST TOGGLES (Home featured + Feed page)
+───────────────────────────────────────────── */
+function wireFeedToggle(toggleId, containerSelector, onChange){
+  const toggle = document.getElementById(toggleId);
+  if(!toggle) return;
+  toggle.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const isList = btn.dataset.mode === 'list';
+      document.querySelectorAll(containerSelector+' .feed-grid').forEach(g=> g.classList.toggle('list-mode', isList));
+      if(onChange) onChange(isList);
+    });
+  });
+}
+wireFeedToggle('pageFeedToggle', '.feed-list-col');
+
+/* ─────────────────────────────────────────────
+   HOME FEATURED — infinite flickable canvas grid.
+   Cards from one real-content pool (from the CV) are
+   tiled into a 3x3 super-grid and panned via drag/flick
+   with inertia, wrapped seamlessly with modulo math, plus
+   a subtle ambient cursor parallax at rest. Click a tile
+   to "dip in" (opens the shared detail modal); a genuine
+   drag never triggers that. Tabs swap which slice of the
+   pool populates the grid.
+───────────────────────────────────────────── */
+(function(){
+  const tabsEl = document.getElementById('homeFeedTabs');
+  const viewport = document.getElementById('canvasViewport');
+  const track = document.getElementById('canvasTrack');
+  if(!tabsEl || !viewport || !track) return;
+
+  const POOL = [
+    { kicker:'BNY Mellon', tag:'Fintech · 2022–23', style:'bold', headline:'Wove: one client profile, three parallel Agile tracks.', meta:'Publicis Sapient engagement — $2T in assets under management.', img:'https://picsum.photos/id/1005/700/460?grayscale' },
+    { kicker:'GNC', tag:'E-commerce · 2021', style:'bold', headline:'Reclaimed ~$500M in annual revenue, post-bankruptcy.', meta:'Elva Design Group — taxonomy to storefront, one thread held.', img:'https://picsum.photos/id/1011/700/460?grayscale' },
+    { kicker:'Code and Theory', tag:'Enterprise · 2021–22', style:'plain', headline:'TikTok For Business — Senior Designer to ACD to DRI.', meta:'One engagement, three roles, sixty-two floors up.', img:'https://picsum.photos/id/1015/700/460?grayscale' },
+    { kicker:'Hardinge', tag:'E-commerce · 2019–21', style:'plain', headline:'A drop-navigation rebuild, thumb-zone logic.', meta:'LiveArea — discovery to delivery in twelve weeks.', img:'https://picsum.photos/id/1025/700/460?grayscale' },
+    { kicker:'LiveArea', tag:'E-commerce · 2019–21', style:'quote', headline:'"Cards Against Bad UX" — jargon turned into "as a shopper."', meta:'It catalyzed everything.', img:'https://picsum.photos/id/1027/700/460?grayscale' },
+    { kicker:'Aquasana · YETI · Simpson', tag:'E-commerce · 2019–21', style:'plain', headline:'B2B and B2C on Salesforce Commerce Cloud.', meta:'Multiple projects and junior designers, simultaneously.', img:'https://picsum.photos/id/1031/700/460?grayscale' },
+    { kicker:'Elva Design Group', tag:'Recovery · 2021', style:'plain', headline:'Restructured GNC’s product taxonomy first.', meta:'You cannot design navigation for a catalog you have not understood.', img:'https://picsum.photos/id/1040/700/460?grayscale' },
+    { kicker:'Publicis Sapient', tag:'Fintech · 2022–23', style:'bold', headline:'Interim Product Owner — a role I became, not one I was hired for.', meta:'Primary client liaison, 375 Hudson Street.', img:'https://picsum.photos/id/1043/700/460?grayscale' },
+    { kicker:'Wolfgang & Co.', tag:'Studio · 2025–', style:'quote', headline:'"A concept studio for craft, language, and human intent."', meta:'Named for a late blind rescue poodle.', img:'https://picsum.photos/id/1050/700/460?grayscale' },
+    { kicker:'wolfie.love', tag:'Product · 2025–', style:'plain', headline:'A sentence-progressive reading engine.', meta:'Flow Mode, authored timing markup, four themes.', img:'https://picsum.photos/id/1056/700/460?grayscale' },
+    { kicker:'dab.cx', tag:'Product · 2025–', style:'bold', headline:'Design, Architect, Build — one continuous motion.', meta:'No hand-off, no translation loss.', img:'https://picsum.photos/id/1059/700/460?grayscale' },
+    { kicker:'intoview.pro', tag:'Studio · 2025–', style:'plain', headline:'Fourteen organizations, twenty years, one panel.', meta:'Narrative-as-nodes, applied to the job market.', img:'https://picsum.photos/id/1073/700/460?grayscale' },
+    { kicker:'ifimaybefrank.com', tag:'Product · 2025–', style:'quote', headline:'"A writing application and a manifesto, simultaneously."', meta:'The tool proves the argument by existing.', img:'https://picsum.photos/id/1069/700/460?grayscale' },
+    { kicker:'reasonably.cc', tag:'Product · 2025–', style:'plain', headline:'A thinking tool — bracket annotation, scatter canvas.', meta:'The same sentence-first engine, applied to thought.', img:'https://picsum.photos/id/1082/700/460?grayscale' },
+    { kicker:'The Argument', tag:'Career · 2026', style:'bold', headline:'Twenty years, no degree, every credential earned in the work.', meta:'Starting from a pirated copy of Photoshop and a Craigslist post.', img:'https://picsum.photos/id/1084/700/460?grayscale' },
+    { kicker:'Phenom People', tag:'Independent · 2023–25', style:'plain', headline:'Owned the corporate web presence end-to-end.', meta:'Content strategy, roadmap, third-party integrations.', img:'https://picsum.photos/id/1062/700/460?grayscale' },
+    { kicker:'Brave People', tag:'Independent · 2023–25', style:'plain', headline:'Fixed-scope fintech UX for Geico Asset Management.', meta:'Execution complete, without the luxury of iteration.', img:'https://picsum.photos/id/1074/700/460?grayscale' },
+    { kicker:'One Sixty Over Ninety', tag:'Agency · 2014–16', style:'bold', headline:'Comcast, Kent State, the Eagles — on time, in budget.', meta:'Enterprise IA, high-fidelity wireframes, ADA compliance.', img:'https://picsum.photos/id/1077/700/460?grayscale' },
+    { kicker:'O3 World', tag:'Product · 2016–17', style:'plain', headline:'Agile with La Colombe, Vertex, SEIC.', meta:'Working with clients, not for them.', img:'https://picsum.photos/id/1080/700/460?grayscale' },
+    { kicker:'FlightPath', tag:'Pharma · 2018–19', style:'plain', headline:'Merck, Zoetis, Charter, Goya.', meta:'WCAG 2.0 AA/AAA under regulatory scrutiny.', img:'https://picsum.photos/id/1035/700/460?grayscale' },
+    { kicker:'HUGE', tag:'Hospitality · 2021', style:'quote', headline:'"One user flow. Twenty people on the account."', meta:'To say we were siloed would be an understatement.', img:'https://picsum.photos/id/1018/700/460?grayscale' },
+    { kicker:'Sentral Lifestyle Apartments', tag:'Hospitality · 2021', style:'plain', headline:'End-to-end booking flow, shipped fast.', meta:'Brand activation, competitive analysis, critical flows.', img:'https://picsum.photos/id/1016/700/460?grayscale' },
+    { kicker:'Leadnomics', tag:'Conversion · 2011–14', style:'bold', headline:'95.8% conversion — mobile-first before it was a mandate.', meta:'Responsive design, rigorous A/B testing.', img:'https://picsum.photos/id/1024/700/460?grayscale' },
+    { kicker:'Workarea', tag:'SaaS · 2017–18', style:'plain', headline:'Napkin sketches, high-velocity over high-fidelity.', meta:'Direct partnership with developers, no mockup theater.', img:'https://picsum.photos/id/1029/700/460?grayscale' },
+  ];
+
+  const TAB_OFFSET = { others:0, today:8, yesterday:16 };
+  function sliceFor(tab, count){
+    const offset = TAB_OFFSET[tab] || 0;
+    const out = [];
+    for(let i=0;i<count;i++) out.push(POOL[(offset+i) % POOL.length]);
+    return out;
+  }
+
+  function initialsOfHome(name){
+    const words = (name||'').split(/\s+/).filter(w=>/[a-zA-Z]/.test(w));
+    if(!words.length) return '•';
+    if(words.length===1) return words[0].slice(0,2).toUpperCase();
+    return (words[0][0]+words[1][0]).toUpperCase();
+  }
+
+  function tileInnerHTML(idx, c){
+    return `<div class="feed-top"><span class="feed-idx">${String(idx).padStart(2,'0')}</span><span class="feed-arrow">→</span></div>
+      ${c.kicker ? `<div class="feed-kicker">${c.kicker}</div>` : ''}
+      <div class="feed-headline style-${c.style}">${c.headline}</div>
+      <div class="feed-meta-line">${c.meta}</div>
+      <div class="feed-bottom"><span class="feed-tag">${c.tag}</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>`;
+  }
+
+  const COLS = 4, ROWS = 3;
+  let baseFontPx = 16;
+  let TW = 300, TH = 236, GAP = 16, setW = COLS*(TW+GAP), setH = ROWS*(TH+GAP);
+  let copiesX = 1, copiesY = 1;
+  let currentTab = 'others';
+
+  function recomputeDims(){
+    const scale = baseFontPx / 16;
+    TW = Math.round(300*scale); TH = Math.round(236*scale); GAP = Math.round(16*scale);
+    setW = COLS*(TW+GAP); setH = ROWS*(TH+GAP);
+    const vw = viewport.clientWidth || window.innerWidth;
+    const vh = viewport.clientHeight || window.innerHeight;
+    copiesX = Math.max(1, Math.ceil(vw/setW)) + 1;
+    copiesY = Math.max(1, Math.ceil(vh/setH)) + 1;
+    track.style.setProperty('--tile-font-scale', scale.toFixed(3));
+  }
+
+  function buildTiles(tab){
+    currentTab = tab;
+    track.innerHTML = '';
+    const cards = sliceFor(tab, COLS*ROWS);
+    for(let dxi=-copiesX; dxi<=copiesX; dxi++){
+      for(let dyi=-copiesY; dyi<=copiesY; dyi++){
+        cards.forEach((c,i)=>{
+          const col = i % COLS, row = Math.floor(i/COLS);
+          const left = dxi*setW + col*(TW+GAP);
+          const top = dyi*setH + row*(TH+GAP);
+          const tile = document.createElement('div');
+          tile.className = 'feed-card canvas-tile';
+          tile.style.left = left+'px'; tile.style.top = top+'px';
+          tile.style.width = TW+'px'; tile.style.height = TH+'px';
+          tile.dataset.kicker = c.kicker || '';
+          tile.dataset.tag = c.tag;
+          tile.dataset.img = c.img || '';
+          tile.dataset.body = (c.meta || '').replace(/"/g,'&quot;');
+          tile.innerHTML = tileInnerHTML(i+1, c);
+          track.appendChild(tile);
+        });
+      }
+    }
+  }
+
+  let panX = 0, panY = 0, velX = 0, velY = 0;
+  // Ambient parallax: target vs rendered (lerped in the unified rAF loop)
+  let ambTargetX = 0, ambTargetY = 0, ambX = 0, ambY = 0;
+  let dragging = false, moved = false, startX = 0, startY = 0, lastX = 0, lastY = 0, pid = null;
+  let loopRunning = false;
+
+  function mod(n,m){ return ((n%m)+m)%m; }
+  function applyTransform(){
+    const rx = mod(panX,setW) - setW;
+    const ry = mod(panY,setH) - setH;
+    track.style.transform = `translate3d(${(rx+ambX).toFixed(2)}px,${(ry+ambY).toFixed(2)}px,0)`;
+  }
+  function centerPan(){
+    const vw = viewport.clientWidth || window.innerWidth;
+    const vh = viewport.clientHeight || window.innerHeight;
+    panX = vw/2 - setW/2;
+    panY = vh/2 - setH/2;
+    velX = 0; velY = 0;
+  }
+  function rebuildAndCenter(){
+    recomputeDims();
+    buildTiles(currentTab);
+    centerPan();
+    applyTransform();
+  }
+
+  // Unified rAF loop — always running while viewport visible.
+  // Handles inertia decay + ambient parallax lerp in one place,
+  // so neither ever blocks the other (Phantom's approach).
+  const AMB_LERP = 0.07;   // how quickly ambient offset catches up
+  const INERTIA_FRICTION = 0.935; // drag-release friction (higher = longer glide)
+  const INERTIA_THRESHOLD = 0.08;
+
+  function startLoop(){
+    if(loopRunning) return;
+    loopRunning = true;
+    (function tick(){
+      let needsMore = false;
+      // Inertia
+      if(!dragging && (Math.abs(velX) > INERTIA_THRESHOLD || Math.abs(velY) > INERTIA_THRESHOLD)){
+        velX *= INERTIA_FRICTION;
+        velY *= INERTIA_FRICTION;
+        panX += velX;
+        panY += velY;
+        needsMore = true;
+      }
+      // Ambient lerp
+      const dAmbX = ambTargetX - ambX, dAmbY = ambTargetY - ambY;
+      if(Math.abs(dAmbX) > 0.02 || Math.abs(dAmbY) > 0.02){
+        ambX += dAmbX * AMB_LERP;
+        ambY += dAmbY * AMB_LERP;
+        needsMore = true;
+      } else {
+        ambX = ambTargetX; ambY = ambTargetY;
+      }
+      applyTransform();
+      if(needsMore || dragging){ requestAnimationFrame(tick); }
+      else { loopRunning = false; }
+    })();
+  }
+  function stopInertia(){ velX = 0; velY = 0; }
+
+  viewport.addEventListener('pointerdown', e=>{
+    if(e.target.closest('.feed-quick-save')) return;
+    stopInertia();
+    dragging = true; moved = false;
+    startX = lastX = e.clientX; startY = lastY = e.clientY;
+    pid = e.pointerId;
+    try{ viewport.setPointerCapture(pid); }catch(err){}
+    viewport.classList.add('panning');
+    velX = 0; velY = 0;
+    startLoop();
+  });
+  viewport.addEventListener('pointermove', e=>{
+    if(!dragging || e.pointerId !== pid) return;
+    const dx = e.clientX-lastX, dy = e.clientY-lastY;
+    if(Math.abs(e.clientX-startX) > 5 || Math.abs(e.clientY-startY) > 5) moved = true;
+    panX += dx; panY += dy;
+    // Velocity accumulation: blend new delta with running velocity for smoothness
+    velX = velX*0.72 + dx*0.28; velY = velY*0.72 + dy*0.28;
+    lastX = e.clientX; lastY = e.clientY;
+    applyTransform();
+  });
+  function openCardFromTile(card){
+    if(!window.openCardPanel) return;
+    const kicker = card.dataset.kicker || '';
+    const tag = card.dataset.tag || '';
+    const img = card.dataset.img || '';
+    const body = card.dataset.body || '';
+    const author = kicker || 'Update';
+    const role = (tag.split('·')[0] || '').trim();
+    const headlineEl = card.querySelector('.feed-headline');
+    const headline = headlineEl?.textContent.trim() || '';
+    const styleClass = [...(headlineEl?.classList || [])].find(c=>c.startsWith('style-')) || 'style-plain';
+    window.openCardPanel([
+      '<div class="poster-header">',
+        '<span class="poster-kicker">'+kicker+'</span>',
+        '<button class="poster-close" id="posterCloseBtn">Close ×</button>',
+      '</div>',
+      img ? '<div class="poster-media"><img src="'+img+'" alt=""></div>' : '',
+      '<div class="poster-body-wrap">',
+        '<h2 class="poster-title '+styleClass+'">'+headline+'</h2>',
+        '<p class="poster-body">'+body+'</p>',
+        '<div class="poster-tagrow">',
+          '<span class="poster-tag">'+tag+'</span>',
+          '<button class="poster-save" id="posterSaveBtn">Save</button>',
+        '</div>',
+        '<div class="poster-author">',
+          '<div class="poster-avatar">'+initialsOfHome(author)+'</div>',
+          '<div><div class="poster-author-name">'+author+'</div><div class="poster-author-role">'+role+'</div></div>',
+          '<button class="poster-profile-btn" id="posterProfileBtn">View profile</button>',
+        '</div>',
+        '<div class="poster-related">',
+          '<div class="poster-related-label">Related pathways</div>',
+          '<a class="poster-related-link" href="#" data-anchor="graph">The Network</a>',
+          '<a class="poster-related-link" href="#" data-view="jobs">Open Rooms</a>',
+          '<a class="poster-related-link" href="#" data-anchor="ledger">Analytics</a>',
+          '<a class="poster-related-link" href="#" data-view="feed">All Updates</a>',
+        '</div>',
+      '</div>',
+    ].join(''));
+    const panel = document.getElementById('posterPanel');
+    panel.querySelector('#posterCloseBtn')?.addEventListener('click', ()=>{ if(window.closeCardPanel) window.closeCardPanel(); });
+    panel.querySelector('#posterSaveBtn')?.addEventListener('click', ()=>{ if(window.saveFeedCard) window.saveFeedCard(card); });
+    panel.querySelector('#posterProfileBtn')?.addEventListener('click', ()=>{
+      if(window.showView) window.showView('profile');
+      if(window.closeCardPanel) window.closeCardPanel();
+    });
+  }
+
+  function endDrag(e){
+    if(!dragging) return;
+    dragging = false;
+    viewport.classList.remove('panning');
+    try{ if(pid!=null) viewport.releasePointerCapture(pid); }catch(err){}
+    if(moved){
+      startLoop();
+    } else if(e){
+      // Use elementFromPoint rather than e.target — setPointerCapture can
+      // retarget the derived click event to the capturing element itself,
+      // silently swallowing the tile underneath.
+      const hit = document.elementFromPoint(e.clientX, e.clientY);
+      if(hit && !hit.closest('.feed-quick-save')){
+        const card = hit.closest('.canvas-tile');
+        if(card) openCardFromTile(card);
+      }
+    }
+    pid = null;
+  }
+  viewport.addEventListener('pointerup', endDrag);
+  viewport.addEventListener('pointercancel', endDrag);
+
+  viewport.addEventListener('mousemove', e=>{
+    if(dragging) return;
+    const r = viewport.getBoundingClientRect();
+    const nx = (e.clientX-r.left)/r.width - 0.5;
+    const ny = (e.clientY-r.top)/r.height - 0.5;
+    ambTargetX = -nx*26; ambTargetY = -ny*26;
+    startLoop();
+  });
+  viewport.addEventListener('mouseleave', ()=>{ ambTargetX = 0; ambTargetY = 0; startLoop(); });
+
+  tabsEl.querySelectorAll('.feed-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabsEl.querySelectorAll('.feed-tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      stopInertia();
+      currentTab = btn.dataset.tab;
+      buildTiles(currentTab);
+      centerPan();
+      applyTransform();
+      startLoop();
+    });
+  });
+
+  let resizeTimer;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(rebuildAndCenter, 150);
+  });
+
+  const scaleSlider = document.getElementById('canvasScaleSlider');
+  const scaleLabel = document.getElementById('canvasScaleLabel');
+  function setBaseFont(px){
+    baseFontPx = Math.min(24, Math.max(11, px));
+    if(scaleSlider) scaleSlider.value = String(baseFontPx);
+    if(scaleLabel) scaleLabel.textContent = Math.round(baseFontPx) + 'px';
+    stopInertia();
+    rebuildAndCenter();
+  }
+  if(scaleSlider){
+    scaleSlider.addEventListener('input', ()=> setBaseFont(parseFloat(scaleSlider.value)));
+  }
+  viewport.addEventListener('wheel', e=>{
+    if(!e.shiftKey) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setBaseFont(baseFontPx + (e.deltaY < 0 ? 1 : -1));
+  }, { passive:false });
+
+  recomputeDims();
+  buildTiles('others');
+  centerPan();
+  applyTransform();
+})();
+
+/* ─────────────────────────────────────────────
+   FEED PAGE — master/detail panel
+───────────────────────────────────────────── */
+(function(){
+  const grid = document.getElementById('pageFeedGrid');
+  const panel = document.getElementById('feedDetailPanel');
+  if(!grid || !panel) return;
+
+  function styleOf(card){
+    const h = card.querySelector('.feed-headline');
+    return h && h.classList.contains('style-quote') ? 'quote' : h && h.classList.contains('style-bold') ? 'bold' : 'plain';
+  }
+  function initialsOf(name){
+    const words = (name||'').replace(/&amp;/g,'&').split(/\s+/).filter(w=>/[a-zA-Z]/.test(w));
+    if(!words.length) return '•';
+    if(words.length===1) return words[0].slice(0,2).toUpperCase();
+    return (words[0][0]+words[1][0]).toUpperCase();
+  }
+  function renderDetail(card){
+    const style = styleOf(card);
+    const headline = card.querySelector('.feed-headline')?.textContent.trim() || '';
+    const kicker = card.dataset.kicker || card.querySelector('.feed-kicker')?.textContent.trim() || '';
+    const tag = card.dataset.tag || card.querySelector('.feed-tag')?.textContent.trim() || '';
+    const body = card.dataset.body || card.querySelector('.feed-meta-line')?.textContent.trim() || '';
+    const img = card.dataset.img || '';
+    const author = card.dataset.author || kicker || 'Unknown';
+    const role = card.dataset.role || '';
+    panel.innerHTML = `
+      ${img ? `<div class="feed-detail-media"><img src="${img}" alt=""></div>` : ''}
+      <div class="feed-detail-kicker">${kicker}</div>
+      <div class="feed-detail-title style-${style}">${headline}</div>
+      <p class="feed-detail-body">${body}</p>
+      <div class="feed-detail-meta">
+        <span class="feed-detail-tag">${tag}</span>
+        <button class="feed-detail-save">Save →</button>
+      </div>
+      <button class="feed-author-toggle" id="authorToggle">About ${author} <span class="fa-caret">▾</span></button>
+      <div class="feed-author-fold" id="authorFold">
+        <div class="feed-author-avatar">${initialsOf(author)}</div>
+        <div>
+          <div class="feed-author-name">${author}</div>
+          <div class="feed-author-role">${role}</div>
+        </div>
+        <button class="feed-author-link" id="authorProfileLink">View full profile →</button>
+      </div>`;
+    panel.querySelector('.feed-detail-save').addEventListener('click', ()=>{
+      if(window.saveFeedCard) window.saveFeedCard(card);
+    });
+    const toggle = panel.querySelector('#authorToggle');
+    const fold = panel.querySelector('#authorFold');
+    toggle.addEventListener('click', ()=>{
+      toggle.classList.toggle('open');
+      fold.classList.toggle('open');
+    });
+    panel.querySelector('#authorProfileLink').addEventListener('click', ()=>{
+      if(window.showView) window.showView('profile');
+    });
+  }
+  function selectCard(card){
+    grid.querySelectorAll('.feed-card').forEach(c=>c.classList.remove('active'));
+    card.classList.add('active');
+    renderDetail(card);
+  }
+  grid.addEventListener('click', e=>{
+    if(e.target.closest('.feed-quick-save')) return;
+    const card = e.target.closest('.feed-card');
+    if(card) selectCard(card);
+  });
+  const first = grid.querySelector('.feed-card');
+  if(first) selectCard(first);
+})();
+
+/* ─────────────────────────────────────────────
+   FEED PAGE — simulated "new updates" refresh
+───────────────────────────────────────────── */
+(function(){
+  const btn = document.getElementById('feedRefreshBtn');
+  const grid = document.getElementById('pageFeedGrid');
+  if(!btn || !grid) return;
+  const EXTRA = [
+    { kicker:'Update', tag:'Update · Just now', style:'plain', headline:'A new introduction is waiting in The Room.', meta:'One conversation, already lined up.' },
+    { kicker:'Quote', tag:'Quote · Just now', style:'quote', headline:'"Fewer steps, from homepage through checkout."', meta:'— GNC, Shopify Plus redesign' },
+    { kicker:'Analytics', tag:'Analytics · Just now', style:'bold', headline:'Your reach just crossed last week\u2019s number.', meta:'Anonymous by design — patterns, never names.' },
+  ];
+  function renumber(){
+    grid.querySelectorAll('.feed-card .feed-idx').forEach((el,i)=>{ el.textContent = String(i+1).padStart(2,'0'); });
+  }
+  function showRefresh(){ btn.classList.add('show'); }
+  setTimeout(showRefresh, 14000);
+  btn.addEventListener('click', ()=>{
+    EXTRA.forEach(d=>{
+      const card = document.createElement('div');
+      card.className = 'feed-card entering';
+      card.dataset.kicker = d.kicker; card.dataset.tag = d.tag; card.dataset.body = d.meta;
+      card.innerHTML = `
+        <div class="feed-top"><span class="feed-idx">00</span><span class="feed-arrow">→</span></div>
+        <div class="feed-headline style-${d.style}">${d.headline}</div>
+        <div class="feed-meta-line">${d.meta}</div>
+        <div class="feed-bottom"><span class="feed-tag">${d.tag}</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>`;
+      grid.insertBefore(card, grid.firstChild);
+    });
+    renumber();
+    btn.classList.remove('show');
+  });
+})();
 
 /* ─────────────────────────────────────────────
    PROFILE TABS — Case studies / Documents
@@ -1337,25 +2254,33 @@ document.querySelectorAll('.profile-tab').forEach(tab=>{
 });
 
 /* ─────────────────────────────────────────────
-   SAVE TO DOCK — press-and-hold drag, drop on the
-   FAB in the lower-left corner to save. Generic:
-   any element gets this by calling makeSaveable(el,
-   type) — no per-page wiring beyond that call.
+   SAVED — right-click a job, case study, or gallery
+   item and choose "Save" to add it here. Generic:
+   any element becomes save-able just by being
+   matched in the selector list below.
 ───────────────────────────────────────────── */
 (function(){
-  const HOLD_MS = 280, MOVE_CANCEL = 8, DROP_RADIUS = 70;
-  const dockFab = document.getElementById('dockFab');
   const dockCountEl = document.getElementById('dockCount');
   const dockFiltersEl = document.getElementById('dockFilters');
   const dockListEl = document.getElementById('dockList');
+  const ctxMenu = document.getElementById('ctxMenu');
+  const activityOverlay = document.getElementById('activityOverlay');
+  const activityModal = document.getElementById('activityModal');
 
   let dockItems = [
     { id:'seed1', type:'Job', title:'Founding Engineer, Applied ML', meta:'Nordhaus Studio', ts: Date.now() - 1000*60*192 },
     { id:'seed2', type:'Media', title:'Workshop — Whiteboard Session', meta:'Profile gallery', ts: Date.now() - 1000*60*47 },
   ];
   let currentFilter = 'all';
-  let ghost = null;
 
+  const SAVEABLE_SELECTOR = '#jobsFeed .job-row, #panel-case-studies .case-row, #view-profile .gallery-grid .m-cell, .feed-card';
+
+  function cardType(el){
+    if(el.classList.contains('job-row')) return 'Job';
+    if(el.classList.contains('case-row')) return 'Case Study';
+    if(el.classList.contains('feed-card')) return 'Update';
+    return 'Media';
+  }
   function extractInfo(el, type){
     let title, meta;
     if(type === 'Job'){
@@ -1364,22 +2289,19 @@ document.querySelectorAll('.profile-tab').forEach(tab=>{
     } else if(type === 'Case Study'){
       title = el.querySelector('.case-title')?.textContent.trim();
       meta = el.querySelector('.case-tag')?.textContent.trim();
-    } else if(type === 'Media'){
+    } else if(type === 'Update'){
+      title = el.querySelector('.feed-headline')?.textContent.trim();
+      meta = el.dataset.tag || el.querySelector('.feed-tag')?.textContent.trim();
+    } else {
       title = el.querySelector('.m-media-cap')?.textContent.trim() || el.querySelector('img')?.getAttribute('alt') || 'Untitled clip';
       meta = 'Profile gallery';
     }
     return { title: title || 'Untitled', meta: meta || '' };
   }
-
-  function updateGhostPos(x, y){
-    if(ghost){ ghost.style.left = x+'px'; ghost.style.top = y+'px'; }
-  }
-  function fabProximity(x, y){
-    const r = dockFab.getBoundingClientRect();
-    const d = Math.hypot(x - (r.left+r.width/2), y - (r.top+r.height/2));
-    dockFab.classList.toggle('hover-target', d < DROP_RADIUS);
-    return d < DROP_RADIUS;
-  }
+  window.saveFeedCard = function(el){
+    const info = extractInfo(el, 'Update');
+    saveItem('Update', info.title, info.meta);
+  };
 
   function saveItem(type, title, meta){
     dockItems.unshift({ id:'d'+Date.now()+Math.random().toString(36).slice(2,6), type, title, meta, ts: Date.now() });
@@ -1391,72 +2313,14 @@ document.querySelectorAll('.profile-tab').forEach(tab=>{
     dockCountEl.textContent = dockItems.length + ' saved';
     renderDock();
   }
-
-  function attachHoldDrag(el, type){
-    el.classList.add('saveable');
-    let timer = null, startX = 0, startY = 0, lifted = false, pid = null;
-
-    el.addEventListener('pointerdown', e=>{
-      if(e.pointerType === 'mouse' && e.button !== 0) return;
-      startX = e.clientX; startY = e.clientY; lifted = false; pid = e.pointerId;
-      try{ el.setPointerCapture(pid); }catch(err){}
-      clearTimeout(timer);
-      timer = setTimeout(()=>{
-        lifted = true;
-        el.classList.add('lifting');
-        const info = extractInfo(el, type);
-        ghost = document.createElement('div');
-        ghost.className = 'drag-ghost';
-        ghost.innerHTML = `<div class="dg-type">${type}</div><div class="dg-title">${info.title}</div>`;
-        document.body.appendChild(ghost);
-        updateGhostPos(e.clientX, e.clientY);
-        dockFab.classList.add('show');
-      }, HOLD_MS);
-    });
-
-    el.addEventListener('pointermove', e=>{
-      if(e.pointerId !== pid) return;
-      if(!lifted){
-        if(Math.abs(e.clientX-startX) > MOVE_CANCEL || Math.abs(e.clientY-startY) > MOVE_CANCEL) clearTimeout(timer);
-        return;
-      }
-      updateGhostPos(e.clientX, e.clientY);
-      fabProximity(e.clientX, e.clientY);
-    });
-
-    function finish(e){
-      clearTimeout(timer);
-      if(lifted){
-        e.preventDefault();
-        const dropped = fabProximity(e.clientX, e.clientY);
-        if(dropped){
-          const info = extractInfo(el, type);
-          saveItem(type, info.title, info.meta);
-          dockFab.classList.add('pulse');
-          setTimeout(()=> dockFab.classList.remove('pulse'), 400);
-        }
-        if(ghost){ ghost.remove(); ghost = null; }
-        dockFab.classList.remove('show','hover-target');
-        el.classList.remove('lifting');
-      }
-      lifted = false; pid = null;
-    }
-    el.addEventListener('pointerup', finish);
-    el.addEventListener('pointercancel', finish);
-  }
-
-  function fmtTime(ts){
-    return new Date(ts).toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
-  }
-  function typeAbbrev(type){
-    return type === 'Job' ? 'JOB' : type === 'Case Study' ? 'CASE' : 'MEDIA';
-  }
+  function fmtTime(ts){ return new Date(ts).toLocaleTimeString([], { hour:'numeric', minute:'2-digit' }); }
+  function typeAbbrev(type){ return type === 'Job' ? 'JOB' : type === 'Case Study' ? 'CASE' : 'MEDIA'; }
 
   window.renderDock = function renderDock(){
     if(!dockListEl) return;
     const items = currentFilter === 'all' ? dockItems : dockItems.filter(i=> i.type === currentFilter);
     if(!items.length){
-      dockListEl.innerHTML = `<div class="dock-empty"><p>Nothing saved yet. Press and hold any job, case study, or gallery item, then drop it on the dock icon that appears in the lower-left corner.</p></div>`;
+      dockListEl.innerHTML = `<div class="dock-empty"><p>Nothing saved yet. Right-click any job, case study, or gallery item and choose "Save" to add it here.</p></div>`;
       return;
     }
     dockListEl.innerHTML = `<div class="dock-group-label">Today</div>` + items.map(i => `
@@ -1484,12 +2348,184 @@ document.querySelectorAll('.profile-tab').forEach(tab=>{
       });
     });
   }
-
-  document.querySelectorAll('#jobsFeed .job-row').forEach(el=> attachHoldDrag(el, 'Job'));
-  document.querySelectorAll('#panel-case-studies .case-row').forEach(el=> attachHoldDrag(el, 'Case Study'));
-  document.querySelectorAll('#view-profile .gallery-grid .m-cell').forEach(el=> attachHoldDrag(el, 'Media'));
-
   if(dockCountEl) dockCountEl.textContent = dockItems.length + ' saved';
+
+  document.addEventListener('click', e=>{
+    const btn = e.target.closest('.feed-quick-save');
+    if(!btn) return;
+    e.stopPropagation();
+    const card = btn.closest('.feed-card');
+    if(card) window.saveFeedCard(card);
+  });
+
+  /* ── Generic modal (activity / edit / recontextualize) ── */
+  function openModal(html){
+    activityModal.innerHTML = html;
+    activityOverlay.classList.add('open'); activityModal.classList.add('open');
+    const closeBtn = activityModal.querySelector('.modal-close');
+    if(closeBtn) closeBtn.addEventListener('click', closeActivity);
+  }
+  window.openModal = openModal;
+  function closeActivity(){ activityOverlay.classList.remove('open'); activityModal.classList.remove('open'); }
+  activityOverlay.addEventListener('click', closeActivity);
+
+  /* ── Poster panel (right-clamped, full height, typography-driven) ── */
+  const posterOverlay = document.getElementById('posterOverlay');
+  const posterPanel = document.getElementById('posterPanel');
+  function closePosterPanel(){
+    posterOverlay.classList.remove('open');
+    posterPanel.classList.remove('open');
+  }
+  function openCardPanel(html){
+    posterPanel.innerHTML = html;
+    posterOverlay.classList.add('open');
+    posterPanel.classList.add('open');
+    posterPanel.scrollTop = 0;
+    // Wire any close button injected by the caller's template
+    posterPanel.querySelector('#posterCloseBtn')?.addEventListener('click', closePosterPanel);
+  }
+  window.openCardPanel = openCardPanel;
+  window.closeCardPanel = closePosterPanel;
+  posterOverlay.addEventListener('click', closePosterPanel);
+
+  function openActivity(){
+    const mins = Math.max(1, Math.round((Date.now()-pageLoadTs)/60000));
+    const total = Object.values(pageViews).reduce((a,b)=>a+b,0);
+    const breakdown = Object.entries(pageViews).map(([k,v])=> `${k} ${v}×`).join(' · ');
+    openModal(`
+      <div class="modal-title">Today's activity</div>
+      <div class="modal-stats">
+        <div class="modal-stat"><b>${mins}m</b><span>Time this session</span></div>
+        <div class="modal-stat"><b>${total}</b><span>${breakdown}</span></div>
+        <div class="modal-stat"><b>${dockItems.length}</b><span>Items in Saved</span></div>
+      </div>
+      <button class="modal-close">Close</button>`);
+  }
+  function openEditPlaceholder(label){
+    openModal(`
+      <div class="modal-title">Edit ${label}</div>
+      <p style="font-size:13.5px;line-height:1.7;color:var(--muted);margin-bottom:22px">In-place editing isn't wired up in this concept yet — this is where you'd revise the ${label} directly, without leaving the page.</p>
+      <button class="modal-close">Close</button>`);
+  }
+  function openRecontextualize(label){
+    openModal(`
+      <div class="modal-title">Recontextualize</div>
+      <p style="font-size:13.5px;line-height:1.7;color:var(--muted);margin-bottom:22px">Reframe this ${label} for a specific room, audience, or job — pulling the emphasis forward without rewriting the facts. An Agent-tier capability, coming soon.</p>
+      <button class="modal-close">Close</button>`);
+  }
+
+  /* ── Right-click context menu — surface aware ── */
+  let ctxTarget = null;
+  let ctxSectionLabel = null;
+
+  function closeCtxMenu(){ ctxMenu.classList.remove('show'); }
+
+  function profileSectionLabel(target){
+    if(target.closest('.case-row')) return 'case study';
+    if(target.closest('.doc-row')) return 'document';
+    if(target.closest('.gallery-grid .m-cell')) return 'media item';
+    if(target.closest('.profile-summary')) return 'summary';
+    return 'section';
+  }
+
+  document.addEventListener('contextmenu', e=>{
+    e.preventDefault();
+    const inProfile = currentView === 'profile' && e.target.closest('#view-profile');
+    const onWallCanvas = e.target === document.getElementById('wallCanvas') || e.target.closest('.hero-wall-block');
+    const card = !inProfile && !onWallCanvas ? e.target.closest(SAVEABLE_SELECTOR) : null;
+    let html = '';
+    ctxTarget = null; ctxSectionLabel = null;
+
+    function labelForView(name){ return name === 'home' ? 'Home' : (SUBVIEWS[name]?.label || name); }
+    const canBack = historyIndex > 0;
+    const canForward = historyIndex < historyStack.length - 1;
+    html += `<button class="ctx-item" data-action="back" ${canBack ? '' : 'disabled'}>← Previous${canBack ? ': '+labelForView(historyStack[historyIndex-1]) : ''}</button>`;
+    html += `<button class="ctx-item" data-action="forward" ${canForward ? '' : 'disabled'}>Forward${canForward ? ': '+labelForView(historyStack[historyIndex+1]) : ''} →</button>`;
+    html += `<div class="ctx-sep"></div>`;
+
+    if(onWallCanvas){
+      html += `<button class="ctx-item" data-action="reset-wall">Reset particle text</button>`;
+      html += `<div class="ctx-sep"></div>`;
+    } else if(inProfile){
+      ctxSectionLabel = profileSectionLabel(e.target);
+      html += `<button class="ctx-item" data-action="edit">Edit ${ctxSectionLabel}</button>`;
+      html += `<button class="ctx-item" data-action="recontextualize">Recontextualize…</button>`;
+      html += `<div class="ctx-sep"></div>`;
+    } else if(card){
+      const type = cardType(card);
+      ctxTarget = { el: card, type };
+      html += `<button class="ctx-item" data-action="save">Save ${type}</button><div class="ctx-sep"></div>`;
+    } else if(currentView === 'home'){
+      html += `<button class="ctx-item" data-action="nav-jobs">Jobs</button>`;
+      html += `<button class="ctx-item" data-action="nav-network">Network</button>`;
+      html += `<button class="ctx-item" data-action="nav-analytics">Analytics</button>`;
+      html += `<button class="ctx-item" data-action="nav-agents">Agents</button>`;
+      html += `<button class="ctx-item" data-action="nav-profile">View public profile</button>`;
+      html += `<div class="ctx-sep"></div>`;
+    }
+
+    html += `<button class="ctx-item" data-action="theme">Switch to ${isDarkTheme ? 'light' : 'dark'} theme</button>`;
+    html += `<button class="ctx-item" data-action="activity">View daily activity</button>`;
+    html += `<button class="ctx-item" data-action="saved">See Saved</button>`;
+    ctxMenu.innerHTML = html;
+
+    const menuH = ctxMenu.scrollHeight + 8;
+    const mx = Math.min(e.clientX, window.innerWidth - 224);
+    const my = Math.min(e.clientY, window.innerHeight - menuH);
+    ctxMenu.style.left = Math.max(8,mx)+'px';
+    ctxMenu.style.top = Math.max(8,my)+'px';
+    ctxMenu.classList.add('show');
+
+    ctxMenu.querySelectorAll('.ctx-item:not([disabled])').forEach(btn=>{
+      btn.addEventListener('click', ev=>{
+        ev.stopPropagation();
+        const action = btn.dataset.action;
+        if(action === 'reset-wall'){
+          if(window.resetWallParticles) window.resetWallParticles();
+        } else if(action === 'back'){
+          goBack();
+        } else if(action === 'forward'){
+          goForward();
+        } else if(action === 'save' && ctxTarget){
+          const info = extractInfo(ctxTarget.el, ctxTarget.type);
+          saveItem(ctxTarget.type, info.title, info.meta);
+        } else if(action === 'edit'){
+          openEditPlaceholder(ctxSectionLabel);
+        } else if(action === 'recontextualize'){
+          openRecontextualize(ctxSectionLabel);
+        } else if(action === 'nav-jobs'){
+          showView('jobs');
+        } else if(action === 'nav-network'){
+          goToAnchor('graph');
+        } else if(action === 'nav-analytics'){
+          goToAnchor('ledger');
+        } else if(action === 'nav-agents'){
+          goToAnchor('assistant');
+        } else if(action === 'nav-profile'){
+          showView('profile');
+        } else if(action === 'theme'){
+          applyTheme(!isDarkTheme);
+        } else if(action === 'activity'){
+          openActivity();
+        } else if(action === 'saved'){
+          showView('dock'); closePanel();
+        }
+        closeCtxMenu();
+      });
+    });
+  });
+  document.addEventListener('click', closeCtxMenu);
+  document.addEventListener('scroll', closeCtxMenu, true);
+  window.addEventListener('keydown', e=>{
+    if(e.key !== 'Escape') return;
+    closeCtxMenu();
+    // Dismiss overlays in priority order, then navigate back one step
+    if(document.getElementById('activityOverlay').classList.contains('open')){ closeActivity(); return; }
+    if(document.getElementById('posterOverlay').classList.contains('open')){ closePosterPanel(); return; }
+    if(document.getElementById('accountPanel').classList.contains('open')){ closePanel(); return; }
+    // Back one step in navigation
+    if(currentView !== 'home'){ goBack(); }
+  });
 })();
 
 /* ─────────────────────────────────────────────
@@ -1499,10 +2535,9 @@ window.addEventListener('load', ()=>{
   initLenis();
   initScrollFx();
   initWallParticles();
-  initHeadlineParticles();
 
   if(window.gsap && window.ScrollTrigger && !REDUCED){
-    gsap.to(['#wallCanvas','#titleCanvas'], {
+    gsap.to('#wallCanvas', {
       opacity:0.15, ease:'none',
       scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:.5 }
     });
