@@ -408,6 +408,16 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
 .feed-headline.style-quote{font-family:var(--serif);font-style:italic;font-weight:400;font-size:17.5px;line-height:1.32}
 .feed-headline.style-plain{font-family:var(--sans);font-weight:600;font-size:16px;line-height:1.32}
 .feed-kicker{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+
+/* ── Business posts: branded, structured, like a digital business card ── */
+.feed-card.job-business{border-top:2px solid var(--fg)}
+.feed-kicker-branded{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.feed-kicker-logo{width:20px;height:20px;object-fit:contain;flex-shrink:0}
+.feed-kicker-branded span{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg);font-weight:600}
+
+/* ── Recruiter posts: human voice, styled closer to a stylized tweet ── */
+.feed-kicker-recruiter{font-family:var(--sans);font-style:italic;color:var(--muted);text-transform:none;letter-spacing:0;font-size:11px}
+.feed-card.job-recruiter .feed-headline{font-family:var(--serif)}
 .feed-meta-line{font-size:11.5px;line-height:1.55;color:var(--muted);margin-top:10px}
 .feed-bottom{margin-top:16px;padding-top:14px;border-top:1px solid var(--faint);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .feed-tag{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
@@ -711,6 +721,10 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
 .feeds-mode-toggle button.active{background:var(--fg);color:var(--bg)}
 .feeds-mode-toggle button+button{border-left:1px solid var(--fg)}
 .feeds-header-sticky .feed-tabs{max-width:1500px;padding-left:0;padding-right:0}
+.jobs-source-filter{display:none;max-width:1500px;margin:0 auto;padding:14px 20px 0;gap:8px}
+.jobs-source-filter.show{display:flex}
+.jsf-btn{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--rule);background:none;color:var(--muted);cursor:none}
+.jsf-btn.active{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 
 #feedsCanvasViewport{height:calc(100vh - 172px)}
 
@@ -1190,6 +1204,11 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
         <button class="feed-tab" data-tab="outercircle">Outer-circles</button>
         <button class="feed-tab" data-tab="interesting">Interesting</button>
         <button class="feed-tab" data-tab="saved">Saved</button>
+      </div>
+      <div class="jobs-source-filter" id="jobsSourceFilter">
+        <button class="jsf-btn active" data-source="all">All</button>
+        <button class="jsf-btn" data-source="business">From Business</button>
+        <button class="jsf-btn" data-source="recruiter">From Recruiter</button>
       </div>
     </div>
 
@@ -2431,8 +2450,11 @@ function initCanvasGrid(cfg){
   if(!viewport || !track) return null;
 
   function tileInnerHTML(idx, c){
+    const kickerHTML = c.source === 'business'
+      ? `<div class="feed-kicker feed-kicker-branded">${c.logo ? `<img class="feed-kicker-logo" src="${c.logo}" alt="">` : ''}<span>${c.kicker}</span></div>`
+      : (c.kicker ? `<div class="feed-kicker${c.source === 'recruiter' ? ' feed-kicker-recruiter' : ''}">${c.kicker}</div>` : '');
     return `<div class="feed-top"><span class="feed-idx">${String(idx).padStart(2,'0')}</span><span class="feed-arrow">→</span></div>
-      ${c.kicker ? `<div class="feed-kicker">${c.kicker}</div>` : ''}
+      ${kickerHTML}
       <div class="feed-headline style-${c.style}">${c.headline}</div>
       <div class="feed-meta-line">${c.meta}</div>
       <div class="feed-bottom"><span class="feed-tag">${c.tag}</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>`;
@@ -2466,13 +2488,15 @@ function initCanvasGrid(cfg){
           const left = dxi*setW + col*(TW+GAP);
           const top = dyi*setH + row*(TH+GAP);
           const tile = document.createElement('div');
-          tile.className = 'feed-card canvas-tile';
+          tile.className = 'feed-card canvas-tile' + (c.source ? ' job-'+c.source : '');
           tile.style.left = left+'px'; tile.style.top = top+'px';
           tile.style.width = TW+'px'; tile.style.height = TH+'px';
           tile.dataset.kicker = c.kicker || '';
           tile.dataset.tag = c.tag;
           tile.dataset.img = c.img || '';
           tile.dataset.body = (c.meta || '').replace(/"/g,'&quot;');
+          tile.dataset.source = c.source || '';
+          tile.dataset.logo = c.logo || '';
           tile.innerHTML = tileInnerHTML(i+1, c);
           track.appendChild(tile);
         });
@@ -2736,13 +2760,14 @@ function initCanvasGrid(cfg){
    shows the same five categories as stacked rows.
 ───────────────────────────────────────────── */
 (function(){
+  const JOB_LOGO = 'https://raw.githubusercontent.com/ZACKGORT/ZACKGORT/main/favicon.webp';
   const JOBS_POOL = [
-    { kicker:'Studio Atlas', tag:'Remote · 2d ago', style:'bold', headline:'Senior Product Designer, Design Systems', meta:'Introduced by Rachel Kim — building the component library the whole studio ships from.', img:'https://picsum.photos/id/1062/700/460?grayscale' },
-    { kicker:'Nordhaus Studio', tag:'Hybrid — Chicago · 5d ago', style:'plain', headline:'Founding Engineer, Applied ML', meta:'Small team, first ML hire. The founder answers questions directly, no recruiter relay.', img:'https://picsum.photos/id/1074/700/460?grayscale' },
-    { kicker:'Vector Labs', tag:'Remote · 1w ago', style:'plain', headline:'Growth Lead, Series B', meta:'Mentored by two people already in your second-degree graph.', img:'https://picsum.photos/id/1084/700/460?grayscale' },
-    { kicker:'Meridian Analytics', tag:'Remote · 1w ago', style:'plain', headline:'Backend Engineer, Data Platform', meta:'Shipped with three people you\u2019ve worked with before.', img:'https://picsum.photos/id/1069/700/460?grayscale' },
-    { kicker:'Lower Deck Games', tag:'On-site — Austin · 2w ago', style:'quote', headline:'"Creative Direction, Brand Strategy"', meta:'Recruited by a studio lead you were introduced through in Chapter One.', img:'https://picsum.photos/id/1077/700/460?grayscale' },
-    { kicker:'Kent & Vale', tag:'Remote · 3w ago', style:'plain', headline:'Ops & Logistics Manager', meta:'Field Research team, hiring through Civic Tech connections.', img:'https://picsum.photos/id/1080/700/460?grayscale' },
+    { source:'business', logo:JOB_LOGO, kicker:'Studio Atlas', tag:'Remote · 2d ago', style:'bold', headline:'Senior Product Designer, Design Systems', meta:'Introduced by Rachel Kim — building the component library the whole studio ships from.', img:'https://picsum.photos/id/1062/700/460?grayscale' },
+    { source:'business', logo:JOB_LOGO, kicker:'Nordhaus Studio', tag:'Hybrid — Chicago · 5d ago', style:'plain', headline:'Founding Engineer, Applied ML', meta:'Small team, first ML hire. The founder answers questions directly, no recruiter relay.', img:'https://picsum.photos/id/1074/700/460?grayscale' },
+    { source:'recruiter', recruiter:'Priya Anand', kicker:'Priya Anand · Recruiter', tag:'Placed via Priya Anand · Series B', style:'quote', headline:'"Found the growth lead Vector Labs didn\u2019t know they needed."', meta:'Two people in your graph already vouched for this one — that\u2019s not luck, that\u2019s the search.', img:'https://picsum.photos/id/1084/700/460?grayscale' },
+    { source:'business', logo:JOB_LOGO, kicker:'Meridian Analytics', tag:'Remote · 1w ago', style:'plain', headline:'Backend Engineer, Data Platform', meta:'Shipped with three people you\u2019ve worked with before.', img:'https://picsum.photos/id/1069/700/460?grayscale' },
+    { source:'recruiter', recruiter:'Jordan Cole', kicker:'Jordan Cole · Recruiter', tag:'Placed via Jordan Cole · On-site — Austin', style:'quote', headline:'"This brief is better than the job description could ever be."', meta:'Recruited by a studio lead you were introduced through in Chapter One.', img:'https://picsum.photos/id/1077/700/460?grayscale' },
+    { source:'recruiter', recruiter:'Jordan Cole', kicker:'Jordan Cole · Recruiter', tag:'Placed via Jordan Cole · Remote', style:'quote', headline:'"Field Research needs someone who already gets civic tech."', meta:'Closes after three conversations — I\u2019m not going to waste your time with a fourth.', img:'https://picsum.photos/id/1080/700/460?grayscale' },
   ];
   const INNER_CIRCLE_POOL = [
     { kicker:'Rachel Kim', tag:'Product · 2d ago', style:'bold', headline:'Just wrapped Q3 planning for the Wove rebuild.', meta:'The rebuild finally has a name people believe in internally.', img:'https://picsum.photos/id/1027/700/460?grayscale' },
@@ -2769,9 +2794,17 @@ function initCanvasGrid(cfg){
   ];
   const FEEDS_POOLS = { jobs: JOBS_POOL, innercircle: INNER_CIRCLE_POOL, outercircle: OUTER_CIRCLE_POOL, interesting: INTERESTING_POOL };
 
+  let jobsSourceFilter = 'all';
+  function filteredJobsPool(){
+    if(jobsSourceFilter === 'all') return JOBS_POOL;
+    return JOBS_POOL.filter(j => j.source === jobsSourceFilter);
+  }
+  const NO_RESULTS_CARD = { kicker:'', tag:'No results', style:'plain', headline:'No postings match this filter yet.', meta:'Try a different source, or check back soon.', img:'' };
+
   function feedsDataProvider(tab, count){
     if(tab === 'saved') return savedTabSlice(count);
-    const pool = FEEDS_POOLS[tab] || JOBS_POOL;
+    const pool = tab === 'jobs' ? filteredJobsPool() : (FEEDS_POOLS[tab] || JOBS_POOL);
+    if(!pool.length) return Array(count).fill(NO_RESULTS_CARD);
     const out = [];
     for(let i=0;i<count;i++) out.push(pool[i % pool.length]);
     return out;
@@ -2782,22 +2815,52 @@ function initCanvasGrid(cfg){
     defaultTab: 'jobs', dataProvider: feedsDataProvider,
   });
 
+  const jobsSourceFilterEl = document.getElementById('jobsSourceFilter');
+  function updateJobsFilterVisibility(activeTab){
+    if(jobsSourceFilterEl) jobsSourceFilterEl.classList.toggle('show', activeTab === 'jobs');
+  }
+  document.querySelectorAll('#feedsTabs .feed-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=> updateJobsFilterVisibility(btn.dataset.tab));
+  });
+  if(jobsSourceFilterEl){
+    jobsSourceFilterEl.querySelectorAll('.jsf-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        jobsSourceFilterEl.querySelectorAll('.jsf-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        jobsSourceFilter = btn.dataset.source;
+        if(feedsGrid) feedsGrid.buildTiles('jobs');
+        renderFeedsListRows();
+      });
+    });
+  }
+  updateJobsFilterVisibility('jobs');
+
   function feedCardHTML(idx, c){
-    return `<div class="feed-card" data-kicker="${c.kicker||''}" data-tag="${c.tag}" data-img="${c.img||''}" data-body="${(c.meta||'').replace(/"/g,'&quot;')}">
+    const kickerHTML = c.source === 'business'
+      ? `<div class="feed-kicker feed-kicker-branded">${c.logo ? `<img class="feed-kicker-logo" src="${c.logo}" alt="">` : ''}<span>${c.kicker}</span></div>`
+      : (c.kicker ? `<div class="feed-kicker${c.source === 'recruiter' ? ' feed-kicker-recruiter' : ''}">${c.kicker}</div>` : '');
+    return `<div class="feed-card${c.source ? ' job-'+c.source : ''}" data-kicker="${c.kicker||''}" data-tag="${c.tag}" data-img="${c.img||''}" data-body="${(c.meta||'').replace(/"/g,'&quot;')}">
       <div class="feed-top"><span class="feed-idx">${String(idx).padStart(2,'0')}</span><span class="feed-arrow">→</span></div>
-      ${c.kicker ? `<div class="feed-kicker">${c.kicker}</div>` : ''}
+      ${kickerHTML}
       <div class="feed-headline style-${c.style}">${c.headline}</div>
       <div class="feed-meta-line">${c.meta}</div>
       <div class="feed-bottom"><span class="feed-tag">${c.tag}</span><button class="feed-quick-save" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg></button></div>
     </div>`;
   }
   function renderFeedsListRows(){
-    const rowMap = { jobs:'feedsRowJobs', innercircle:'feedsRowInner', outercircle:'feedsRowOuter', interesting:'feedsRowInteresting' };
+    const rowMap = { innercircle:'feedsRowInner', outercircle:'feedsRowOuter', interesting:'feedsRowInteresting' };
     Object.entries(rowMap).forEach(([tab, elId])=>{
       const el = document.getElementById(elId);
       if(!el) return;
       el.innerHTML = FEEDS_POOLS[tab].map((c,i)=>feedCardHTML(i+1, c)).join('');
     });
+    const jobsEl = document.getElementById('feedsRowJobs');
+    if(jobsEl){
+      const pool = filteredJobsPool();
+      jobsEl.innerHTML = pool.length
+        ? pool.map((c,i)=>feedCardHTML(i+1, c)).join('')
+        : feedCardHTML(1, NO_RESULTS_CARD);
+    }
     const savedEl = document.getElementById('feedsRowSaved');
     if(savedEl){
       const saved = window.getDockItems ? window.getDockItems() : [];
