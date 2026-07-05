@@ -47,6 +47,7 @@ img{max-width:100%;display:block}
 #cursorDot.vis{opacity:1}
 #cursorDot.hot{width:40px;height:40px;background:transparent;border:1px solid #fff}
 .v-line{position:fixed;pointer-events:none;z-index:5;background:color-mix(in srgb, var(--fg) 9%, transparent);opacity:0;transition:opacity .3s}
+body.no-xy-lines .v-line,body.no-xy-lines .v-coord{display:none !important}
 .v-line.h{left:0;right:0;height:1px}
 .v-line.v{top:0;bottom:0;width:1px}
 .v-line.vis{opacity:1}
@@ -1495,7 +1496,7 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
 <!-- ═══════════════════════ VIEW: NETWORK — Kanban board ═══════════════════════ -->
 <div id="view-network" style="display:none">
   <div class="agents-page">
-    <iframe src="https://zack.cx/placeholder00.html" title="Circles — placeholder" loading="lazy"></iframe>
+    <iframe id="circlesFrame" src="https://zack.cx/circles" title="Circles — placeholder" loading="lazy"></iframe>
   </div>
 </div><!-- /view-network -->
 
@@ -1607,7 +1608,7 @@ a.m-tag:hover{background:var(--fg);color:var(--bg)}
 <!-- ═══════════════════════ VIEW: AGENTS — placeholder iframe ═══════════════════════ -->
 <div id="view-agents" style="display:none">
   <div class="agents-page">
-    <iframe src="https://zack.cx/placeholder.html" title="Agents — placeholder" loading="lazy"></iframe>
+    <iframe src="https://zack.cx/shoot.html" title="Agents — placeholder" loading="lazy"></iframe>
   </div>
 </div><!-- /view-agents -->
 
@@ -1722,6 +1723,17 @@ document.addEventListener('mousemove', e=>{
 });
 document.addEventListener('mouseleave', ()=>{
   cursorDot.classList.remove('vis'); vLineH.classList.remove('vis'); vLineV.classList.remove('vis'); vCoord.classList.remove('vis');
+});
+
+// Iframes (Circles, Agents) are separate documents — once the real cursor
+// crosses into one, this page stops receiving mousemove entirely, so our
+// custom cursor would otherwise freeze mid-air at the iframe's edge rather
+// than tracking. Hide it on entry; the existing mousemove handler above
+// naturally shows it again the moment the cursor returns to this page.
+document.querySelectorAll('iframe').forEach(frame=>{
+  frame.addEventListener('mouseenter', ()=>{
+    cursorDot.classList.remove('vis'); vLineH.classList.remove('vis'); vLineV.classList.remove('vis'); vCoord.classList.remove('vis');
+  });
 });
 document.querySelectorAll('a,button,.m-cell').forEach(el=>{
   el.addEventListener('mouseenter', ()=> cursorDot.classList.add('hot'));
@@ -2097,6 +2109,7 @@ function showView(name){
   document.querySelectorAll('.mnav-links a[data-view]').forEach(a=> a.classList.toggle('active', a.dataset.view===name));
   bc.classList.toggle('show', !!sub);
   if(sub) bcCurrent.textContent = sub.label;
+  document.body.classList.toggle('no-xy-lines', name === 'network');
   window.scrollTo(0,0);
   if(window.ScrollTrigger) ScrollTrigger.refresh();
   if(name === 'dock' && typeof renderDock === 'function') renderDock();
